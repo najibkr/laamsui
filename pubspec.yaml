@@ -1,6 +1,6 @@
 name: laamsui
-description: "A design system with a collection Futter UI Widgets, and dart extensions"
-version: 0.0.1
+description: "A design system with a collection Futter UI Widgets and dart extensions"
+version: 0.0.2
 homepage: https://laams.io
 
 environment:

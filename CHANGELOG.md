@@ -1,3 +1,6 @@
+## 0.1.0
+- Exported LaamsIcans and JaguarText
+
 ## 0.0.4
 - Fixed bugs
 - Followed pub guidlines

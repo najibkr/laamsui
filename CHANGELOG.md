@@ -1,3 +1,7 @@
+## 0.0.4
+- Fixed bugs
+- Followed pub guidlines
+
 ## 0.0.3
 - Add repository and issue tracker links
 

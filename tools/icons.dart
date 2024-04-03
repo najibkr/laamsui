@@ -9,6 +9,13 @@ void main() {
     var buffer = StringBuffer();
     buffer.write('// ignore_for_file: constant_identifier_names\n\n');
     buffer.write("import 'package:flutter/widgets.dart';\n\n");
+    buffer.write('''
+/// You can use [LaamsIcons] using the following examples
+/// in your flutter project:
+/// ```dart
+///  final icon = Icon(LaamsIcons.star_outline, size:20, color: Colors.blue);
+/// ```
+''');
     buffer.write('class LaamsIcons {\n');
 
     for (var file in files) {

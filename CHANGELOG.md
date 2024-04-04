@@ -1,3 +1,6 @@
+## 0.2.2
+- Fixed bugs in LaamsTabbedScaffold
+
 ## 0.2.1
 - Fixed bugs in LaamsTabbedScaffold
 

@@ -255,16 +255,17 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       toolBar = Column(children: [titleBar, tabBar]);
     }
 
-    Widget? header;
+    Widget? header = tab.header;
     if (tab.hasHeader) {
       header = _LaamsScaffoldHeader(
         data: tab,
         hasTitleBar: _hasTitleBar,
       );
+
       header = FlexibleSpaceBar(
         background: header,
         collapseMode: CollapseMode.none,
-        stretchModes: const [StretchMode.fadeTitle],
+        stretchModes: const [StretchMode.zoomBackground],
       );
     }
 
@@ -325,6 +326,7 @@ class LaamsScaffoldTabData {
   final double iconSize;
   final String label;
   final PreferredSizeWidget? header;
+  final EdgeInsetsGeometry? headerMargin;
   final double? headerHeight;
   final Color? headerBackgroundColor;
   final AlignmentDirectional headerBoxAlignment;
@@ -357,6 +359,7 @@ class LaamsScaffoldTabData {
     this.iconSize = 20,
     required this.label,
     this.header,
+    this.headerMargin,
     this.headerHeight,
     this.headerBackgroundColor,
     this.headerBoxAlignment = AlignmentDirectional.center,
@@ -380,6 +383,7 @@ class LaamsScaffoldTabData {
   });
 
   bool get hasHeader {
+    if (header != null) return true;
     if ((headerTitle ?? '').isNotEmpty) return true;
     if ((headerDescription ?? '').isNotEmpty) return true;
     if ((searchLabel ?? '').isNotEmpty) return true;
@@ -554,9 +558,9 @@ class _LaamsScaffoldHeader extends StatelessWidget {
       child: header,
     );
 
-    if (data.bodyMargin != null) {
+    if (data.headerMargin != null) {
       header = Padding(
-        padding: data.bodyMargin!,
+        padding: data.headerMargin!,
         child: header,
       );
     }

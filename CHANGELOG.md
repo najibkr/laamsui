@@ -1,3 +1,7 @@
+## 0.2.3
+- Added models
+- Fixed bugs in LaamsTabbedScaffold
+
 ## 0.2.2
 - Fixed bugs in LaamsTabbedScaffold
 

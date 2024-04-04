@@ -359,7 +359,8 @@ class LaamsScaffoldTabData {
     this.iconSize = 20,
     required this.label,
     this.header,
-    this.headerMargin,
+    this.headerMargin =
+        const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
     this.headerHeight,
     this.headerBackgroundColor,
     this.headerBoxAlignment = AlignmentDirectional.center,

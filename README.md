@@ -1,2 +1,2 @@
 # laamsui
-A design system with a collection Futter UI Widgets and dart extensions.
+A design system with a collection of Futter UI Widgets and dart extensions.

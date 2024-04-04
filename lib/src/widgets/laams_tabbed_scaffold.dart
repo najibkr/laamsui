@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A scaffold with multiple tabs.
 class LaamsTabbedScaffold extends StatefulWidget {
-  final double? expandedHeight;
   final double titleBarHeight;
   final bool isAppBarPrimary;
   final bool isAppBarPinned;
@@ -18,7 +16,6 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final bool centerTitle;
   final double titleSpacing;
   final List<Widget> actions;
-  final Widget? flexibleSpace;
   final List<LaamsScaffoldTabData> tabs;
   final bool areTabsScrollable;
   final bool hideSingleTab;
@@ -27,11 +24,10 @@ class LaamsTabbedScaffold extends StatefulWidget {
 
   const LaamsTabbedScaffold({
     super.key,
-    this.expandedHeight,
     this.titleBarHeight = 50,
     this.isAppBarPrimary = false,
     this.isAppBarPinned = false,
-    this.isAppBarFloating = true,
+    this.isAppBarFloating = false,
     this.leadingIcon,
     this.leadingIconColor,
     this.leadingIconSize = 25,
@@ -43,7 +39,6 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.centerTitle = false,
     this.titleSpacing = 12,
     this.actions = const <Widget>[],
-    this.flexibleSpace,
     required this.tabs,
     this.areTabsScrollable = true,
     this.tabsAlignment = TabAlignment.start,
@@ -101,10 +96,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   double get _appBarHeight {
-    final extra = widget.tabs[_currentTab].headerHeight;
+    final extra = widget.tabs[_currentTab].headerHeight ?? 0;
     if (!_hasTitleBar) return widget.titleBarHeight + extra;
-    final topHeight = widget.expandedHeight ?? widget.titleBarHeight;
-    return topHeight + extra + 46;
+    return widget.titleBarHeight + extra + 49;
   }
 
   bool _listenToScroll(ScrollUpdateNotification note) {
@@ -261,12 +255,22 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       toolBar = Column(children: [titleBar, tabBar]);
     }
 
-    PreferredSizeWidget? header;
-    if (tab.hasHeader) header = LaamsScaffoldHeader(data: tab);
+    Widget? header;
+    if (tab.hasHeader) {
+      header = _LaamsScaffoldHeader(
+        data: tab,
+        hasTitleBar: _hasTitleBar,
+      );
+      header = FlexibleSpaceBar(
+        background: header,
+        collapseMode: CollapseMode.none,
+        stretchModes: const [StretchMode.fadeTitle],
+      );
+    }
 
     Widget sliverAppBar = SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: widget.expandedHeight,
+      expandedHeight: tab.headerHeight,
       collapsedHeight: switch (_hasTitleBar) {
         true => widget.titleBarHeight + (tabBar?.preferredSize.height ?? 0),
         false => tabBar?.preferredSize.height ?? 0,
@@ -287,10 +291,10 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       title: toolBar,
       titleSpacing: 0,
       centerTitle: true,
-      flexibleSpace: widget.flexibleSpace,
+      flexibleSpace: header,
       elevation: 0,
       // bottom: _hasTitleBar ? tabBar : null,
-      bottom: header,
+      // bottom: header,
     );
 
     if (tab.hasScrollObsorber) {
@@ -303,9 +307,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     return <Widget>[sliverAppBar];
   }
 
-  LaamsScaffoldTab _mapTab(LaamsScaffoldTabData data) {
+  _LaamsScaffoldTab _mapTab(LaamsScaffoldTabData data) {
     final dataIndex = widget.tabs.indexWhere((e) => e.label == data.label);
-    return LaamsScaffoldTab(
+    return _LaamsScaffoldTab(
       data: data,
       tabsAlignment: widget.tabsAlignment,
       isSelected: dataIndex == _currentTab,
@@ -321,7 +325,7 @@ class LaamsScaffoldTabData {
   final double iconSize;
   final String label;
   final PreferredSizeWidget? header;
-  final double headerHeight;
+  final double? headerHeight;
   final Color? headerBackgroundColor;
   final AlignmentDirectional headerBoxAlignment;
   final MainAxisAlignment headerMainAxisAlignment;
@@ -353,7 +357,7 @@ class LaamsScaffoldTabData {
     this.iconSize = 20,
     required this.label,
     this.header,
-    this.headerHeight = 0,
+    this.headerHeight,
     this.headerBackgroundColor,
     this.headerBoxAlignment = AlignmentDirectional.center,
     this.headerMainAxisAlignment = MainAxisAlignment.center,
@@ -384,12 +388,11 @@ class LaamsScaffoldTabData {
   }
 }
 
-class LaamsScaffoldTab extends StatelessWidget {
+class _LaamsScaffoldTab extends StatelessWidget {
   final LaamsScaffoldTabData data;
   final bool isSelected;
   final TabAlignment tabsAlignment;
-  const LaamsScaffoldTab({
-    super.key,
+  const _LaamsScaffoldTab({
     required this.data,
     required this.isSelected,
     required this.tabsAlignment,
@@ -436,13 +439,10 @@ class LaamsScaffoldTab extends StatelessWidget {
   }
 }
 
-class LaamsScaffoldHeader extends StatelessWidget
-    implements PreferredSizeWidget {
+class _LaamsScaffoldHeader extends StatelessWidget {
   final LaamsScaffoldTabData data;
-  const LaamsScaffoldHeader({super.key, required this.data});
-
-  @override
-  Size get preferredSize => Size.fromHeight(data.headerHeight);
+  final bool hasTitleBar;
+  const _LaamsScaffoldHeader({required this.data, required this.hasTitleBar});
 
   @override
   Widget build(BuildContext context) {
@@ -560,6 +560,11 @@ class LaamsScaffoldHeader extends StatelessWidget
         child: header,
       );
     }
+
+    header = Padding(
+      padding: EdgeInsets.only(top: hasTitleBar ? 100 : 50),
+      child: header,
+    );
 
     if (data.headerBackgroundColor != null) {
       final decoration = BoxDecoration(color: data.headerBackgroundColor);

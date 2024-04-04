@@ -1,3 +1,6 @@
+## 0.2.1
+- Fixed bugs in LaamsTabbedScaffold
+
 ## 0.2.0
 - Exported LaamsTabbedScaffold and LaamsDevice
 - Fixed bugs

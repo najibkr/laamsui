@@ -1,5 +1,9 @@
+## 0.2.0
+- Exported LaamsTabbedScaffold and LaamsDevice
+- Fixed bugs
+
 ## 0.1.0
-- Exported LaamsIcans and JaguarText
+- Exported LaamsIcans and LaamsText
 
 ## 0.0.4
 - Fixed bugs

@@ -21,6 +21,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final bool hideSingleTab;
   final TabAlignment tabsAlignment;
   final int currentTab;
+  final bool isTabBarBottom;
 
   const LaamsTabbedScaffold({
     super.key,
@@ -44,6 +45,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.tabsAlignment = TabAlignment.start,
     this.hideSingleTab = true,
     this.currentTab = 0,
+    this.isTabBarBottom = false,
   });
 
   @override
@@ -213,7 +215,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       );
 
       titleBar = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         height: widget.titleBarHeight,
         child: row,
       );
@@ -241,8 +243,8 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       indicatorWeight: 3,
       labelColor: theme.primaryColor,
       unselectedLabelColor: theme.textTheme.bodyLarge?.color,
-      labelStyle: theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 17 : 14),
-      labelPadding: EdgeInsets.symmetric(horizontal: isS ? 10 : 15),
+      labelStyle: theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
+      labelPadding: EdgeInsets.symmetric(horizontal: isS ? 12 : 17),
       overlayColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
       tabs: widget.tabs.map(_mapTab).toList(),
     );
@@ -418,7 +420,7 @@ class _LaamsScaffoldTab extends StatelessWidget {
     final noIcon = data.icon == null && data.activeIcon == null;
     final isS = MediaQuery.of(context).size.width <= 500;
 
-    final labelPad = EdgeInsetsDirectional.only(start: isS ? 4 : 5);
+    const labelPad = EdgeInsetsDirectional.only(start: 5);
     final label = Padding(
       padding: noIcon ? EdgeInsets.zero : labelPad,
       child: Text(data.label),
@@ -433,7 +435,7 @@ class _LaamsScaffoldTab extends StatelessWidget {
 
     final icon = Icon(
       isSelected ? (data.activeIcon ?? data.icon) : data.icon,
-      size: isS ? data.iconSize + 2 : data.iconSize,
+      size: isS ? data.iconSize : data.iconSize,
     );
 
     final align = switch (isS) {

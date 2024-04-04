@@ -310,10 +310,12 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
   _LaamsScaffoldTab _mapTab(LaamsScaffoldTabData data) {
     final dataIndex = widget.tabs.indexWhere((e) => e.label == data.label);
+
     return _LaamsScaffoldTab(
       data: data,
       tabsAlignment: widget.tabsAlignment,
       isSelected: dataIndex == _currentTab,
+      tabsLength: widget.tabs.length,
     );
   }
 }
@@ -397,15 +399,17 @@ class _LaamsScaffoldTab extends StatelessWidget {
   final LaamsScaffoldTabData data;
   final bool isSelected;
   final TabAlignment tabsAlignment;
+  final int tabsLength;
   const _LaamsScaffoldTab({
     required this.data,
     required this.isSelected,
     required this.tabsAlignment,
+    required this.tabsLength,
   });
 
-  MainAxisAlignment get _alignment {
-    if (tabsAlignment == TabAlignment.center) return MainAxisAlignment.center;
-    if (tabsAlignment == TabAlignment.fill) return MainAxisAlignment.center;
+  MainAxisAlignment _alignment(TabAlignment align) {
+    if (align == TabAlignment.center) return MainAxisAlignment.center;
+    if (align == TabAlignment.fill) return MainAxisAlignment.center;
     return MainAxisAlignment.start;
   }
 
@@ -432,8 +436,13 @@ class _LaamsScaffoldTab extends StatelessWidget {
       size: isS ? data.iconSize + 2 : data.iconSize,
     );
 
+    final align = switch (isS) {
+      true => tabsLength <= 3 ? TabAlignment.fill : tabsAlignment,
+      _ => tabsAlignment,
+    };
+
     var row = Row(
-      mainAxisAlignment: _alignment,
+      mainAxisAlignment: _alignment(align),
       children: [icon, label],
     );
 

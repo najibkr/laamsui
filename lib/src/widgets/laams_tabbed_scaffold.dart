@@ -20,9 +20,9 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final double titleSpacing;
   final List<Widget> actions;
   final List<LaamsScaffoldTabData> tabs;
-  final bool areTabsScrollable;
+  final bool? areTabsScrollable;
   final bool hideSingleTab;
-  final TabAlignment tabsAlignment;
+  final TabAlignment? tabsAlignment;
   final int currentTab;
   final FlexibleSpaceBar? header;
   final double? headerHeight;
@@ -47,8 +47,8 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.titleSpacing = 12,
     this.actions = const <Widget>[],
     required this.tabs,
-    this.areTabsScrollable = true,
-    this.tabsAlignment = TabAlignment.start,
+    this.areTabsScrollable,
+    this.tabsAlignment,
     this.hideSingleTab = true,
     this.currentTab = 0,
     this.header,
@@ -59,8 +59,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
   State<LaamsTabbedScaffold> createState() => _LaamsTabbedScaffoldState();
 }
 
-class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
-    with SingleTickerProviderStateMixin {
+class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTickerProviderStateMixin {
   int _index = 0;
   late ScrollController _scrollController;
   late TabController _tabController;
@@ -111,12 +110,31 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     return widget.titleBarHeight + 50;
   }
 
+  bool _areTabsScrollable(BuildContext context) {
+    final areScrollable = widget.areTabsScrollable;
+    if (areScrollable != null) areScrollable;
+    final screenSize = MediaQuery.of(context).size;
+    if (screenSize.width <= 320) return true;
+    if (screenSize.width <= 500) return widget.tabs.length <= 3 ? false : true;
+    return true;
+  }
+
+  TabAlignment _getTabsAlignment(BuildContext context) {
+    final alignment = widget.tabsAlignment;
+    if (alignment != null) return alignment;
+    final screenSize = MediaQuery.of(context).size;
+    if (screenSize.width <= 320) return TabAlignment.start;
+    if (screenSize.width <= 500) {
+      return widget.tabs.length <= 3 ? TabAlignment.fill : TabAlignment.start;
+    }
+    return TabAlignment.start;
+  }
+
   bool _listenToScroll(ScrollUpdateNotification note) {
     if (note.metrics.axis == Axis.horizontal) return false;
     final outerOffset = _scrollController.offset;
     final innerOffset = note.metrics.pixels;
-    final shouldSync =
-        outerOffset != innerOffset && innerOffset <= _appBarHeight;
+    final shouldSync = outerOffset != innerOffset && innerOffset <= _appBarHeight;
     if (shouldSync) _scrollController.jumpTo(innerOffset);
     final ensure = innerOffset >= _appBarHeight && outerOffset != _appBarHeight;
     if (ensure) _scrollController.jumpTo(_appBarHeight);
@@ -226,22 +244,11 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       );
     }
 
-    final areTabsScrollable = switch (isS) {
-      true => widget.tabs.length <= 3 ? false : true,
-      _ => widget.areTabsScrollable,
-    };
-
-    final tabsAlignment = switch (isS) {
-      true =>
-        widget.tabs.length <= 3 ? TabAlignment.fill : widget.tabsAlignment,
-      _ => widget.tabsAlignment,
-    };
-
     PreferredSizeWidget? tabBar = TabBar(
       onTap: (index) => setState(() => _index = index),
       controller: _tabController,
-      isScrollable: areTabsScrollable,
-      tabAlignment: tabsAlignment,
+      isScrollable: _areTabsScrollable(context),
+      tabAlignment: _getTabsAlignment(context),
       indicatorColor: theme.primaryColor,
       dividerColor: theme.cardColor,
       dividerHeight: 2,
@@ -323,7 +330,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
     return _LaamsScaffoldTab(
       data: data,
-      tabsAlignment: widget.tabsAlignment,
+      tabsAlignment: _getTabsAlignment(context),
       isSelected: dataIndex == _index,
       tabsLength: widget.tabs.length,
     );

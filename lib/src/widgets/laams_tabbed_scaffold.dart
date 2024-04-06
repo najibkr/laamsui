@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This helps you create a scaffold with multiple tabs.
 class LaamsTabbedScaffold extends StatefulWidget {
   final double titleBarHeight;
   final bool isAppBarPrimary;
@@ -9,10 +10,12 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final IconData? leadingIcon;
   final Color? leadingIconColor;
   final double leadingIconSize;
-  final double? leadingWidth;
   final Widget? leading;
-  final String? titleText;
   final Widget? title;
+  final String? titleText;
+  final double? titleTextFontSize;
+  final Color? titleTextColor;
+  final FontWeight? titleTextFontWeight;
   final bool centerTitle;
   final double titleSpacing;
   final List<Widget> actions;
@@ -21,7 +24,8 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final bool hideSingleTab;
   final TabAlignment tabsAlignment;
   final int currentTab;
-  final bool isTabBarBottom;
+  final FlexibleSpaceBar? header;
+  final double? headerHeight;
 
   const LaamsTabbedScaffold({
     super.key,
@@ -33,10 +37,12 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.leadingIconColor,
     this.leadingIconSize = 25,
     this.onLeading,
-    this.leadingWidth,
     this.leading,
-    this.titleText,
     this.title,
+    this.titleText,
+    this.titleTextFontSize,
+    this.titleTextColor,
+    this.titleTextFontWeight,
     this.centerTitle = false,
     this.titleSpacing = 12,
     this.actions = const <Widget>[],
@@ -45,7 +51,8 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.tabsAlignment = TabAlignment.start,
     this.hideSingleTab = true,
     this.currentTab = 0,
-    this.isTabBarBottom = false,
+    this.header,
+    this.headerHeight,
   });
 
   @override
@@ -54,7 +61,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
 
 class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     with SingleTickerProviderStateMixin {
-  int _currentTab = 0;
+  int _index = 0;
   late ScrollController _scrollController;
   late TabController _tabController;
   late PageController _pageController;
@@ -62,11 +69,11 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   @override
   void initState() {
     super.initState();
-    _currentTab = widget.currentTab;
+    _index = widget.currentTab;
     _scrollController = ScrollController();
-    _pageController = PageController(initialPage: _currentTab);
+    _pageController = PageController(initialPage: _index);
     _tabController = TabController(
-      initialIndex: _currentTab,
+      initialIndex: _index,
       length: widget.tabs.length,
       vsync: this,
     );
@@ -98,30 +105,27 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   double get _appBarHeight {
-    final extra = widget.tabs[_currentTab].headerHeight ?? 0;
-    if (!_hasTitleBar) return widget.titleBarHeight + extra;
-    return widget.titleBarHeight + extra + 49;
+    final hHeight = widget.headerHeight ?? widget.tabs[_index].headerHeight;
+    if (hHeight != null) return hHeight;
+    if (!_hasTitleBar) return 50;
+    return widget.titleBarHeight + 50;
   }
 
   bool _listenToScroll(ScrollUpdateNotification note) {
     if (note.metrics.axis == Axis.horizontal) return false;
     final outerOffset = _scrollController.offset;
     final innerOffset = note.metrics.pixels;
-
-    if (outerOffset != innerOffset && innerOffset <= _appBarHeight) {
-      _scrollController.jumpTo(innerOffset);
-    }
-
-    if (innerOffset >= _appBarHeight && outerOffset != _appBarHeight) {
-      _scrollController.jumpTo(_appBarHeight);
-    }
-
+    final shouldSync =
+        outerOffset != innerOffset && innerOffset <= _appBarHeight;
+    if (shouldSync) _scrollController.jumpTo(innerOffset);
+    final ensure = innerOffset >= _appBarHeight && outerOffset != _appBarHeight;
+    if (ensure) _scrollController.jumpTo(_appBarHeight);
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final tab = widget.tabs[_currentTab];
+    final tab = widget.tabs[_index];
     Widget page = PageView.builder(
       controller: _pageController,
       itemCount: widget.tabs.length,
@@ -168,7 +172,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   List<Widget> _builHeaders(BuildContext context, bool innerBoxIsScrolled) {
     final theme = Theme.of(context);
     final isS = MediaQuery.of(context).size.width <= 500;
-    final tab = widget.tabs[_currentTab];
+    final tab = widget.tabs[_index];
 
     Widget? leading = widget.leading;
     if (widget.leading == null && widget.leadingIcon != null) {
@@ -177,9 +181,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         color: widget.leadingIconColor ?? theme.textTheme.bodyLarge?.color,
         size: widget.leadingIconSize,
       );
-    }
 
-    if (widget.onLeading != null && leading != null) {
       leading = GestureDetector(
         onTap: () => widget.onLeading!(context),
         child: Padding(padding: const EdgeInsets.all(2.5), child: leading),
@@ -189,8 +191,11 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     Widget? title;
     if (widget.titleText != null) {
       final style = theme.textTheme.displayLarge?.copyWith(
-        color: theme.textTheme.bodyLarge?.color,
+        color: widget.titleTextColor ?? theme.textTheme.bodyLarge?.color,
+        fontSize: widget.titleTextFontSize,
+        fontWeight: widget.titleTextFontWeight,
       );
+
       title = Text(
         widget.titleText ?? '',
         style: style,
@@ -203,7 +208,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       final children = [
         if (leading != null) leading,
         const SizedBox(width: 8),
-        if (title != null) Expanded(child: title),
+        if (title != null) Expanded(child: widget.title ?? title),
         const SizedBox(width: 8),
         ...widget.actions,
       ];
@@ -215,7 +220,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       );
 
       titleBar = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 22),
         height: widget.titleBarHeight,
         child: row,
       );
@@ -233,7 +238,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     };
 
     PreferredSizeWidget? tabBar = TabBar(
-      onTap: (index) => setState(() => _currentTab = index),
+      onTap: (index) => setState(() => _index = index),
       controller: _tabController,
       isScrollable: areTabsScrollable,
       tabAlignment: tabsAlignment,
@@ -252,13 +257,16 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
     Widget? toolBar;
     if (tabBar == null && titleBar != null) toolBar = titleBar;
-    if (tabBar != null && titleBar == null) toolBar = tabBar;
-    if (tabBar != null && titleBar != null) {
+    if (tabBar != null && titleBar == null && widget.header == null) {
+      toolBar = tabBar;
+    }
+    if (tabBar != null && titleBar != null && widget.header == null) {
       toolBar = Column(children: [titleBar, tabBar]);
     }
+    if (widget.header != null) toolBar = titleBar;
 
-    Widget? header = tab.header;
-    if (tab.hasHeader) {
+    Widget? header = widget.header ?? tab.header;
+    if (tab.hasHeader && widget.header == null && tab.header == null) {
       header = _LaamsScaffoldHeader(
         data: tab,
         hasTitleBar: _hasTitleBar,
@@ -273,7 +281,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
     Widget sliverAppBar = SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: tab.headerHeight,
+      expandedHeight: widget.headerHeight ?? tab.headerHeight,
       collapsedHeight: switch (_hasTitleBar) {
         true => widget.titleBarHeight + (tabBar?.preferredSize.height ?? 0),
         false => tabBar?.preferredSize.height ?? 0,
@@ -297,7 +305,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       flexibleSpace: header,
       elevation: 0,
       // bottom: _hasTitleBar ? tabBar : null,
-      // bottom: header,
+      bottom: widget.header != null ? tabBar : null,
     );
 
     if (tab.hasScrollObsorber) {
@@ -316,7 +324,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     return _LaamsScaffoldTab(
       data: data,
       tabsAlignment: widget.tabsAlignment,
-      isSelected: dataIndex == _currentTab,
+      isSelected: dataIndex == _index,
       tabsLength: widget.tabs.length,
     );
   }
@@ -363,20 +371,19 @@ class LaamsScaffoldTabData {
     this.iconSize = 20,
     required this.label,
     this.header,
-    this.headerMargin =
-        const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    this.headerMargin = const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
     this.headerHeight,
     this.headerBackgroundColor,
     this.headerBoxAlignment = AlignmentDirectional.center,
     this.headerMainAxisAlignment = MainAxisAlignment.center,
-    this.headerCrossAxisAlignment = CrossAxisAlignment.center,
+    this.headerCrossAxisAlignment = CrossAxisAlignment.start,
     this.headerTitle,
     this.headerTitleMaxLines = 1,
     this.headerDescription,
-    this.headerDescriptonMaxLines = 3,
+    this.headerDescriptonMaxLines = 2,
     this.headerDescriptionWidth = 650,
-    this.headerTextsAlignment = TextAlign.center,
-    this.headerSpacing = 8,
+    this.headerTextsAlignment = TextAlign.start,
+    this.headerSpacing = 4,
     this.onSearch,
     this.searchLabel,
     this.searchFieldWidth = 600,
@@ -420,7 +427,7 @@ class _LaamsScaffoldTab extends StatelessWidget {
     final noIcon = data.icon == null && data.activeIcon == null;
     final isS = MediaQuery.of(context).size.width <= 500;
 
-    const labelPad = EdgeInsetsDirectional.only(start: 5);
+    const labelPad = EdgeInsetsDirectional.only(start: 6);
     final label = Padding(
       padding: noIcon ? EdgeInsets.zero : labelPad,
       child: Text(data.label),
@@ -554,7 +561,7 @@ class _LaamsScaffoldHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         titleWidget,
-        descWidget,
+        if ((data.headerDescription ?? '').isNotEmpty) descWidget,
         if (searchBar != null) searchBar,
       ],
     );

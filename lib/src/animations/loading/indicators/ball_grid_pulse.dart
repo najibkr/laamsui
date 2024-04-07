@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:laamsui/external.dart';
 
 import '../shape/indicator_painter.dart';
 

@@ -40,17 +40,24 @@ import 'loading/indicators/triangle_skew_spin.dart';
 enum WidgetType { card, sliver, screen }
 
 class LaamsLoading extends StatelessWidget {
+  final WidgetType type;
   final double? height;
   final double? width;
-  final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
   final BoxBorder? border;
   final BorderRadiusGeometry? borderRadius;
-  final WidgetType widgetType;
-  final bool centered;
+
+  /// Indicator-Related Fields:
+  final IndicatorType indicatorType;
+  final Size indicatorSize;
+  final List<Color>? indicatorColors;
+  final double? indicatorStrokeWidth;
+  final Color? indicatorPathBackgroundColor;
+
+  /// Message-Related Fields:
   final String? message;
   final TextStyle? messageStyle;
   final double? messageFontSize;
@@ -58,23 +65,16 @@ class LaamsLoading extends StatelessWidget {
   final FontWeight? messageFontWeight;
   final int? messageMaxLines;
 
-  /// Indicate which type.
-  final IndicatorType type;
+  final void Function()? onButtonPressed;
+  final String? buttonLabel;
 
-  /// The color you draw on the shape.
-  final List<Color>? colors;
+  final double spacing;
 
-  /// The stroke width of line.
-  final double? strokeWidth;
-
-  /// Applicable to which has cut edge of the shape
-  final Color? pathBackgroundColor;
-
-  const LaamsLoading.card({
+  const LaamsLoading({
     super.key,
+    this.type = WidgetType.card,
     this.height,
     this.width,
-    this.alignment = Alignment.center,
     this.margin,
     this.message,
     this.messageStyle,
@@ -87,9 +87,9 @@ class LaamsLoading extends StatelessWidget {
     this.boxShadow,
     this.border,
     this.borderRadius,
-    this.centered = true,
-    this.type = IndicatorType.circular,
-    this.colors = const [
+    this.indicatorType = IndicatorType.circular,
+    this.indicatorSize = const Size(50, 50),
+    this.indicatorColors = const [
       Colors.deepOrangeAccent,
       Colors.pinkAccent,
       Colors.amber,
@@ -99,117 +99,21 @@ class LaamsLoading extends StatelessWidget {
       Colors.orangeAccent,
       Colors.blueAccent,
     ],
-    this.strokeWidth,
-    this.pathBackgroundColor,
-  }) : widgetType = WidgetType.card;
-
-  @Deprecated('Use JaguarLoading.card()')
-  const LaamsLoading.box({
-    super.key,
-    this.height,
-    this.message,
-    this.messageStyle,
-    this.messageColor,
-    this.messageFontSize,
-    this.messageFontWeight,
-    this.messageMaxLines = 2,
-    this.width,
-    this.alignment = Alignment.center,
-    this.margin,
-    this.padding,
-    this.backgroundColor,
-    this.boxShadow,
-    this.border,
-    this.borderRadius,
-    this.centered = true,
-    this.type = IndicatorType.circular,
-    this.colors = const [
-      Colors.amber,
-      Colors.deepOrangeAccent,
-      Colors.pinkAccent,
-      Colors.purple,
-      Colors.yellow,
-      Colors.lightGreen,
-      Colors.orangeAccent,
-      Colors.blueAccent,
-    ],
-    this.strokeWidth,
-    this.pathBackgroundColor,
-  }) : widgetType = WidgetType.card;
-
-  const LaamsLoading.sliver({
-    super.key,
-    this.height,
-    this.width,
-    this.message,
-    this.messageStyle,
-    this.messageColor,
-    this.messageFontSize,
-    this.messageFontWeight,
-    this.messageMaxLines = 2,
-    this.alignment = Alignment.center,
-    this.margin,
-    this.padding,
-    this.backgroundColor,
-    this.boxShadow,
-    this.border,
-    this.borderRadius,
-    this.centered = true,
-    this.type = IndicatorType.circular,
-    this.colors = const [
-      Colors.amber,
-      Colors.deepOrangeAccent,
-      Colors.pinkAccent,
-      Colors.purple,
-      Colors.yellow,
-      Colors.lightGreen,
-      Colors.orangeAccent,
-      Colors.blueAccent,
-    ],
-    this.strokeWidth,
-    this.pathBackgroundColor,
-  }) : widgetType = WidgetType.sliver;
-
-  const LaamsLoading.screen({
-    super.key,
-    this.height,
-    this.width,
-    this.message,
-    this.messageStyle,
-    this.messageColor,
-    this.messageFontSize,
-    this.messageFontWeight,
-    this.messageMaxLines = 2,
-    this.alignment = Alignment.center,
-    this.margin,
-    this.padding,
-    this.backgroundColor,
-    this.boxShadow,
-    this.border,
-    this.borderRadius,
-    this.centered = true,
-    this.type = IndicatorType.circular,
-    this.colors = const [
-      Colors.amber,
-      Colors.deepOrangeAccent,
-      Colors.pinkAccent,
-      Colors.purple,
-      Colors.yellow,
-      Colors.lightGreen,
-      Colors.orangeAccent,
-      Colors.blueAccent,
-    ],
-    this.strokeWidth,
-    this.pathBackgroundColor,
-  }) : widgetType = WidgetType.screen;
+    this.indicatorPathBackgroundColor,
+    this.indicatorStrokeWidth,
+    this.onButtonPressed,
+    this.buttonLabel,
+    this.spacing = 10,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<Color> safeColors =
-        colors == null || colors!.isEmpty ? [theme.primaryColor] : colors!;
+    List<Color> safeColors = indicatorColors == null || indicatorColors!.isEmpty
+        ? [theme.primaryColor]
+        : indicatorColors!;
 
-    final loading = switch (type) {
+    final loading = switch (indicatorType) {
       IndicatorType.ballPulse => const BallPulse(),
       IndicatorType.ballGridPulse => const BallGridPulse(),
       IndicatorType.ballClipRotate => const BallClipRotate(),
@@ -249,49 +153,50 @@ class LaamsLoading extends StatelessWidget {
     };
 
     final decoration = DecorateData(
-      indicator: type,
+      indicator: indicatorType,
       colors: safeColors,
-      strokeWidth: strokeWidth,
-      pathBackgroundColor: pathBackgroundColor,
+      strokeWidth: indicatorStrokeWidth,
+      pathBackgroundColor: indicatorPathBackgroundColor,
     );
 
-    Widget newIndicator = AspectRatio(
-      aspectRatio: 1,
+    Widget indicator = SizedBox(
+      height: indicatorSize.height,
+      width: indicatorSize.width,
       child: DecorateContext(decorateData: decoration, child: loading),
     );
 
-    if ((message ?? '').isEmpty && WidgetType.card == widgetType) {
-      return Center(child: newIndicator);
-    }
-
-    if ((message ?? '').isEmpty && WidgetType.sliver == widgetType) {
-      return SliverToBoxAdapter(child: Center(child: newIndicator));
-    }
-
-    if ((message ?? '').isEmpty && WidgetType.screen == widgetType) {
-      return Scaffold(body: Center(child: newIndicator));
-    }
-
-    if ((message ?? '').isNotEmpty) {
-      final style = theme.textTheme.bodyLarge?.copyWith(
-        fontSize: messageFontSize,
-        fontWeight: messageFontWeight,
-        color: messageColor,
-      );
-      var text = Text(
-        message ?? '',
-        maxLines: messageMaxLines,
-        textAlign: TextAlign.center,
-        style: messageStyle ?? style,
+    Widget? btn;
+    if (buttonLabel != null) {
+      btn = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Text(buttonLabel ?? ''),
       );
 
-      const space = SizedBox(height: 10);
-      newIndicator = Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [newIndicator, space, text],
+      final buttonStyle = ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.red),
+        backgroundColor: MaterialStateProperty.all(Colors.red.withOpacity(0.1)),
+        surfaceTintColor:
+            MaterialStateProperty.all(Colors.red.withOpacity(0.2)),
+        overlayColor: MaterialStateProperty.all(Colors.red.withOpacity(0.2)),
       );
+
+      btn = TextButton(
+        onPressed: onButtonPressed,
+        style: buttonStyle,
+        child: btn,
+      );
+    }
+
+    if ((message ?? '').isEmpty) {
+      if (btn != null) {
+        final space = SizedBox(height: spacing);
+        indicator = Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [indicator, space, btn],
+        );
+      }
 
       final boxDecoration = BoxDecoration(
         color: backgroundColor,
@@ -300,24 +205,64 @@ class LaamsLoading extends StatelessWidget {
         borderRadius: borderRadius,
       );
 
-      newIndicator = Container(
+      indicator = Container(
         height: height,
         width: width,
         padding: padding,
         margin: margin,
         decoration: boxDecoration,
-        child: newIndicator,
+        child: indicator,
       );
+
+      return switch (type) {
+        WidgetType.sliver =>
+          SliverToBoxAdapter(child: Center(child: indicator)),
+        WidgetType.screen => Scaffold(body: Center(child: indicator)),
+        _ => Center(child: indicator),
+      };
     }
 
-    if (widgetType == WidgetType.sliver) {
-      return SliverToBoxAdapter(child: Center(child: newIndicator));
-    }
+    final style = theme.textTheme.bodyLarge?.copyWith(
+      fontSize: messageFontSize,
+      fontWeight: messageFontWeight,
+      color: messageColor,
+    );
 
-    if (widgetType == WidgetType.screen) {
-      return Scaffold(body: Center(child: newIndicator));
-    }
+    var text = Text(
+      message ?? '',
+      maxLines: messageMaxLines,
+      textAlign: TextAlign.center,
+      style: messageStyle ?? style,
+    );
 
-    return Center(child: newIndicator);
+    final space = SizedBox(height: spacing);
+    indicator = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [indicator, space, text, space, if (btn != null) btn],
+    );
+
+    final boxDecoration = BoxDecoration(
+      color: backgroundColor,
+      boxShadow: boxShadow,
+      border: border,
+      borderRadius: borderRadius,
+    );
+
+    indicator = Container(
+      height: height,
+      width: width,
+      padding: padding,
+      margin: margin,
+      decoration: boxDecoration,
+      child: indicator,
+    );
+
+    return switch (type) {
+      WidgetType.sliver => SliverToBoxAdapter(child: Center(child: indicator)),
+      WidgetType.screen => Scaffold(body: Center(child: indicator)),
+      _ => Center(child: indicator),
+    };
   }
 }

@@ -1,3 +1,5 @@
+## 0.3.5
+- Exported IndicatorType
 ## 0.3.4
 - Fixed bugs
 - Added unused directories to .pubignore

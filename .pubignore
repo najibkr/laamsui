@@ -1,4 +1,4 @@
 /tools/
 Makefile
 build/
-example/
+example/build/

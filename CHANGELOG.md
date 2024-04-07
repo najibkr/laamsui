@@ -1,3 +1,6 @@
+## 0.3.4
+- Fixed bugs
+- Added unused directories to .pubignore
 ## 0.3.3
 - Fixed bugs
 - Added unused directories to .pubignore

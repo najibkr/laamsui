@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 /// This helps you create a scaffold with multiple tabs.
 class LaamsTabbedScaffold extends StatefulWidget {
-  final double titleBarHeight;
   final bool isAppBarPrimary;
   final bool isAppBarPinned;
   final bool isAppBarFloating;
+  final double titleBarHeight;
+  final EdgeInsetsGeometry titleBarPadding;
   final void Function(BuildContext context)? onLeading;
+  final Widget? leading;
   final IconData? leadingIcon;
   final Color? leadingIconColor;
   final double leadingIconSize;
-  final Widget? leading;
   final Widget? title;
   final String? titleText;
   final double? titleTextFontSize;
@@ -19,25 +20,28 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final bool centerTitle;
   final double titleSpacing;
   final List<Widget> actions;
+  final void Function(String path) onTabSelected;
   final List<LaamsScaffoldTabData> tabs;
   final bool? areTabsScrollable;
   final bool hideSingleTab;
   final TabAlignment? tabsAlignment;
-  final int currentTab;
+  final String currentPath;
   final FlexibleSpaceBar? header;
   final double? headerHeight;
+  final Widget body;
 
   const LaamsTabbedScaffold({
     super.key,
-    this.titleBarHeight = 50,
     this.isAppBarPrimary = false,
     this.isAppBarPinned = false,
     this.isAppBarFloating = false,
-    this.leadingIcon,
-    this.leadingIconColor,
-    this.leadingIconSize = 25,
+    this.titleBarHeight = 50,
+    this.titleBarPadding = const EdgeInsets.symmetric(horizontal: 22),
     this.onLeading,
     this.leading,
+    this.leadingIcon,
+    this.leadingIconColor,
+    this.leadingIconSize = 24,
     this.title,
     this.titleText,
     this.titleTextFontSize,
@@ -46,43 +50,44 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.centerTitle = false,
     this.titleSpacing = 12,
     this.actions = const <Widget>[],
+    required this.onTabSelected,
     required this.tabs,
     this.areTabsScrollable,
     this.tabsAlignment,
     this.hideSingleTab = true,
-    this.currentTab = 0,
+    required this.currentPath,
     this.header,
     this.headerHeight,
+    required this.body,
   });
 
   @override
   State<LaamsTabbedScaffold> createState() => _LaamsTabbedScaffoldState();
 }
 
-class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTickerProviderStateMixin {
-  int _index = 0;
+class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
+    with SingleTickerProviderStateMixin {
+  // final int _index = 0;
+  int _currentTab = 0;
   late ScrollController _scrollController;
   late TabController _tabController;
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _index = widget.currentTab;
     _scrollController = ScrollController();
-    _pageController = PageController(initialPage: _index);
+    final index = widget.tabs.indexWhere((e) => e.path == widget.currentPath);
+    if (index >= 0) _currentTab = index;
+
     _tabController = TabController(
-      initialIndex: _index,
+      initialIndex: _currentTab,
       length: widget.tabs.length,
       vsync: this,
     );
 
     _tabController.addListener(() {
-      _pageController.animateToPage(
-        _tabController.index,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-      );
+      widget.onTabSelected(widget.tabs[_tabController.index].path);
+      setState(() => _currentTab = _tabController.index);
     });
   }
 
@@ -90,7 +95,6 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
   void dispose() {
     _scrollController.dispose();
     _tabController.dispose();
-    _pageController.dispose();
     super.dispose();
   }
 
@@ -103,16 +107,30 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
     return false;
   }
 
+  bool get _hasTopTabBar {
+    if (widget.header != null) return false;
+    if (widget.tabs.isEmpty) return false;
+    if (widget.hideSingleTab && widget.tabs.length < 2) return false;
+    return true;
+  }
+
+  double get _toolbarHeight {
+    if (!_hasTitleBar && !_hasTopTabBar) return 0;
+    if (_hasTitleBar && !_hasTopTabBar) return widget.titleBarHeight;
+    if (!_hasTitleBar && _hasTopTabBar) return 46 + 3;
+    return widget.titleBarHeight + (46 + 3);
+  }
+
   double get _appBarHeight {
-    final hHeight = widget.headerHeight ?? widget.tabs[_index].headerHeight;
+    final hHeight =
+        widget.headerHeight ?? widget.tabs[_currentTab].headerHeight;
     if (hHeight != null) return hHeight;
-    if (!_hasTitleBar) return 50;
-    return widget.titleBarHeight + 50;
+    return _toolbarHeight;
   }
 
   bool _areTabsScrollable(BuildContext context) {
     final areScrollable = widget.areTabsScrollable;
-    if (areScrollable != null) areScrollable;
+    if (areScrollable != null) return areScrollable;
     final screenSize = MediaQuery.of(context).size;
     if (screenSize.width <= 320) return true;
     if (screenSize.width <= 500) return widget.tabs.length <= 3 ? false : true;
@@ -122,35 +140,36 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
   TabAlignment _getTabsAlignment(BuildContext context) {
     final alignment = widget.tabsAlignment;
     if (alignment != null) return alignment;
-    final screenSize = MediaQuery.of(context).size;
-    if (screenSize.width <= 320) return TabAlignment.start;
-    if (screenSize.width <= 500) {
-      return widget.tabs.length <= 3 ? TabAlignment.fill : TabAlignment.start;
-    }
-    return TabAlignment.start;
+    final areScrollabel = _areTabsScrollable(context);
+    if (areScrollabel) return TabAlignment.start;
+    return TabAlignment.fill;
   }
 
   bool _listenToScroll(ScrollUpdateNotification note) {
     if (note.metrics.axis == Axis.horizontal) return false;
+    final innerMaxExtent = note.metrics.maxScrollExtent;
     final outerOffset = _scrollController.offset;
     final innerOffset = note.metrics.pixels;
-    final shouldSync = outerOffset != innerOffset && innerOffset <= _appBarHeight;
-    if (shouldSync) _scrollController.jumpTo(innerOffset);
-    final ensure = innerOffset >= _appBarHeight && outerOffset != _appBarHeight;
-    if (ensure) _scrollController.jumpTo(_appBarHeight);
+
+    if (outerOffset != innerOffset && innerOffset <= _appBarHeight) {
+      final smallInnerOffset = innerMaxExtent <= _appBarHeight;
+      final scrolledEnough = innerOffset >= innerMaxExtent;
+      if (smallInnerOffset && scrolledEnough) return false;
+      _scrollController.jumpTo(innerOffset);
+    }
+
+    if (innerOffset >= _appBarHeight && outerOffset != _appBarHeight) {
+      _scrollController.jumpTo(_appBarHeight);
+    }
+
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final tab = widget.tabs[_index];
-    Widget page = PageView.builder(
-      controller: _pageController,
-      itemCount: widget.tabs.length,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, i) => widget.tabs[i].child,
-    );
+    final tab = widget.tabs[_currentTab];
 
+    Widget page = widget.body;
     if (tab.bodyWidth != null || tab.bodyHeight != null) {
       page = SizedBox(
         height: tab.bodyHeight,
@@ -164,36 +183,27 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
       page = Padding(padding: tab.bodyMargin!, child: page);
     }
 
-    final physics = switch (tab.listenToInnerScroll) {
-      true => const NeverScrollableScrollPhysics(),
-      false => const BouncingScrollPhysics(),
-    };
-
     Widget scrollView = NestedScrollView(
       controller: _scrollController,
-      floatHeaderSlivers: widget.isAppBarFloating,
-      physics: physics,
+      floatHeaderSlivers: false,
+      physics: const NeverScrollableScrollPhysics(),
       headerSliverBuilder: _builHeaders,
       body: page,
     );
 
-    if (tab.listenToInnerScroll) {
-      scrollView = NotificationListener<ScrollUpdateNotification>(
-        onNotification: _listenToScroll,
-        child: scrollView,
-      );
-    }
-
-    return scrollView;
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: _listenToScroll,
+      child: scrollView,
+    );
   }
 
   List<Widget> _builHeaders(BuildContext context, bool innerBoxIsScrolled) {
     final theme = Theme.of(context);
     final isS = MediaQuery.of(context).size.width <= 500;
-    final tab = widget.tabs[_index];
+    final tab = widget.tabs[_currentTab];
 
     Widget? leading = widget.leading;
-    if (widget.leading == null && widget.leadingIcon != null) {
+    if (widget.leadingIcon != null) {
       leading = Icon(
         widget.leadingIcon,
         color: widget.leadingIconColor ?? theme.textTheme.bodyLarge?.color,
@@ -217,6 +227,8 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
       title = Text(
         widget.titleText ?? '',
         style: style,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         textAlign: widget.centerTitle ? TextAlign.center : TextAlign.start,
       );
     }
@@ -238,49 +250,57 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
       );
 
       titleBar = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22),
         height: widget.titleBarHeight,
+        padding: widget.titleBarPadding,
         child: row,
       );
     }
 
-    PreferredSizeWidget? tabBar = TabBar(
-      onTap: (index) => setState(() => _index = index),
-      controller: _tabController,
-      isScrollable: _areTabsScrollable(context),
-      tabAlignment: _getTabsAlignment(context),
-      indicatorColor: theme.primaryColor,
-      dividerColor: theme.cardColor,
-      dividerHeight: 2,
-      indicatorWeight: 3,
-      labelColor: theme.primaryColor,
-      unselectedLabelColor: theme.textTheme.bodyLarge?.color,
-      labelStyle: theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
-      labelPadding: EdgeInsets.symmetric(horizontal: isS ? 12 : 17),
-      overlayColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
-      tabs: widget.tabs.map(_mapTab).toList(),
-    );
-    if (widget.hideSingleTab && widget.tabs.length < 2) tabBar = null;
+    PreferredSizeWidget? tabBar;
+    if (widget.tabs.isNotEmpty) {
+      _LaamsScaffoldTab tabs(LaamsScaffoldTabData data) {
+        final index = widget.tabs.indexWhere((e) => e.label == data.label);
+        return _LaamsScaffoldTab(
+          data: data,
+          tabsAlignment: _getTabsAlignment(context),
+          isSelected: index == _currentTab,
+          tabsLength: widget.tabs.length,
+        );
+      }
+
+      tabBar = TabBar(
+        controller: _tabController,
+        isScrollable: _areTabsScrollable(context),
+        tabAlignment: _getTabsAlignment(context),
+        indicatorColor: theme.primaryColor,
+        dividerColor: theme.cardColor,
+        dividerHeight: 2,
+        indicatorWeight: 3,
+        labelColor: theme.primaryColor,
+        unselectedLabelColor: theme.textTheme.bodyLarge?.color,
+        labelStyle:
+            theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
+        labelPadding: EdgeInsets.symmetric(horizontal: isS ? 10 : 17),
+        overlayColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
+        tabs: widget.tabs.map(tabs).toList(),
+      );
+      if (widget.hideSingleTab && widget.tabs.length < 2) tabBar = null;
+    }
 
     Widget? toolBar;
-    if (tabBar == null && titleBar != null) toolBar = titleBar;
-    if (tabBar != null && titleBar == null && widget.header == null) {
-      toolBar = tabBar;
+    if (titleBar != null || tabBar != null) {
+      if (titleBar != null && tabBar == null) toolBar = titleBar;
+      if (titleBar == null && tabBar != null) toolBar = tabBar;
+      if (titleBar != null && tabBar != null) {
+        toolBar = Column(children: [titleBar, tabBar]);
+      }
+      if (widget.header != null) toolBar = titleBar;
     }
-    if (tabBar != null && titleBar != null && widget.header == null) {
-      toolBar = Column(children: [titleBar, tabBar]);
-    }
-    if (widget.header != null) toolBar = titleBar;
 
     Widget? header = widget.header ?? tab.header;
-    if (tab.hasHeader && widget.header == null && tab.header == null) {
-      header = _LaamsScaffoldHeader(
-        data: tab,
-        hasTitleBar: _hasTitleBar,
-      );
-
+    if (header == null && tab.hasHeader) {
       header = FlexibleSpaceBar(
-        background: header,
+        background: _LaamsScaffoldHeader(data: tab, topSpacing: _toolbarHeight),
         collapseMode: CollapseMode.none,
         stretchModes: const [StretchMode.zoomBackground],
       );
@@ -288,30 +308,23 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
 
     Widget sliverAppBar = SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: widget.headerHeight ?? tab.headerHeight,
-      collapsedHeight: switch (_hasTitleBar) {
-        true => widget.titleBarHeight + (tabBar?.preferredSize.height ?? 0),
-        false => tabBar?.preferredSize.height ?? 0,
-      },
-      toolbarHeight: switch (_hasTitleBar) {
-        true => widget.titleBarHeight + (tabBar?.preferredSize.height ?? 0),
-        false => tabBar?.preferredSize.height ?? 0,
-      },
-      leadingWidth: 0,
       primary: widget.isAppBarPrimary,
       pinned: widget.isAppBarPinned,
       floating: widget.isAppBarFloating,
       snap: false,
       forceElevated: false,
+      expandedHeight: _appBarHeight,
+      collapsedHeight: _toolbarHeight,
+      toolbarHeight: _toolbarHeight,
+      leadingWidth: 0,
+      titleSpacing: 0,
+      elevation: 0,
       backgroundColor: theme.scaffoldBackgroundColor,
       surfaceTintColor: theme.scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
       title: toolBar,
-      titleSpacing: 0,
       centerTitle: true,
       flexibleSpace: header,
-      elevation: 0,
-      // bottom: _hasTitleBar ? tabBar : null,
       bottom: widget.header != null ? tabBar : null,
     );
 
@@ -324,21 +337,10 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold> with SingleTi
 
     return <Widget>[sliverAppBar];
   }
-
-  _LaamsScaffoldTab _mapTab(LaamsScaffoldTabData data) {
-    final dataIndex = widget.tabs.indexWhere((e) => e.label == data.label);
-
-    return _LaamsScaffoldTab(
-      data: data,
-      tabsAlignment: _getTabsAlignment(context),
-      isSelected: dataIndex == _index,
-      tabsLength: widget.tabs.length,
-    );
-  }
 }
 
 class LaamsScaffoldTabData {
-  final bool listenToInnerScroll;
+  final String path;
   final bool hasScrollObsorber;
   final IconData? icon;
   final IconData? activeIcon;
@@ -368,17 +370,17 @@ class LaamsScaffoldTabData {
   final AlignmentGeometry bodyAlignment;
   final EdgeInsetsGeometry? bodyMargin;
 
-  final Widget? child;
+  // final Widget? body;
 
   const LaamsScaffoldTabData({
-    this.listenToInnerScroll = false,
+    required this.path,
     this.hasScrollObsorber = true,
     this.icon,
     this.activeIcon,
     this.iconSize = 20,
     required this.label,
     this.header,
-    this.headerMargin = const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+    this.headerMargin = const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
     this.headerHeight,
     this.headerBackgroundColor,
     this.headerBoxAlignment = AlignmentDirectional.center,
@@ -398,7 +400,7 @@ class LaamsScaffoldTabData {
     this.bodyHeight,
     this.bodyAlignment = Alignment.center,
     this.bodyMargin,
-    required this.child,
+    // required this.body,
   });
 
   bool get hasHeader {
@@ -471,8 +473,8 @@ class _LaamsScaffoldTab extends StatelessWidget {
 
 class _LaamsScaffoldHeader extends StatelessWidget {
   final LaamsScaffoldTabData data;
-  final bool hasTitleBar;
-  const _LaamsScaffoldHeader({required this.data, required this.hasTitleBar});
+  final double topSpacing;
+  const _LaamsScaffoldHeader({required this.data, required this.topSpacing});
 
   @override
   Widget build(BuildContext context) {
@@ -592,7 +594,7 @@ class _LaamsScaffoldHeader extends StatelessWidget {
     }
 
     header = Padding(
-      padding: EdgeInsets.only(top: hasTitleBar ? 100 : 50),
+      padding: EdgeInsets.only(top: topSpacing),
       child: header,
     );
 

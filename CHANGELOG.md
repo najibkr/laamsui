@@ -1,3 +1,6 @@
+## 0.3.0
+- Added more features
+
 ## 0.2.5
 - Stablized LaamsTabbedScaffold
 

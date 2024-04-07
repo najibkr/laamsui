@@ -1,17 +1,18 @@
 name: laamsui
 description: "A design system with a collection of Futter UI Widgets and dart extensions."
-version: 0.2.5
+version: 0.3.0
 homepage: https://laams.io
 repository: https://github.com/najibkr/laamsui
 issue_tracker: https://github.com/najibkr/laamsui/issues
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: ">=3.3.3 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  async: ^2.11.0
 
 dev_dependencies:
   flutter_test:
@@ -19,12 +20,11 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
-
   # Local Assets
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
- 
+  assets:
+    - assets/svgs/
+
+
   # Local Fonts:
   fonts:
     - family: Ionicons

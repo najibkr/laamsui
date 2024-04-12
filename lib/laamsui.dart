@@ -6,4 +6,5 @@ library laamsui;
 export 'src/animations.dart';
 export 'src/device.dart';
 export 'src/laams_icons.dart';
+export 'src/table.dart';
 export 'src/widgets.dart';

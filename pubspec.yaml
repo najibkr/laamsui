@@ -13,6 +13,9 @@ dependencies:
   flutter:
     sdk: flutter
   async: ^2.11.0
+  flutter_svg: ^2.0.10+1
+  flutter_animate: ^4.5.0
+  two_dimensional_scrollables: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -23,7 +26,6 @@ flutter:
   # Local Assets
   assets:
     - assets/svgs/
-
 
   # Local Fonts:
   fonts:

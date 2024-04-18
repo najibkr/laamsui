@@ -268,6 +268,12 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         );
       }
 
+      final tabPadding = switch (_getTabsAlignment(context)) {
+        TabAlignment.fill => 3.0,
+        TabAlignment.center => 5.0,
+        _ => isS ? 16.0 : 18.0,
+      };
+
       tabBar = TabBar(
         controller: _tabController,
         isScrollable: _areTabsScrollable(context),
@@ -280,7 +286,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         unselectedLabelColor: theme.textTheme.bodyLarge?.color,
         labelStyle:
             theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
-        labelPadding: EdgeInsets.symmetric(horizontal: isS ? 10 : 17),
+        labelPadding: EdgeInsets.symmetric(horizontal: tabPadding),
         overlayColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
         tabs: widget.tabs.map(tabs).toList(),
       );

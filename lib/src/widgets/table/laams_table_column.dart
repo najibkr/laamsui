@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/src/laams_icons.dart';
 
 class LaamsTableColumn extends StatefulWidget {
   final void Function()? onSort;
+  final IconData? sortIcon;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -15,6 +15,7 @@ class LaamsTableColumn extends StatefulWidget {
   const LaamsTableColumn({
     super.key,
     this.onSort,
+    this.sortIcon,
     this.alignment = AlignmentDirectional.center,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 3),
@@ -47,17 +48,21 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
     );
 
     Widget items = Text(widget.label, style: style);
-    if (widget.onSort != null) {
-      final icon = widget.isAscending
-          ? LaamsIcons.sort_ascending1
-          : LaamsIcons.sort_descending1;
+    if (widget.sortIcon != null) {
       final color = theme.textTheme.bodyLarge?.color;
       final btn = GestureDetector(
         onTap: widget.onSort,
-        child: Icon(icon, size: 20, color: color),
+        child: Icon(widget.sortIcon, size: 20, color: color),
       );
 
       items = Row(children: [Expanded(child: items), btn]);
+    }
+
+    if (widget.onSort != null && widget.sortIcon == null) {
+      items = GestureDetector(
+        onTap: widget.onSort,
+        child: items,
+      );
     }
 
     Widget container = Container(

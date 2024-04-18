@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laamsui/models.dart';
 
 class LaamsTableMessage extends StatelessWidget {
-  final void Function()? onButtonPressed;
+  final void Function()? onAccept;
   final double? width;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -18,7 +18,7 @@ class LaamsTableMessage extends StatelessWidget {
 
   const LaamsTableMessage({
     super.key,
-    this.onButtonPressed,
+    this.onAccept,
     this.width = 500,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -81,7 +81,7 @@ class LaamsTableMessage extends StatelessWidget {
       );
 
       btn = TextButton(
-        onPressed: onButtonPressed,
+        onPressed: onAccept,
         style: buttonStyle,
         child: btn,
       );

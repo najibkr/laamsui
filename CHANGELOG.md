@@ -1,3 +1,7 @@
+## 0.4.2
+- Fixed Bugs in LaamsTable
+- Updated Dependencies
+
 ## 0.4.1
 - Fixed Bugs in LaamsTable
 

@@ -120,7 +120,6 @@ class LaamsTable<Entity> extends StatelessWidget {
 
   final void Function()? onCancel;
   final void Function()? onRetry;
-  // final void Function()? onFetchMore;
   final void Function(String value)? onCancelSearch;
   final void Function()? onAddNew;
 
@@ -128,6 +127,7 @@ class LaamsTable<Entity> extends StatelessWidget {
   final Widget? Function(BuildContext, int)? mobileRowBuilder;
   final bool isSliver;
   final Widget Function(BuildContext, LaamsCellData<Entity>) cellBuilder;
+  final int totalsCount;
   final Widget Function(BuildContext, LaamsCellData<String?>)? totalsBuilder;
 
   final String cancelLabel;
@@ -179,9 +179,6 @@ class LaamsTable<Entity> extends StatelessWidget {
     this.loadingRowsCount = 10,
     this.loadingRowsHeight = 40,
     this.rows = const [],
-
-    // Other
-    // this.onFetchMore,
     this.onCancel,
     this.onRetry,
     this.onCancelSearch,
@@ -189,6 +186,7 @@ class LaamsTable<Entity> extends StatelessWidget {
     this.mobileBreakPoint = 600.0,
     this.mobileRowBuilder,
     required this.cellBuilder,
+    this.totalsCount = 1,
     this.totalsBuilder,
     this.isSliver = true,
     this.cancelLabel = 'Cancel',
@@ -209,15 +207,6 @@ class LaamsTable<Entity> extends StatelessWidget {
     if (boxShadow != null) return true;
     return false;
   }
-
-  // bool get _hasMoreButton {
-  //   if (onFetchMore != null) return true;
-  //   if ((loadMoreLabel ?? '').isNotEmpty) return true;
-  //   if ((allLoadedMessage ?? '').isNotEmpty) return true;
-  //   if ((isFetchingMore != null)) return true;
-  //   if (areAllLoaded != null) return true;
-  //   return false;
-  // }
 
   bool _shouldShowMobileView(double maxWidth) {
     final isMobile = maxWidth <= mobileBreakPoint;
@@ -242,7 +231,7 @@ class LaamsTable<Entity> extends StatelessWidget {
   int get _rowsCount {
     if (status.type.isQuerying) return loadingRowsCount;
     final extraRows = switch (totalsBuilder != null) {
-      true => moreButton != null ? 3 : 2,
+      true => moreButton != null ? 2 + totalsCount : 1 + totalsCount,
       false => moreButton != null ? 2 : 1,
     };
     if (moreButton != null) return rows.length + extraRows;

@@ -1,5 +1,6 @@
 export 'table/cells/laams_autocomplete_cell.dart';
 export 'table/cells/laams_cell_data.dart';
+export 'table/cells/laams_date_time_cell.dart';
 export 'table/cells/laams_editable_cell.dart';
 export 'table/cells/laams_options_cell.dart';
 export 'table/cells/laams_text_cell.dart';

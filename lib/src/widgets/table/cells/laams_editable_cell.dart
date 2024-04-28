@@ -20,7 +20,13 @@ class LaamsEditableCell<T> extends StatefulWidget {
   final TextAlign valueTextAlignment;
   final Color? valueTextColor;
   final FontWeight? valueTextFontWeight;
+  final String? unit;
+  final double? unitFontSize;
+  final Color? unitColor;
+  final FontWeight? unitFontWeight;
   final bool enabled;
+  final double? minValue;
+  final double? maxValue;
 
   const LaamsEditableCell({
     super.key,
@@ -43,7 +49,13 @@ class LaamsEditableCell<T> extends StatefulWidget {
     this.valueTextAlignment = TextAlign.start,
     this.valueTextColor,
     this.valueTextFontWeight,
+    this.unit,
+    this.unitFontSize,
+    this.unitFontWeight,
+    this.unitColor,
     this.enabled = true,
+    this.minValue,
+    this.maxValue,
   });
 
   @override
@@ -90,6 +102,20 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     return null;
   }
 
+  String _translateNumbers(String value) {
+    return value
+        .replaceAll('۰', '0')
+        .replaceAll("۱", "1")
+        .replaceAll("۲", "2")
+        .replaceAll("۳", "3")
+        .replaceAll("۴", "4")
+        .replaceAll("۵", "5")
+        .replaceAll("۶", "6")
+        .replaceAll("۷", "7")
+        .replaceAll("۸", "8")
+        .replaceAll("۹", "9");
+  }
+
   void _handleUnfocus() {
     if (_focusNode.hasFocus) return;
     if (widget.value == _controller.text) return;
@@ -99,27 +125,34 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
       return widget.onUnfocused!(_controller.text as T);
     }
     if (T is double || T == double) {
-      return widget.onUnfocused!(double.tryParse(_controller.text) as T?);
+      final translated = _translateNumbers(_controller.text);
+      _controller.text = translated;
+      return widget.onUnfocused!(double.tryParse(translated) as T?);
     }
 
     if (T is int || T == int) {
-      return widget.onUnfocused!(int.tryParse(_controller.text) as T?);
+      final translated = _translateNumbers(_controller.text);
+      _controller.text = translated;
+      return widget.onUnfocused!(int.tryParse(translated) as T?);
     }
   }
 
-  void _onChanged(String value) {
+  void _onChanged(String? value) {
     if (widget.onChanged == null) return;
+    if (value == null) return widget.onChanged!(null);
 
     if (T is String || T == String) {
-      return widget.onChanged!(value as T);
+      return widget.onChanged!(value as T?);
     }
 
     if (T is double || T == double) {
-      return widget.onChanged!(double.tryParse(value) as T?);
+      final translated = _translateNumbers(value);
+      return widget.onChanged!(double.tryParse(translated) as T?);
     }
 
     if (T is int || T == int) {
-      return widget.onChanged!(int.tryParse(value) as T?);
+      final translated = _translateNumbers(value);
+      return widget.onChanged!(int.tryParse(translated) as T?);
     }
   }
 
@@ -132,12 +165,103 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     }
 
     if (T is double || T == double) {
-      return widget.onSaved!(double.tryParse(value) as T?);
+      final translated = _translateNumbers(value);
+      return widget.onSaved!(double.tryParse(translated) as T?);
     }
 
     if (T is int || T == int) {
-      return widget.onSaved!(int.tryParse(value) as T?);
+      final translated = _translateNumbers(value);
+      return widget.onSaved!(int.tryParse(translated) as T?);
     }
+  }
+
+  String? _validator(String? input) {
+    final value = input ?? '';
+    if (widget.minValue == null && widget.maxValue == null) return null;
+    final hasMin = widget.minValue != null && widget.maxValue == null;
+    final hasMax = widget.minValue == null && widget.maxValue != null;
+    final hasMinMax = widget.minValue != null && widget.maxValue != null;
+
+    if (hasMin && (T is String || T == String)) {
+      return switch (value.length < (widget.minValue as int)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMin && (T is double || T == double)) {
+      final doubleValue = double.tryParse(value) ?? 0.0;
+      return switch (doubleValue < (widget.minValue ?? 0)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMin && (T is int || T == int)) {
+      final intValue = int.tryParse(value) ?? 0;
+      return switch (intValue < (widget.minValue as int)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMax && (T is String || T == String)) {
+      return switch (value.length > (widget.maxValue as int)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMax && (T is double || T == double)) {
+      final doubleValue = double.tryParse(value) ?? 0.0;
+      return switch (doubleValue > (widget.maxValue ?? 0)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMax && (T is int || T == int)) {
+      final intValue = int.tryParse(value) ?? 0;
+      return switch (intValue > (widget.maxValue as int)) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMinMax && (T is String || T == String)) {
+      return switch ((value.length < (widget.minValue as int)) ||
+          (value.length > (widget.maxValue as int))) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMinMax && (T is double || T == double)) {
+      final doubleValue = double.tryParse(value) ?? 0.0;
+      return switch ((doubleValue < (widget.minValue ?? 0)) ||
+          (doubleValue > (widget.maxValue ?? 0))) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    if (hasMinMax && (T is int || T == int)) {
+      final intValue = int.tryParse(value) ?? 0;
+      return switch ((intValue < (widget.minValue as int)) ||
+          (intValue > (widget.maxValue as int))) {
+        true => '',
+        _ => null,
+      };
+    }
+
+    return null;
+  }
+
+  int? get _maxLength {
+    if (widget.maxValue == null) return null;
+    if ((T is String || T == String)) return widget.maxValue as int?;
+    if ((T is int || T == int)) return '${widget.maxValue}'.length;
+    return (widget.maxValue ?? 0).toStringAsFixed(2).split('.').first.length;
   }
 
   @override
@@ -154,37 +278,61 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
       borderRadius: BorderRadius.zero,
     );
 
+    const errorBorder = OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red, width: 0.5),
+      borderRadius: BorderRadius.zero,
+    );
+
+    Widget? suffix;
+    if ((widget.unit ?? '').isNotEmpty) {
+      final style = theme.textTheme.bodyLarge?.copyWith(
+        fontSize: widget.unitFontSize,
+        fontWeight: widget.unitFontWeight,
+        color: widget.unitColor,
+      );
+
+      suffix = Text(
+        widget.unit ?? '',
+        style: style,
+        textAlign: TextAlign.center,
+      );
+    }
+
     final decoration = InputDecoration(
       border: border,
       focusColor: widget.backgroundColor ?? theme.cardColor,
       fillColor: widget.backgroundColor ?? theme.scaffoldBackgroundColor,
       hoverColor: widget.backgroundColor ?? theme.cardColor,
-      errorBorder: border,
+      errorBorder: errorBorder,
       enabledBorder: border,
       focusedBorder: border,
       disabledBorder: border,
-      focusedErrorBorder: border,
+      focusedErrorBorder: errorBorder,
       contentPadding: widget.padding,
       hintText: widget.hintText,
+      suffix: suffix,
+      errorStyle: const TextStyle(height: 0, fontSize: 0),
+      counterText: '',
     );
 
-    Widget cell = Align(
-      alignment: widget.alignment,
-      child: TextFormField(
-        controller: _controller,
-        focusNode: _focusNode,
-        keyboardType: _keyboardType,
-        textInputAction: widget.textInputAction,
-        textAlign: widget.valueTextAlignment,
-        style: widget.valueStyle ?? style,
-        decoration: decoration,
-        enabled: widget.enabled,
-        onChanged: _onChanged,
-        onSaved: _onSaved,
-      ),
+    Widget field = TextFormField(
+      controller: _controller,
+      focusNode: _focusNode,
+      keyboardType: _keyboardType,
+      textInputAction: widget.textInputAction,
+      textAlign: widget.valueTextAlignment,
+      style: widget.valueStyle ?? style,
+      decoration: decoration,
+      enabled: widget.enabled,
+      onChanged: _onChanged,
+      onSaved: _onSaved,
+      validator: _validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      maxLength: _maxLength == null ? null : (_maxLength ?? 0) + 5,
     );
 
-    if (widget.onTap == null) return cell;
-    return GestureDetector(onTap: widget.onTap, child: cell);
+    field = Align(alignment: widget.alignment, child: field);
+    if (widget.onTap == null) return field;
+    return GestureDetector(onTap: widget.onTap, child: field);
   }
 }

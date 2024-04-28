@@ -4,14 +4,13 @@ class LaamsOptionsCell<T> extends StatelessWidget {
   final void Function()? onTap;
   final double? height;
   final double? width;
-  final double? menuWidth;
-  final double? menuHeight;
-  final void Function(String tag)? onSearch;
-  final void Function(T? value)? onSelected;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
+  final double? menuWidth;
+  final double? menuHeight;
+  final void Function(T? value)? onSelected;
   final T? value;
   final TextStyle? valueStyle;
   final double? valueTextFontSize;
@@ -19,7 +18,6 @@ class LaamsOptionsCell<T> extends StatelessWidget {
   final Color? valueTextColor;
   final FontWeight? valueTextFontWeight;
   final String? hintText;
-  final List<DropdownMenuEntry<T>> entries;
   final List<LaamsCellOption<T>> options;
   final Widget? optionsChild;
 
@@ -30,12 +28,11 @@ class LaamsOptionsCell<T> extends StatelessWidget {
     this.width,
     this.menuWidth,
     this.menuHeight,
-    this.onSearch,
-    this.onSelected,
     this.alignment = AlignmentDirectional.centerStart,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 5),
     this.backgroundColor,
+    this.onSelected,
     required this.value,
     this.valueStyle,
     this.valueTextFontSize,
@@ -43,8 +40,7 @@ class LaamsOptionsCell<T> extends StatelessWidget {
     this.valueTextColor,
     this.valueTextFontWeight,
     this.hintText,
-    this.entries = const [],
-    this.options = const [],
+    required this.options,
     this.optionsChild,
   });
 
@@ -128,7 +124,9 @@ class LaamsOptionsCell<T> extends StatelessWidget {
         position: PopupMenuPosition.under,
         itemBuilder: _buildPopupItems,
         constraints: BoxConstraints.tightFor(
-            width: menuWidth ?? width, height: menuHeight),
+          width: menuWidth ?? width,
+          height: menuHeight,
+        ),
         child: option,
       ),
     );

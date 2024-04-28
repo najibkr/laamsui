@@ -1,3 +1,7 @@
+## 0.5.0
+- Added more features
+- Fixed bugs
+
 ## 0.4.2
 - Fixed Bugs in LaamsTable
 - Updated Dependencies

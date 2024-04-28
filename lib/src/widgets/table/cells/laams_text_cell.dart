@@ -12,7 +12,11 @@ class LaamsTextCell extends StatelessWidget {
   final BoxBorder? border;
   final List<BoxShadow>? boxShadow;
   final AlignmentGeometry? childAlignment;
+  final Widget? leading;
   final Widget? child;
+  final IconData? icon;
+  final double? iconSize;
+  final Color? iconColor;
   final String? text;
   final Widget? textsTop;
   final MainAxisAlignment textsMainAxisAlignment;
@@ -44,7 +48,11 @@ class LaamsTextCell extends StatelessWidget {
     this.borderRadius,
     this.border,
     this.boxShadow,
+    this.leading,
     this.child,
+    this.icon,
+    this.iconSize,
+    this.iconColor,
     this.text,
     this.textsTop,
     this.textsMainAxisAlignment = MainAxisAlignment.start,
@@ -84,6 +92,14 @@ class LaamsTextCell extends StatelessWidget {
       overflow: textOverflow,
     );
 
+    if (icon != null) {
+      textWidget = Icon(
+        icon,
+        size: iconSize,
+        color: iconColor,
+      );
+    }
+
     if (isTextSelectable) {
       textWidget = SelectableText(
         text ?? '',
@@ -93,8 +109,14 @@ class LaamsTextCell extends StatelessWidget {
       );
     }
 
-    if (actions.isNotEmpty) {
-      textWidget = Row(children: [Expanded(child: textWidget), ...actions]);
+    if (actions.isNotEmpty || leading != null) {
+      textWidget = Row(
+        children: [
+          if (leading != null) leading!,
+          Expanded(child: textWidget),
+          ...actions,
+        ],
+      );
     }
 
     if (texts.isNotEmpty) {

@@ -3,12 +3,28 @@ import 'package:flutter/material.dart';
 class LaamsTableColumn extends StatefulWidget {
   final void Function()? onSort;
   final IconData? sortIcon;
+  final double width;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
-  final String label;
-  final double width;
+  final IconData? icon;
+  final double? iconSize;
+  final Color? iconColor;
+  final String? label;
+  final TextStyle? labelTextStyle;
+  final Color? labelColor;
+  final FontWeight? labelFontWeight;
+  final double? labelFontSize;
+  final double? labelLineSpacing;
+  final TextAlign? labelTextAlignment;
+  final int? labelMaxLines;
+  final TextOverflow? labelOverflow;
+  final Widget? overlay;
+  final double? overlayStartPosition;
+  final double? overlayTopPosition;
+  final double? overlayEndPosition;
+  final double? overlayBottomPosition;
   final bool isPinned;
   final bool isAscending;
 
@@ -16,12 +32,28 @@ class LaamsTableColumn extends StatefulWidget {
     super.key,
     this.onSort,
     this.sortIcon,
+    required this.width,
     this.alignment = AlignmentDirectional.center,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 3),
     this.backgroundColor,
-    required this.label,
-    required this.width,
+    this.icon,
+    this.iconColor,
+    this.iconSize,
+    this.label,
+    this.labelTextStyle,
+    this.labelColor,
+    this.labelFontWeight,
+    this.labelFontSize,
+    this.labelLineSpacing,
+    this.labelTextAlignment,
+    this.labelMaxLines,
+    this.labelOverflow,
+    this.overlay,
+    this.overlayStartPosition,
+    this.overlayTopPosition,
+    this.overlayEndPosition,
+    this.overlayBottomPosition,
     this.isPinned = false,
     this.isAscending = true,
   });
@@ -43,11 +75,28 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.bodyLarge?.copyWith(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
+      color: widget.labelColor,
+      fontSize: widget.labelFontSize ?? 14,
+      fontWeight: widget.labelFontWeight ?? FontWeight.w500,
+      height: widget.labelLineSpacing,
     );
 
-    Widget items = Text(widget.label, style: style);
+    Widget items = Text(
+      widget.label ?? '',
+      style: widget.labelTextStyle ?? style,
+      textAlign: widget.labelTextAlignment,
+      maxLines: widget.labelMaxLines,
+      overflow: widget.labelOverflow,
+    );
+
+    if (widget.icon != null) {
+      items = Icon(
+        widget.icon,
+        size: widget.iconSize,
+        color: widget.iconColor,
+      );
+    }
+
     if (widget.sortIcon != null) {
       final color = theme.textTheme.bodyLarge?.color;
       final btn = GestureDetector(
@@ -71,22 +120,26 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
       child: items,
     );
 
-    // container = OverlayPortal(
-    //   controller: _controller,
-    //   overlayChildBuilder: (context) {
-    //     return const PositionedDirectional(
-    //       child: Padding(
-    //         padding: EdgeInsets.all(228.0),
-    //         child: Text("hello"),
-    //       ),
-    //     );
-    //   },
-    //   child: Align(alignment: widget.alignment, child: container),
-    // );
+    if (widget.overlay != null) {
+      container = OverlayPortal(
+        controller: _controller,
+        overlayChildBuilder: _buildOverlay,
+      );
+    }
 
     return GestureDetector(
       onTap: () => _controller.toggle(),
       child: Align(alignment: widget.alignment, child: container),
+    );
+  }
+
+  Widget _buildOverlay(BuildContext context) {
+    return PositionedDirectional(
+      start: widget.overlayStartPosition,
+      top: widget.overlayTopPosition,
+      end: widget.overlayEndPosition,
+      bottom: widget.overlayBottomPosition,
+      child: widget.overlay ?? const SizedBox(),
     );
   }
 }

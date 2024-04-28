@@ -1,3 +1,5 @@
+## 0.5.1
+- Fixed bugs
 ## 0.5.0
 - Added more features
 - Fixed bugs

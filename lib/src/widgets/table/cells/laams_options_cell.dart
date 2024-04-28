@@ -20,6 +20,7 @@ class LaamsOptionsCell<T> extends StatelessWidget {
   final String? hintText;
   final List<LaamsCellOption<T>> options;
   final Widget? optionsChild;
+  final bool enabled;
 
   const LaamsOptionsCell({
     super.key,
@@ -42,6 +43,7 @@ class LaamsOptionsCell<T> extends StatelessWidget {
     this.hintText,
     required this.options,
     this.optionsChild,
+    this.enabled = true,
   });
 
   List<PopupMenuEntry<T>> _buildPopupItems(BuildContext context) {
@@ -113,6 +115,7 @@ class LaamsOptionsCell<T> extends StatelessWidget {
       child: PopupMenuButton<T>(
         onSelected: _onSelected,
         enableFeedback: false,
+        enabled: enabled,
         shadowColor: theme.shadowColor,
         initialValue: value,
         color: theme.cardColor,

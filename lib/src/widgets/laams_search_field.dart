@@ -18,6 +18,7 @@ class LaamsSearchField extends StatefulWidget {
 
   // Field Related:
   final void Function(String value) onSearch;
+  final String hintText;
   final bool autofocus;
   final int maxLength;
 
@@ -44,6 +45,7 @@ class LaamsSearchField extends StatefulWidget {
 
     // Field Related:
     required this.onSearch,
+    required this.hintText,
     this.autofocus = false,
     this.maxLength = 250,
 
@@ -157,6 +159,7 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
       prefixIcon: searchIcon,
       suffixIcon: deleteIcon,
       counterText: '',
+      hintText: widget.hintText,
       counterStyle: const TextStyle(height: 0, fontSize: 0),
     );
 

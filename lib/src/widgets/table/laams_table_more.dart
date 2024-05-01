@@ -22,7 +22,7 @@ class LaamsTableMore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isFetchingMore) return const LaamsLoading();
+    if (isFetchingMore) return const LaamsLoading.card(null);
 
     if (areAllLoaded && allLoadedMessage != null) {
       final theme = Theme.of(context);

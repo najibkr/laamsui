@@ -70,13 +70,12 @@ class LaamsLoading extends StatelessWidget {
 
   final double spacing;
 
-  const LaamsLoading({
+  const LaamsLoading.card(
+    this.message, {
     super.key,
-    this.type = WidgetType.card,
     this.height,
     this.width,
     this.margin,
-    this.message,
     this.messageStyle,
     this.messageColor,
     this.messageFontSize,
@@ -104,7 +103,77 @@ class LaamsLoading extends StatelessWidget {
     this.onButtonPressed,
     this.buttonLabel,
     this.spacing = 10,
-  });
+  }) : type = WidgetType.card;
+
+  const LaamsLoading.sliver(
+    this.message, {
+    super.key,
+    this.height,
+    this.width,
+    this.margin,
+    this.messageStyle,
+    this.messageColor,
+    this.messageFontSize,
+    this.messageFontWeight,
+    this.messageMaxLines = 2,
+    this.padding,
+    this.backgroundColor,
+    this.boxShadow,
+    this.border,
+    this.borderRadius,
+    this.indicatorType = IndicatorType.circular,
+    this.indicatorSize = const Size(50, 50),
+    this.indicatorColors = const [
+      Colors.deepOrangeAccent,
+      Colors.pinkAccent,
+      Colors.amber,
+      Colors.deepOrange,
+      Colors.lightGreen,
+      Colors.indigo,
+      Colors.orangeAccent,
+      Colors.blueAccent,
+    ],
+    this.indicatorPathBackgroundColor,
+    this.indicatorStrokeWidth,
+    this.onButtonPressed,
+    this.buttonLabel,
+    this.spacing = 10,
+  }) : type = WidgetType.sliver;
+
+  const LaamsLoading.screen(
+    this.message, {
+    super.key,
+    this.height,
+    this.width,
+    this.margin,
+    this.messageStyle,
+    this.messageColor,
+    this.messageFontSize,
+    this.messageFontWeight,
+    this.messageMaxLines = 2,
+    this.padding,
+    this.backgroundColor,
+    this.boxShadow,
+    this.border,
+    this.borderRadius,
+    this.indicatorType = IndicatorType.circular,
+    this.indicatorSize = const Size(50, 50),
+    this.indicatorColors = const [
+      Colors.deepOrangeAccent,
+      Colors.pinkAccent,
+      Colors.amber,
+      Colors.deepOrange,
+      Colors.lightGreen,
+      Colors.indigo,
+      Colors.orangeAccent,
+      Colors.blueAccent,
+    ],
+    this.indicatorPathBackgroundColor,
+    this.indicatorStrokeWidth,
+    this.onButtonPressed,
+    this.buttonLabel,
+    this.spacing = 10,
+  }) : type = WidgetType.screen;
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +256,7 @@ class LaamsLoading extends StatelessWidget {
       );
     }
 
-    if ((message ?? '').isEmpty) {
+    if ((message ?? '').trim().isEmpty) {
       if (btn != null) {
         final space = SizedBox(height: spacing);
         indicator = Column(

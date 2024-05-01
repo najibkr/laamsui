@@ -303,10 +303,10 @@ class LaamsTable<Entity> extends StatelessWidget {
     };
 
     table = switch (status.type) {
-      TableStatusType.loading => LaamsLoading(
+      TableStatusType.loading => LaamsLoading.card(
+          status.message,
           indicatorType: IndicatorType.ballPulseRise,
           margin: const EdgeInsets.symmetric(horizontal: 20),
-          message: status.message,
           indicatorSize: const Size(80, 50),
           width: 400,
           onButtonPressed: onCancel,

@@ -83,7 +83,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
 
   String? get _initialValue {
     if (widget.value == null) return null;
-    if (T is String || T == String) return widget.value as String;
+    if (T is String || T == String) return '${widget.value}';
     if (T is double || T == double) return '${widget.value}';
     if (T is int || T == int) return '${widget.value}';
     return null;
@@ -96,7 +96,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     if (T is double || T == double) {
       return const TextInputType.numberWithOptions(
         signed: true,
-        decimal: false,
+        decimal: true,
       );
     }
     return null;
@@ -183,7 +183,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     final hasMinMax = widget.minValue != null && widget.maxValue != null;
 
     if (hasMin && (T is String || T == String)) {
-      return switch (value.length < (widget.minValue as int)) {
+      return switch (value.length < (widget.minValue ?? 0).toInt()) {
         true => '',
         _ => null,
       };
@@ -199,14 +199,14 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
 
     if (hasMin && (T is int || T == int)) {
       final intValue = int.tryParse(value) ?? 0;
-      return switch (intValue < (widget.minValue as int)) {
+      return switch (intValue < (widget.minValue ?? 0).toInt()) {
         true => '',
         _ => null,
       };
     }
 
     if (hasMax && (T is String || T == String)) {
-      return switch (value.length > (widget.maxValue as int)) {
+      return switch (value.length > (widget.maxValue ?? 0).toInt()) {
         true => '',
         _ => null,
       };
@@ -222,15 +222,15 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
 
     if (hasMax && (T is int || T == int)) {
       final intValue = int.tryParse(value) ?? 0;
-      return switch (intValue > (widget.maxValue as int)) {
+      return switch (intValue > ((widget.maxValue ?? 0).toInt())) {
         true => '',
         _ => null,
       };
     }
 
     if (hasMinMax && (T is String || T == String)) {
-      return switch ((value.length < (widget.minValue as int)) ||
-          (value.length > (widget.maxValue as int))) {
+      return switch ((value.length < ((widget.minValue ?? 0).toInt())) ||
+          (value.length > (widget.maxValue ?? 0).toInt())) {
         true => '',
         _ => null,
       };
@@ -247,8 +247,8 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
 
     if (hasMinMax && (T is int || T == int)) {
       final intValue = int.tryParse(value) ?? 0;
-      return switch ((intValue < (widget.minValue as int)) ||
-          (intValue > (widget.maxValue as int))) {
+      return switch ((intValue < (widget.minValue ?? 0).toInt()) ||
+          (intValue > (widget.maxValue ?? 0).toInt())) {
         true => '',
         _ => null,
       };
@@ -259,7 +259,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
 
   int? get _maxLength {
     if (widget.maxValue == null) return null;
-    if ((T is String || T == String)) return widget.maxValue as int?;
+    if ((T is String || T == String)) return (widget.maxValue)?.toInt();
     if ((T is int || T == int)) return '${widget.maxValue}'.length;
     return (widget.maxValue ?? 0).toStringAsFixed(2).split('.').first.length;
   }

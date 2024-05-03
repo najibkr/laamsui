@@ -99,7 +99,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
         decimal: true,
       );
     }
-    return null;
+    return TextInputType.text;
   }
 
   String _translateNumbers(String value) {

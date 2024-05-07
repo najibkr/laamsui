@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/src/device.dart';
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsTableButton extends StatefulWidget {
   final void Function()? onPressed;
@@ -84,9 +84,9 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
     _overlayController = OverlayPortalController();
   }
 
-  void _handleOnTap(BuildContext context, bool isMobile) {
+  void _handleOnTap(BuildContext context) {
     if (widget.onPressed != null) return widget.onPressed!();
-    if (!isMobile) return _overlayController.show();
+    if (!context.isS) return _overlayController.show();
     _showBottomSheet(context);
   }
 
@@ -124,7 +124,8 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = LaamsDevice.isS(context);
+    // final isMobile = context.isS;
+    // final isMobile = LaamsDevice.isS(context);
     final theme = Theme.of(context);
 
     Widget? child;
@@ -185,7 +186,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       );
     }
 
-    if (!isMobile && widget.onPressed == null) {
+    if (!context.isS && widget.onPressed == null) {
       child = OverlayPortal(
         controller: _overlayController,
         overlayChildBuilder: _buildOverlay,
@@ -194,7 +195,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
     }
 
     child = GestureDetector(
-      onTap: () => _handleOnTap(context, isMobile),
+      onTap: () => _handleOnTap(context),
       child: child,
     );
 

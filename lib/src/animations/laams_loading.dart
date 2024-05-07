@@ -41,6 +41,7 @@ enum WidgetType { card, sliver, screen }
 
 class LaamsLoading extends StatelessWidget {
   final WidgetType type;
+  final AlignmentGeometry alignment;
   final double? height;
   final double? width;
   final EdgeInsetsGeometry? margin;
@@ -73,6 +74,7 @@ class LaamsLoading extends StatelessWidget {
   const LaamsLoading.card(
     this.message, {
     super.key,
+    this.alignment = Alignment.center,
     this.height,
     this.width,
     this.margin,
@@ -108,6 +110,7 @@ class LaamsLoading extends StatelessWidget {
   const LaamsLoading.sliver(
     this.message, {
     super.key,
+    this.alignment = Alignment.center,
     this.height,
     this.width,
     this.margin,
@@ -143,6 +146,7 @@ class LaamsLoading extends StatelessWidget {
   const LaamsLoading.screen(
     this.message, {
     super.key,
+    this.alignment = Alignment.center,
     this.height,
     this.width,
     this.margin,
@@ -328,10 +332,15 @@ class LaamsLoading extends StatelessWidget {
       child: indicator,
     );
 
+    indicator = Align(
+      alignment: alignment,
+      child: indicator,
+    );
+
     return switch (type) {
-      WidgetType.sliver => SliverToBoxAdapter(child: Center(child: indicator)),
-      WidgetType.screen => Scaffold(body: Center(child: indicator)),
-      _ => Center(child: indicator),
+      WidgetType.sliver => SliverToBoxAdapter(child: indicator),
+      WidgetType.screen => Scaffold(body: indicator),
+      _ => indicator,
     };
   }
 }

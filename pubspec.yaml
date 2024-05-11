@@ -1,6 +1,6 @@
 name: laamsui
 description: "A design system with a collection of Futter UI Widgets and dart extensions."
-version: 0.5.6
+version: 0.5.7
 homepage: https://laams.io
 repository: https://github.com/najibkr/laamsui
 issue_tracker: https://github.com/najibkr/laamsui/issues
@@ -11,8 +11,6 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
-  flutter_localizations:
     sdk: flutter
   async: ^2.11.0
   flutter_svg: ^2.0.10+1

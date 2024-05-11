@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class LaamsTextButton extends StatelessWidget {
   final void Function()? onPressed;
+  final AlignmentGeometry? alignment;
   final double? width;
   final double? height;
   final EdgeInsetsGeometry? margin;
@@ -16,6 +17,7 @@ class LaamsTextButton extends StatelessWidget {
   const LaamsTextButton({
     super.key,
     required this.onPressed,
+    this.alignment,
     this.width = 130,
     this.height,
     this.margin,
@@ -58,6 +60,10 @@ class LaamsTextButton extends StatelessWidget {
 
     if (height != null || width != null) {
       button = SizedBox(width: width, height: height, child: button);
+    }
+
+    if (alignment != null) {
+      button = Align(alignment: alignment!, child: button);
     }
 
     return button;

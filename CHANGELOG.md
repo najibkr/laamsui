@@ -1,2 +1,2 @@
-## 0.5.9
+## 0.5.10
 - Fixed bugs & upgraded dependencies

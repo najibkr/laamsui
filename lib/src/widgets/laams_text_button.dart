@@ -37,8 +37,8 @@ class LaamsTextButton extends StatelessWidget {
     final foreColor = foregroundColor ?? theme.primaryColor;
     var buttonStyle = ButtonStyle(
       visualDensity: VisualDensity.compact,
-      backgroundColor: MaterialStateProperty.all(bgColor),
-      foregroundColor: MaterialStateProperty.all(foreColor),
+      backgroundColor: WidgetStateProperty.all(bgColor),
+      foregroundColor: WidgetStateProperty.all(foreColor),
     );
     var iconWidget = Padding(
       padding: const EdgeInsetsDirectional.only(end: 5),

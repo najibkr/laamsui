@@ -36,12 +36,12 @@ extension ViewportExtension on BuildContext {
   static const double _xxxlBreakpoint = 1920;
 
   // Get Screen Size:
-  Size get screenSize => MediaQuery.of(this).size;
+  Size get screenSize => MediaQuery.sizeOf(this);
 
   /// Returns `true` if the viewport `width` is smaller than or equal to `130px`,
   /// **OR** the viewport `height` is smaller than or equal to `130px`.
   bool get isXXXS {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     final isCorrectWidth = size.width <= _xxxsBreakpoint;
     final isCorrectHeight = size.height <= _xxxsBreakpoint;
     return isCorrectWidth || isCorrectHeight;
@@ -55,7 +55,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than or equal to `290px`,
   /// **AND** the viewport `height` is smaller than or equal to `290px`.
   bool get isXXS {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     final isCorrectWidth = size.width <= _xxsBreakpoint;
     final isCorrectHeight = size.height <= _xxsBreakpoint;
     return isCorrectWidth && isCorrectHeight;
@@ -69,7 +69,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   /// or equal to `330px`,
   bool get isXS {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _xsBreakpoint;
   }
 
@@ -82,7 +82,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `500px`,
   bool get isS {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _sBreakpoint;
   }
 
@@ -95,7 +95,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `770px`,
   bool get isM {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _mBreakpoint;
   }
 
@@ -108,7 +108,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `1030px`,
   bool get isL {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _lBreakpoint;
   }
 
@@ -121,7 +121,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `1290px`,
   bool get isXL {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _xlBreakpoint;
   }
 
@@ -134,7 +134,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `1670px`,
   bool get isXXL {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _xxlBreakpoint;
   }
 
@@ -147,7 +147,7 @@ extension ViewportExtension on BuildContext {
   /// Returns `true` if the viewport `width` is smaller than
   ///  **OR** equal to `1920px`,
   bool get isXXXL {
-    final size = MediaQuery.of(this).size;
+    final size = MediaQuery.sizeOf(this);
     return size.width <= _xxxlBreakpoint;
   }
 
@@ -160,14 +160,14 @@ extension ViewportExtension on BuildContext {
   /// Returns true if the device orientation is **Portrait** and
   /// returns `false` if the device orientation is **Landscape**
   bool get isPortrait {
-    final orientation = MediaQuery.of(this).orientation;
+    final orientation = MediaQuery.orientationOf(this);
     return orientation == Orientation.portrait;
   }
 
   /// Returns `true` if the device orientation is **Landscape** and
   /// returns `false` if the device orientation is **Portrait**
   bool get isLandscape {
-    final orientation = MediaQuery.of(this).orientation;
+    final orientation = MediaQuery.orientationOf(this);
     return orientation == Orientation.landscape;
   }
 

@@ -104,13 +104,12 @@ class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
 
     var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(15));
     final menuStyle = MenuStyle(
-      backgroundColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
-      shadowColor: MaterialStateProperty.all(theme.shadowColor),
-      surfaceTintColor:
-          MaterialStateProperty.all(theme.scaffoldBackgroundColor),
-      elevation: MaterialStateProperty.all(10),
-      shape: MaterialStateProperty.all(shape),
-      padding: MaterialStateProperty.all(
+      backgroundColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
+      shadowColor: WidgetStateProperty.all(theme.shadowColor),
+      surfaceTintColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
+      elevation: WidgetStateProperty.all(10),
+      shape: WidgetStateProperty.all(shape),
+      padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(horizontal: 10, vertical: 20)),
     );
     final val = widget.initialValue;
@@ -153,13 +152,13 @@ class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
     );
 
     final style = ButtonStyle(
-      textStyle: MaterialStateProperty.all(textStyle),
-      backgroundColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
-      shadowColor: MaterialStateProperty.all(theme.shadowColor),
-      surfaceTintColor: MaterialStateProperty.all(theme.shadowColor),
-      overlayColor: MaterialStateProperty.all(theme.cardColor),
-      padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
-      shape: MaterialStateProperty.all(radius),
+      textStyle: WidgetStateProperty.all(textStyle),
+      backgroundColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
+      shadowColor: WidgetStateProperty.all(theme.shadowColor),
+      surfaceTintColor: WidgetStateProperty.all(theme.shadowColor),
+      overlayColor: WidgetStateProperty.all(theme.cardColor),
+      padding: WidgetStateProperty.all(const EdgeInsets.all(10)),
+      shape: WidgetStateProperty.all(radius),
     );
 
     return DropdownMenuEntry<T>(

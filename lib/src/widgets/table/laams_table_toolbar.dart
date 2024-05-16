@@ -222,13 +222,13 @@ class _Checkbox extends StatelessWidget {
       checkColor: Colors.white,
       hoverColor: hColor,
       side: BorderSide(width: 2, color: theme.primaryColor),
-      fillColor: MaterialStateProperty.resolveWith(
+      fillColor: WidgetStateProperty.resolveWith(
         (states) {
-          if (states.contains(MaterialState.hovered)) {
+          if (states.contains(WidgetState.hovered)) {
             return hColor;
-          } else if (states.contains(MaterialState.selected)) {
+          } else if (states.contains(WidgetState.selected)) {
             return theme.primaryColor;
-          } else if (states.contains(MaterialState.disabled)) {
+          } else if (states.contains(WidgetState.disabled)) {
             return theme.cardColor;
           }
           return Colors.transparent;

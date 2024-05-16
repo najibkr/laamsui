@@ -39,10 +39,10 @@ class LaamsTableMore extends StatelessWidget {
     if (!areAllLoaded) {
       final theme = Theme.of(context);
       var buttonStyle = ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith(
+        foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) return null;
-            if (states.contains(MaterialState.hovered)) {
+            if (states.contains(WidgetState.disabled)) return null;
+            if (states.contains(WidgetState.hovered)) {
               return theme.primaryColor;
             }
             return theme.primaryColor.withOpacity(0.8);

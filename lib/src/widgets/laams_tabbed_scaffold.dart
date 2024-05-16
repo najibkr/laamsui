@@ -287,7 +287,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         labelStyle:
             theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
         labelPadding: EdgeInsets.symmetric(horizontal: tabPadding),
-        overlayColor: MaterialStateProperty.all(theme.scaffoldBackgroundColor),
+        overlayColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
         tabs: widget.tabs.map(tabs).toList(),
       );
       if (widget.hideSingleTab && widget.tabs.length < 2) tabBar = null;

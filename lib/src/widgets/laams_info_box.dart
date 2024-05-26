@@ -55,7 +55,7 @@ class LaamsInfoBox extends StatelessWidget {
     this.vectorUrl = svgIdea01,
     this.vectorSize = 50,
     required this.isSliver,
-    required this.idleMessage,
+    this.idleMessage = '',
     this.loadingMessage,
     this.failureMessage,
     this.successMessage,
@@ -64,6 +64,7 @@ class LaamsInfoBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (status.isIdle && idleMessage.isEmpty) return const SizedBox();
     final theme = Theme.of(context);
     final isNarrow = context.isM;
     final defultMsgStyle = theme.textTheme.bodyMedium?.copyWith(

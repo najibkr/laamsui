@@ -1,2 +1,2 @@
-## 0.5.12
-- Fixed bugs & upgraded dependencies
+## 0.5.14
+- Fixed bugs

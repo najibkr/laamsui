@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 class LaamsListTile extends StatelessWidget {
+  final void Function(bool)? onHovered;
+  final void Function(bool)? onFocused;
   final void Function()? onPressed;
   final void Function()? onLongPress;
   final void Function()? onDoubleTap;
+  final Duration? animationDuration;
+  final Curve? curve;
   final double? height;
   final double? width;
 
   /// The outer most alignment of the whole JaguarListTile
-  final AlignmentGeometry? listTileBoxAlignment;
+  final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final Color? backgroundColor;
@@ -113,12 +117,16 @@ class LaamsListTile extends StatelessWidget {
 
   const LaamsListTile({
     super.key,
+    this.onHovered,
+    this.onFocused,
     this.onPressed,
     this.onLongPress,
     this.onDoubleTap,
+    this.animationDuration,
+    this.curve,
     this.height,
     this.width,
-    this.listTileBoxAlignment,
+    this.alignment,
     this.margin,
     this.padding,
     this.backgroundColor,
@@ -357,24 +365,45 @@ class LaamsListTile extends StatelessWidget {
       );
     }
 
-    Widget tile = GestureDetector(
-      onTap: onPressed,
-      onLongPress: onLongPress,
-      onDoubleTap: onDoubleTap,
-      child: Container(
-        height: height,
-        width: width,
-        margin: margin,
-        padding: padding,
-        decoration: decoration,
-        child: content,
-      ),
-    );
+    Widget tile = switch (animationDuration != null) {
+      true => AnimatedContainer(
+          duration: animationDuration!,
+          curve: curve ?? Curves.linear,
+          height: height,
+          width: width,
+          margin: margin,
+          padding: padding,
+          decoration: decoration,
+          child: content,
+        ),
+      false => Container(
+          height: height,
+          width: width,
+          margin: margin,
+          padding: padding,
+          decoration: decoration,
+          child: content,
+        ),
+    };
 
-    if (listTileBoxAlignment != null) {
-      tile = Align(alignment: listTileBoxAlignment!, child: tile);
+    if (onPressed != null || onLongPress != null || onDoubleTap != null) {
+      tile = GestureDetector(
+        onTap: onPressed,
+        onLongPress: onLongPress,
+        onDoubleTap: onDoubleTap,
+        child: tile,
+      );
     }
 
+    if (onHovered != null) {
+      tile = FocusableActionDetector(
+        onShowHoverHighlight: onHovered,
+        onShowFocusHighlight: onFocused,
+        child: tile,
+      );
+    }
+
+    if (alignment != null) tile = Align(alignment: alignment!, child: tile);
     return tile;
   }
 }

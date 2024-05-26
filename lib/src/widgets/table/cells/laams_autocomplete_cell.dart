@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LaamAutocompleteCell<T> extends StatefulWidget {
+class LaamsAutocompleteCell<T> extends StatefulWidget {
   final void Function()? onTap;
   final double? height;
   final double? width;
@@ -21,13 +21,13 @@ class LaamAutocompleteCell<T> extends StatefulWidget {
   final String? hintText;
   final List<DropdownMenuEntry<T>> entries;
 
-  const LaamAutocompleteCell({
+  const LaamsAutocompleteCell({
     super.key,
     this.onTap,
     this.height,
     this.width,
-    this.menuWidth,
-    this.menuHeight,
+    this.menuWidth = 400,
+    this.menuHeight = 350,
     this.alignment = AlignmentDirectional.centerStart,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 5),
@@ -45,17 +45,19 @@ class LaamAutocompleteCell<T> extends StatefulWidget {
   });
 
   @override
-  State<LaamAutocompleteCell<T>> createState() =>
-      _LaamAutocompleteCellState<T>();
+  State<LaamsAutocompleteCell<T>> createState() =>
+      _LaamsAutocompleteCellState<T>();
 }
 
-class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
+class _LaamsAutocompleteCellState<T> extends State<LaamsAutocompleteCell<T>> {
   late TextEditingController _dropDownController;
+  late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _dropDownController = TextEditingController();
+    _focusNode = FocusNode();
     _dropDownController.addListener(() {
       if (widget.onSearch != null) {
         widget.onSearch!(_dropDownController.text.trim());
@@ -66,10 +68,12 @@ class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
   @override
   void dispose() {
     _dropDownController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   void _onSelected(T? value) {
+    _focusNode.nextFocus();
     if (widget.onSelected != null) widget.onSelected!(value);
   }
 
@@ -120,6 +124,7 @@ class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
 
     Widget cell = DropdownMenu<T>(
       controller: _dropDownController,
+      focusNode: _focusNode,
       requestFocusOnTap: true,
       enableSearch: true,
       enableFilter: false,
@@ -148,7 +153,7 @@ class _LaamAutocompleteCellState<T> extends State<LaamAutocompleteCell<T>> {
     );
     var radius = RoundedRectangleBorder(
       side: BorderSide(color: theme.shadowColor, width: 0.5),
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(0),
     );
 
     final style = ButtonStyle(

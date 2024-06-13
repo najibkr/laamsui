@@ -1,7 +1,8 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart' show TextTheme, Theme, ThemeData;
+import 'package:flutter/material.dart'
+    show Directionality, TextDirection, TextTheme, Theme, ThemeData;
 import 'package:flutter/widgets.dart'
     show BuildContext, Locale, Localizations, MediaQuery, Orientation, Size;
 
@@ -194,6 +195,11 @@ extension ViewportExtension on BuildContext {
     } catch (e) {
       return const Locale('en', 'US');
     }
+  }
+
+  /// Returns [true] if directionality is right to left
+  bool get isRTL {
+    return Directionality.of(this) == TextDirection.rtl;
   }
 
   ThemeData get theme => Theme.of(this);

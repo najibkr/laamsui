@@ -1,3 +1,4 @@
-## 0.5.16
+## 0.5.17
 - Added fonts
 - Upgraded dependencies
+- Added getting directionality from context

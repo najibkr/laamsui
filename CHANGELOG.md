@@ -1,2 +1,2 @@
-## 0.5.14
-- Fixed bugs
+## 0.5.15
+- Added fonts

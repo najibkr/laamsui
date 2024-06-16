@@ -9,49 +9,83 @@ class LaamsTextButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final Color? backgroundColor;
   final Color? foregroundColor;
-  final IconData icon;
+  final Color? hoverColor;
+  final Color? focusedColor;
+  final BorderRadiusGeometry borderRadius;
+  final IconData? icon;
   final Color? iconColor;
-  final double iconSize;
+  final double? iconSize;
   final String label;
+  final bool isExpanded;
 
   const LaamsTextButton({
     super.key,
     required this.onPressed,
     this.alignment,
-    this.width = 130,
+    this.width,
     this.height,
     this.margin,
-    this.padding = const EdgeInsetsDirectional.fromSTEB(5, 10, 10, 10),
+    this.padding = const EdgeInsetsDirectional.fromSTEB(10, 10, 15, 10),
     this.backgroundColor,
     this.foregroundColor,
-    required this.icon,
+    this.hoverColor,
+    this.focusedColor,
+    this.borderRadius = const BorderRadius.all(Radius.circular(50)),
+    this.icon,
     this.iconColor,
     this.iconSize = 20.0,
     required this.label,
+    this.isExpanded = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bgColor = backgroundColor ?? theme.scaffoldBackgroundColor;
+    final bgColor = backgroundColor ?? theme.cardColor;
     final foreColor = foregroundColor ?? theme.primaryColor;
+
+    Color? mapColor(Set<WidgetState> state) {
+      final isHovered = state.contains(WidgetState.hovered);
+      final defaultColor = theme.primaryColor.withOpacity(0.1);
+      if (isHovered) return hoverColor ?? defaultColor;
+      final isFocused = state.contains(WidgetState.focused);
+      if (isFocused) return focusedColor ?? defaultColor;
+      return null;
+    }
+
+    RoundedRectangleBorder? mapShape(Set<WidgetState> state) {
+      return RoundedRectangleBorder(
+        borderRadius: borderRadius,
+      );
+    }
+
     var buttonStyle = ButtonStyle(
       visualDensity: VisualDensity.compact,
       backgroundColor: WidgetStateProperty.all(bgColor),
       foregroundColor: WidgetStateProperty.all(foreColor),
-    );
-    var iconWidget = Padding(
-      padding: const EdgeInsetsDirectional.only(end: 5),
-      child: Icon(icon, size: iconSize, color: iconColor),
+      overlayColor: WidgetStateProperty.resolveWith(mapColor),
+      shape: WidgetStateProperty.resolveWith(mapShape),
     );
 
-    var content = Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [iconWidget, Text(label)],
-    );
+    Widget? iconWidget;
+    if (icon != null) {
+      iconWidget = Padding(
+        padding: const EdgeInsetsDirectional.only(end: 5),
+        child: Icon(icon, size: iconSize, color: iconColor),
+      );
+    }
 
+    Widget content = Text(label);
+    if (iconWidget != null) {
+      content = Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [iconWidget, Text(label)],
+      );
+    }
+
+    if (isExpanded) content = Center(child: content);
     Widget button = TextButton(
       onPressed: onPressed,
       style: buttonStyle,
@@ -60,6 +94,10 @@ class LaamsTextButton extends StatelessWidget {
 
     if (height != null || width != null) {
       button = SizedBox(width: width, height: height, child: button);
+    }
+
+    if (margin != null) {
+      button = Padding(padding: margin!, child: button);
     }
 
     if (alignment != null) {

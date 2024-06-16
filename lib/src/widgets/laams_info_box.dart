@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:laamsui/src/animations/laams_loading.dart';
+import 'package:laamsui/src/constants/svgs_constants.dart';
 import 'package:laamsui/src/extensions/viewport_extension.dart';
-
-import '../animations/laams_loading.dart';
-import '../constants/svgs_constants.dart';
 
 enum LaamsInfoBoxStatus {
   idle,
+  invalid,
   loading,
   failure,
 }
 
 extension LaamsInfoBoxStatusExt on LaamsInfoBoxStatus {
   bool get isIdle => this == LaamsInfoBoxStatus.idle;
+  bool get isInvalid => this == LaamsInfoBoxStatus.invalid;
   bool get isLoading => this == LaamsInfoBoxStatus.loading;
   bool get isFailure => this == LaamsInfoBoxStatus.failure;
 }
@@ -33,7 +34,8 @@ class LaamsInfoBox extends StatelessWidget {
   final double vectorSize;
 
   /// Displayed when info box is in the message state
-  final String idleMessage;
+  final String? idleMessage;
+  final String? invalidMessage;
   final String? loadingMessage;
   final String? failureMessage;
   final String? successMessage;
@@ -55,7 +57,8 @@ class LaamsInfoBox extends StatelessWidget {
     this.vectorUrl = svgIdea01,
     this.vectorSize = 50,
     required this.isSliver,
-    this.idleMessage = '',
+    this.idleMessage,
+    this.invalidMessage,
     this.loadingMessage,
     this.failureMessage,
     this.successMessage,
@@ -64,7 +67,14 @@ class LaamsInfoBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (status.isIdle && idleMessage.isEmpty) return const SizedBox();
+    final message = switch (status) {
+      LaamsInfoBoxStatus.idle => idleMessage ?? '',
+      LaamsInfoBoxStatus.invalid => invalidMessage ?? '',
+      LaamsInfoBoxStatus.loading => loadingMessage ?? '',
+      LaamsInfoBoxStatus.failure => failureMessage ?? '',
+    };
+    if (status.isIdle && message.isEmpty) return const SizedBox();
+
     final theme = Theme.of(context);
     final isNarrow = context.isM;
     final defultMsgStyle = theme.textTheme.bodyMedium?.copyWith(
@@ -89,11 +99,11 @@ class LaamsInfoBox extends StatelessWidget {
 
     // Message:
     Widget newMessage = Text(
-      (status.isFailure ? failureMessage : idleMessage) ?? '',
+      message,
       style: defultMsgStyle,
     );
 
-    final bgkColor = switch (status.isFailure) {
+    final bgkColor = switch (status.isFailure || status.isInvalid) {
       true => switch (failureBackgroundColor != null) {
           true => failureBackgroundColor,
           false => Colors.red.withOpacity(0.08),

@@ -17,7 +17,9 @@ class LaamsSearchField extends StatefulWidget {
   final Color? searchIconColor;
 
   // Field Related:
-  final void Function(String value) onSearch;
+  final TextInputType keyboardType;
+  final void Function(String value)? onSearch;
+  final void Function(String value)? onSearchUnfocused;
   final String hintText;
   final bool autofocus;
   final int maxLength;
@@ -26,6 +28,7 @@ class LaamsSearchField extends StatefulWidget {
   final IconData? deleteIcon;
   final double deleteIconSize;
   final Color? deleteIconColor;
+
   const LaamsSearchField({
     super.key,
     this.height = 60,
@@ -44,7 +47,9 @@ class LaamsSearchField extends StatefulWidget {
     this.searchIconColor,
 
     // Field Related:
-    required this.onSearch,
+    this.keyboardType = TextInputType.text,
+    this.onSearch,
+    this.onSearchUnfocused,
     required this.hintText,
     this.autofocus = false,
     this.maxLength = 250,
@@ -60,6 +65,7 @@ class LaamsSearchField extends StatefulWidget {
 }
 
 class _LaamsSearchFieldState extends State<LaamsSearchField> {
+  bool _isSearchEmpty = true;
   late TextEditingController _controller;
   late FocusNode _focusNode;
 
@@ -68,12 +74,21 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
     super.initState();
     _controller = TextEditingController();
     _focusNode = FocusNode();
+
+    _controller.addListener(
+      () => setState(() => _isSearchEmpty = _controller.text.isEmpty),
+    );
+
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         _controller.selection = TextSelection(
           baseOffset: 0,
           extentOffset: _controller.value.text.length,
         );
+      } else {
+        if (widget.onSearchUnfocused != null) {
+          widget.onSearchUnfocused!(_controller.value.text.trim());
+        }
       }
     });
   }
@@ -85,9 +100,15 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
     super.dispose();
   }
 
+  void _onSearch(String value) {
+    if (widget.onSearch == null) return;
+    return widget.onSearch!(value.trim());
+  }
+
   void _cancelSearch() {
     _controller.text = '';
-    widget.onSearch('');
+    if (widget.onSearch != null) widget.onSearch!('');
+    if (widget.onSearchUnfocused != null) widget.onSearchUnfocused!('');
   }
 
   @override
@@ -122,14 +143,10 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
     );
 
     Widget? deleteIcon;
-    if (widget.deleteIcon != null) {
-      final iconColor = switch (_controller.value.text.trim().isEmpty) {
-        true => theme.shadowColor,
-        false => theme.primaryColor,
-      };
+    if (widget.deleteIcon != null && !_isSearchEmpty) {
       final icon = Icon(
         widget.deleteIcon,
-        color: widget.deleteIconColor ?? iconColor,
+        color: widget.deleteIconColor ?? theme.shadowColor,
         size: widget.deleteIconSize,
       );
 
@@ -166,11 +183,11 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
     final textField = TextField(
       controller: _controller,
       focusNode: _focusNode,
-      keyboardType: TextInputType.text,
+      keyboardType: widget.keyboardType,
       textInputAction: TextInputAction.search,
       autocorrect: false,
       decoration: inputDecoration,
-      onChanged: (v) => widget.onSearch(v.trim()),
+      onChanged: _onSearch,
       autofocus: widget.autofocus,
       maxLength: widget.maxLength,
     );

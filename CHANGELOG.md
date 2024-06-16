@@ -1,3 +1,6 @@
+## 0.6.0
+- Added new Widgets
+
 ## 0.5.18
 - Fixed bugs
 

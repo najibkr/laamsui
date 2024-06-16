@@ -1,3 +1,5 @@
+export 'widgets/laams_floating_button.dart';
+export 'widgets/laams_form_dialog.dart';
 export 'widgets/laams_info_box.dart';
 export 'widgets/laams_list_tile.dart';
 export 'widgets/laams_search_field.dart';

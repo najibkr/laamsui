@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 /// This helps you create a scaffold with multiple tabs.
 class LaamsTabbedScaffold extends StatefulWidget {
@@ -67,7 +68,6 @@ class LaamsTabbedScaffold extends StatefulWidget {
 
 class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     with SingleTickerProviderStateMixin {
-  // final int _index = 0;
   int _currentTab = 0;
   late ScrollController _scrollController;
   late TabController _tabController;
@@ -76,9 +76,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    final index = widget.tabs.indexWhere((e) => e.path == widget.currentPath);
-    if (index >= 0) _currentTab = index;
-
+    _currentTab = widget.tabs.indexWhere(
+      (e) => widget.currentPath.contains(e.path),
+    );
     _tabController = TabController(
       initialIndex: _currentTab,
       length: widget.tabs.length,
@@ -89,6 +89,16 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       widget.onTabSelected(widget.tabs[_tabController.index].path);
       setState(() => _currentTab = _tabController.index);
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant LaamsTabbedScaffold oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentPath != widget.currentPath) {
+      _currentTab = widget.tabs.indexWhere(
+        (e) => widget.currentPath.contains(e.path),
+      );
+    }
   }
 
   @override
@@ -168,6 +178,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   @override
   Widget build(BuildContext context) {
     final tab = widget.tabs[_currentTab];
+    final isL = context.isL;
 
     Widget page = widget.body;
     if (tab.bodyWidth != null || tab.bodyHeight != null) {
@@ -183,17 +194,24 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       page = Padding(padding: tab.bodyMargin!, child: page);
     }
 
-    Widget scrollView = NestedScrollView(
-      controller: _scrollController,
-      floatHeaderSlivers: false,
-      physics: const NeverScrollableScrollPhysics(),
-      headerSliverBuilder: _builHeaders,
-      body: page,
+    Widget scrollView = NotificationListener<ScrollUpdateNotification>(
+      onNotification: _listenToScroll,
+      child: NestedScrollView(
+        controller: _scrollController,
+        floatHeaderSlivers: false,
+        physics: const NeverScrollableScrollPhysics(),
+        headerSliverBuilder: _builHeaders,
+        body: page,
+      ),
     );
 
-    return NotificationListener<ScrollUpdateNotification>(
-      onNotification: _listenToScroll,
-      child: scrollView,
+    if (tab.endSideBar == null || isL) return scrollView;
+
+    return Row(
+      children: [
+        Expanded(child: scrollView),
+        tab.endSideBar ?? const SizedBox()
+      ],
     );
   }
 
@@ -377,7 +395,7 @@ class LaamsScaffoldTabData {
   final EdgeInsetsGeometry? bodyMargin;
 
   // final Widget? body;
-
+  final Widget? endSideBar;
   const LaamsScaffoldTabData({
     required this.path,
     this.hasScrollObsorber = true,
@@ -406,7 +424,7 @@ class LaamsScaffoldTabData {
     this.bodyHeight,
     this.bodyAlignment = Alignment.center,
     this.bodyMargin,
-    // required this.body,
+    this.endSideBar,
   });
 
   bool get hasHeader {

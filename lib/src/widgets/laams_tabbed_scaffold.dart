@@ -76,9 +76,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _currentTab = widget.tabs.indexWhere(
-      (e) => widget.currentPath.contains(e.path),
-    );
+    _currentTab = _foundIndex;
     _tabController = TabController(
       initialIndex: _currentTab,
       length: widget.tabs.length,
@@ -94,11 +92,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   @override
   void didUpdateWidget(covariant LaamsTabbedScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentPath != widget.currentPath) {
-      _currentTab = widget.tabs.indexWhere(
-        (e) => widget.currentPath.contains(e.path),
-      );
-    }
+    if (oldWidget.currentPath != widget.currentPath) _currentTab = _foundIndex;
   }
 
   @override
@@ -106,6 +100,13 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     _scrollController.dispose();
     _tabController.dispose();
     super.dispose();
+  }
+
+  int get _foundIndex {
+    final index = widget.tabs.indexWhere(
+      (e) => widget.currentPath.contains(e.path),
+    );
+    return switch (index < 0) { true => 0, false => index };
   }
 
   bool get _hasTitleBar {

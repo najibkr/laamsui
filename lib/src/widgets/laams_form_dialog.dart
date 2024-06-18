@@ -176,9 +176,9 @@ class LaamsFormDialog extends StatelessWidget {
       ),
     );
 
-    final actions = switch ((isVisible || isFullScreen) && hasAction) {
-      true => [actionBtn, const SizedBox(width: 5)],
-      false => [closeBtn, const SizedBox(width: 15)],
+    final actions = switch (isFullScreen) {
+      true => hasAction ? [actionBtn, const SizedBox(width: 5)] : <Widget>[],
+      false => [isVisible ? actionBtn : closeBtn, const SizedBox(width: 15)],
     };
 
     const bottomSize = Size.fromHeight(50);
@@ -187,7 +187,7 @@ class LaamsFormDialog extends StatelessWidget {
       primary: isPrimary,
       toolbarHeight: 50,
       surfaceTintColor: theme.scaffoldBackgroundColor,
-      leading: ((isVisible || isFullScreen) && hasAction) ? closeBtn : null,
+      leading: ((isVisible && hasAction) || isFullScreen) ? closeBtn : null,
       title: title,
       centerTitle: true,
       actions: actions,

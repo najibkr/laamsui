@@ -27,6 +27,9 @@ class LaamsEditableCell<T> extends StatefulWidget {
   final bool enabled;
   final double? minValue;
   final double? maxValue;
+  final Widget? suffixIcon;
+  final int? minLines;
+  final int? maxLines;
 
   const LaamsEditableCell({
     super.key,
@@ -56,6 +59,9 @@ class LaamsEditableCell<T> extends StatefulWidget {
     this.enabled = true,
     this.minValue,
     this.maxValue,
+    this.minLines,
+    this.maxLines,
+    this.suffixIcon,
   });
 
   @override
@@ -311,6 +317,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
       contentPadding: widget.padding,
       hintText: widget.hintText,
       suffix: suffix,
+      suffixIcon: widget.suffixIcon,
       errorStyle: const TextStyle(height: 0, fontSize: 0),
       counterText: '',
     );
@@ -329,6 +336,9 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
       validator: _validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLength: _maxLength == null ? null : (_maxLength ?? 0) + 5,
+      minLines: widget.minLines,
+      maxLines: widget.maxLines,
+      textAlignVertical: TextAlignVertical.center,
     );
 
     field = Align(alignment: widget.alignment, child: field);

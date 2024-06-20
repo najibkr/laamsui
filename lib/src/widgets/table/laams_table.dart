@@ -127,6 +127,8 @@ class LaamsTable<Entity> extends StatelessWidget {
   final Widget? Function(BuildContext, int)? mobileRowBuilder;
   final bool isSliver;
   final Widget Function(BuildContext, LaamsCellData<Entity>) cellBuilder;
+
+  final double totalsHeight;
   final int totalsCount;
   final Widget Function(BuildContext, LaamsCellData<String?>)? totalsBuilder;
 
@@ -186,6 +188,7 @@ class LaamsTable<Entity> extends StatelessWidget {
     this.mobileBreakPoint = 600.0,
     this.mobileRowBuilder,
     required this.cellBuilder,
+    this.totalsHeight = 40,
     this.totalsCount = 1,
     this.totalsBuilder,
     this.isSliver = true,
@@ -412,9 +415,9 @@ class LaamsTable<Entity> extends StatelessWidget {
     }
 
     if (index == rows.length + 1 && totalsBuilder != null) {
-      return const TableSpan(
+      return TableSpan(
         backgroundDecoration: null,
-        extent: FixedTableSpanExtent(40),
+        extent: FixedTableSpanExtent(totalsHeight),
       );
     }
 

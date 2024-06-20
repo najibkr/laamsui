@@ -229,9 +229,10 @@ class LaamsCellOption<T> extends StatelessWidget {
 
     Widget tile = title;
     if (subtitleWidget != null) {
-      tile = Column(children: [Expanded(child: title), subtitleWidget]);
+      tile = Column(children: [title, subtitleWidget]);
     }
 
+    PopupMenuEntry;
     return Container(
       height: height,
       width: width,

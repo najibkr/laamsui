@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/src/extensions/viewport_extension.dart';
+import 'package:laamsui/extensions.dart';
 
-/// This helps you create a scaffold with multiple tabs.
 class LaamsTabbedScaffold extends StatefulWidget {
   final bool isAppBarPrimary;
   final bool isAppBarPinned;
@@ -68,7 +67,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
 
 class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     with SingleTickerProviderStateMixin {
-  int _currentTab = 0;
+  int _tabIndex = 0;
   late ScrollController _scrollController;
   late TabController _tabController;
 
@@ -76,23 +75,21 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _currentTab = _foundIndex;
+    _tabIndex = _foundIndex;
     _tabController = TabController(
-      initialIndex: _currentTab,
+      initialIndex: _foundIndex,
       length: widget.tabs.length,
       vsync: this,
     );
-
-    _tabController.addListener(() {
-      widget.onTabSelected(widget.tabs[_tabController.index].path);
-      setState(() => _currentTab = _tabController.index);
-    });
   }
 
   @override
   void didUpdateWidget(covariant LaamsTabbedScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentPath != widget.currentPath) _currentTab = _foundIndex;
+    if (oldWidget.currentPath != widget.currentPath) {
+      _tabIndex = _foundIndex;
+      _tabController.animateTo(_foundIndex);
+    }
   }
 
   @override
@@ -103,9 +100,8 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   int get _foundIndex {
-    final index = widget.tabs.indexWhere(
-      (e) => widget.currentPath.contains(e.path),
-    );
+    final path = widget.currentPath;
+    final index = widget.tabs.indexWhere((e) => e.path == path);
     return switch (index < 0) { true => 0, false => index };
   }
 
@@ -133,8 +129,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   double get _appBarHeight {
-    final hHeight =
-        widget.headerHeight ?? widget.tabs[_currentTab].headerHeight;
+    final hHeight = widget.headerHeight ?? widget.tabs[_tabIndex].headerHeight;
     if (hHeight != null) return hHeight;
     return _toolbarHeight;
   }
@@ -178,7 +173,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
   @override
   Widget build(BuildContext context) {
-    final tab = widget.tabs[_currentTab];
+    final tab = widget.tabs[_tabIndex];
     final isL = context.isL;
 
     Widget page = widget.body;
@@ -219,7 +214,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   List<Widget> _builHeaders(BuildContext context, bool innerBoxIsScrolled) {
     final theme = Theme.of(context);
     final isS = MediaQuery.of(context).size.width <= 500;
-    final tab = widget.tabs[_currentTab];
+    final tab = widget.tabs[_tabIndex];
 
     Widget? leading = widget.leading;
     if (widget.leadingIcon != null) {
@@ -282,7 +277,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         return _LaamsScaffoldTab(
           data: data,
           tabsAlignment: _getTabsAlignment(context),
-          isSelected: index == _currentTab,
+          isSelected: index == _tabIndex,
           tabsLength: widget.tabs.length,
         );
       }
@@ -301,6 +296,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         dividerColor: theme.cardColor,
         dividerHeight: 2,
         indicatorWeight: 3,
+        onTap: (index) => widget.onTabSelected(widget.tabs[index].path),
         labelColor: theme.primaryColor,
         unselectedLabelColor: theme.textTheme.bodyLarge?.color,
         labelStyle:
@@ -385,9 +381,6 @@ class LaamsScaffoldTabData {
   final double? headerDescriptionWidth;
   final TextAlign headerTextsAlignment;
   final double headerSpacing;
-  final void Function(String)? onSearch;
-  final String? searchLabel;
-  final double? searchFieldWidth;
 
   // Body Fields:
   final double? bodyWidth;
@@ -418,9 +411,6 @@ class LaamsScaffoldTabData {
     this.headerDescriptionWidth = 650,
     this.headerTextsAlignment = TextAlign.start,
     this.headerSpacing = 4,
-    this.onSearch,
-    this.searchLabel,
-    this.searchFieldWidth = 600,
     this.bodyWidth,
     this.bodyHeight,
     this.bodyAlignment = Alignment.center,
@@ -432,8 +422,6 @@ class LaamsScaffoldTabData {
     if (header != null) return true;
     if ((headerTitle ?? '').isNotEmpty) return true;
     if ((headerDescription ?? '').isNotEmpty) return true;
-    if ((searchLabel ?? '').isNotEmpty) return true;
-    if (onSearch != null) return true;
     return false;
   }
 }
@@ -535,60 +523,6 @@ class _LaamsScaffoldHeader extends StatelessWidget {
       ),
     );
 
-    Widget? searchBar;
-    if ((data.searchLabel ?? '').isNotEmpty || data.onSearch != null) {
-      final border = OutlineInputBorder(
-        borderSide: BorderSide(color: theme.scaffoldBackgroundColor, width: 1),
-        borderRadius: BorderRadius.circular(100),
-      );
-
-      const prefixIcon = Padding(
-        padding: EdgeInsetsDirectional.only(start: 10.0),
-        child: Icon(Icons.search_outlined, size: 25),
-      );
-
-      final inputDecoration = InputDecoration(
-        isDense: true,
-        hintText: data.searchLabel,
-        enabledBorder: border,
-        border: border,
-        errorBorder: border,
-        focusedBorder: border,
-        disabledBorder: border,
-        focusedErrorBorder: border,
-        focusColor: theme.scaffoldBackgroundColor,
-        hoverColor: theme.scaffoldBackgroundColor,
-        fillColor: theme.scaffoldBackgroundColor,
-        prefixIcon: prefixIcon,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 25),
-        constraints: BoxConstraints(maxHeight: isS ? 48 : 56, minHeight: 48),
-      );
-
-      final textField = TextField(
-        expands: true,
-        maxLines: null,
-        onChanged: data.onSearch,
-        decoration: inputDecoration,
-        textInputAction: TextInputAction.search,
-      );
-
-      final boxDecoration = BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(100),
-        boxShadow: [BoxShadow(color: theme.shadowColor, blurRadius: 5)],
-      );
-
-      searchBar = Center(
-        child: Container(
-          width: data.searchFieldWidth,
-          margin: EdgeInsets.only(top: data.headerSpacing * 2),
-          alignment: Alignment.center,
-          decoration: boxDecoration,
-          child: textField,
-        ),
-      );
-    }
-
     Widget header = Column(
       mainAxisAlignment: data.headerMainAxisAlignment,
       crossAxisAlignment: data.headerCrossAxisAlignment,
@@ -596,7 +530,6 @@ class _LaamsScaffoldHeader extends StatelessWidget {
       children: [
         titleWidget,
         if ((data.headerDescription ?? '').isNotEmpty) descWidget,
-        if (searchBar != null) searchBar,
       ],
     );
 

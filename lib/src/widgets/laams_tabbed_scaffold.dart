@@ -100,6 +100,8 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   int get _foundIndex {
+    final prior = widget.tabs.indexWhere((e) => e.isSelected == true);
+    if (prior >= 0) return prior;
     final path = widget.currentPath;
     final index = widget.tabs.indexWhere((e) => e.path == path);
     return switch (index < 0) { true => 0, false => index };
@@ -390,6 +392,8 @@ class LaamsScaffoldTabData {
 
   // final Widget? body;
   final Widget? endSideBar;
+  final bool? isSelected;
+
   const LaamsScaffoldTabData({
     required this.path,
     this.hasScrollObsorber = true,
@@ -416,6 +420,7 @@ class LaamsScaffoldTabData {
     this.bodyAlignment = Alignment.center,
     this.bodyMargin,
     this.endSideBar,
+    this.isSelected,
   });
 
   bool get hasHeader {

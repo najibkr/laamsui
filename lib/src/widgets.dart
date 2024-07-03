@@ -8,4 +8,5 @@ export 'widgets/laams_stats_tile.dart';
 export 'widgets/laams_tabbed_scaffold.dart';
 export 'widgets/laams_text.dart';
 export 'widgets/laams_text_button.dart';
+export 'widgets/scaffold.dart';
 export 'widgets/table.dart';

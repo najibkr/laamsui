@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class LoadingCell extends StatelessWidget {
-  const LoadingCell({super.key});
+class LaamsLoadingCell extends StatelessWidget {
+  const LaamsLoadingCell({super.key});
 
   @override
   Widget build(BuildContext context) {

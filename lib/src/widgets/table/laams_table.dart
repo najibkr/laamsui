@@ -5,12 +5,12 @@ import 'package:laamsui/src/animations.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 import 'cells/laams_cell_data.dart';
+import 'cells/laams_loading_cell.dart';
 import 'laams_table_column.dart';
 import 'laams_table_message.dart';
 import 'laams_table_more.dart';
 import 'laams_table_row.dart';
 import 'laams_table_toolbar.dart';
-import 'loading_cell.dart';
 
 enum TableStatusType {
   querying,
@@ -134,8 +134,9 @@ class LaamsTable<Entity> extends StatelessWidget {
 
   final String cancelLabel;
   final String retryLabel;
-  final String addNewLabel;
+  final String? addNewLabel;
   final LaamsTableMore? moreButton;
+  final double moreButtonHeight;
   final Widget? footer;
 
   const LaamsTable({
@@ -196,6 +197,7 @@ class LaamsTable<Entity> extends StatelessWidget {
     this.retryLabel = 'Try Again',
     this.addNewLabel = 'Add New',
     this.moreButton,
+    this.moreButtonHeight = 100,
     this.footer,
   });
 
@@ -422,16 +424,16 @@ class LaamsTable<Entity> extends StatelessWidget {
     }
 
     if (index == rows.length + 1 && totalsBuilder == null) {
-      return const TableSpan(
+      return TableSpan(
         backgroundDecoration: null,
-        extent: FixedTableSpanExtent(100),
+        extent: FixedTableSpanExtent(moreButtonHeight),
       );
     }
 
     if (index == rows.length + 2) {
-      return const TableSpan(
+      return TableSpan(
         backgroundDecoration: null,
-        extent: FixedTableSpanExtent(100),
+        extent: FixedTableSpanExtent(moreButtonHeight),
       );
     }
 
@@ -468,7 +470,7 @@ class LaamsTable<Entity> extends StatelessWidget {
     if (v.row == 0) return TableViewCell(child: columns[v.column]);
 
     if (status.type.isQuerying) {
-      return const TableViewCell(child: LoadingCell());
+      return const TableViewCell(child: LaamsLoadingCell());
     }
 
     if (v.row == rows.length + 1 && totalsBuilder != null) {

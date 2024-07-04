@@ -1,70 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:laamsui/extensions.dart';
 
-class LaamsOptionsCell<V> extends StatefulWidget {
+import 'laams_loading_cell.dart';
+
+class LaamsMenuCell<V> extends StatefulWidget {
   final AlignmentDirectional overlayAnchorAlignment;
   final AlignmentDirectional overlayPopupAlignment;
   final double xOffset;
   final double yOffset;
-  final double? height;
-  final double? width;
+  final double height;
+  final double width;
   final EdgeInsetsGeometry? margin;
-  final EdgeInsetsGeometry? padding;
-  final double menuHeight;
-  final double menuWidth;
-  final EdgeInsetsGeometry? optionsMargin;
-  final EdgeInsetsGeometry optionsPadding;
-  final String? hintText;
-  final Widget? optionsHeader;
-  final ScrollController? optionsScrollController;
-  final List<LaamsCellOption<V>> options;
+  final EdgeInsetsGeometry padding;
+  final String hintText;
+  final Widget? header;
+  final ScrollController? scrollController;
+  final List<CellMenuItem<V>> options;
   final V? initialValue;
-  final void Function(V?)? onSelected;
+  final String? initialValueTitle;
+  final String? initialImageUrl;
+  final void Function(CellMenuItem<V>?) onSelected;
+  final int? maxLength;
   final bool enabled;
-  final Widget? cell;
-  final Widget? optionsFooter;
+  final Widget? footer;
 
   // Anchor-Related Fields;
   final AlignmentGeometry anchorAlignment;
+  final bool isLoading;
+  final bool selectAllOnFocus;
 
-  const LaamsOptionsCell({
+  const LaamsMenuCell({
     super.key,
     this.overlayAnchorAlignment = AlignmentDirectional.bottomCenter,
     this.overlayPopupAlignment = AlignmentDirectional.topCenter,
     this.xOffset = 0,
     this.yOffset = 0,
-    this.height,
-    this.width,
-    this.margin = const EdgeInsets.all(0.5),
-    this.padding = const EdgeInsets.symmetric(horizontal: 3),
-    this.menuHeight = 350,
-    this.menuWidth = 280,
-    this.optionsMargin,
-    this.optionsPadding =
-        const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-    this.hintText,
-    this.optionsHeader,
-    this.optionsScrollController,
+    this.height = 350,
+    required this.width,
+    this.margin,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+    required this.hintText,
+    this.header,
+    this.scrollController,
     this.options = const [],
-    this.initialValue,
-    this.onSelected,
+    required this.initialValue,
+    required this.initialValueTitle,
+    this.initialImageUrl,
+    required this.onSelected,
+    this.maxLength = 255,
     this.enabled = true,
-    this.cell,
-    this.optionsFooter,
+    this.footer,
 
     // Anchor-Related Field:
     this.anchorAlignment = AlignmentDirectional.center,
+    this.isLoading = false,
+    this.selectAllOnFocus = true,
   });
 
   @override
-  State<LaamsOptionsCell<V>> createState() => _LaamsOptionsCellState();
+  State<LaamsMenuCell<V>> createState() => _LaamsMenuCellState();
 }
 
-class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
-  bool _isHovered = false;
-  bool _isFocused = false;
-  OverlayPortalController _controller = OverlayPortalController();
-  late LayerLink _link = LayerLink();
+class _LaamsMenuCellState<V> extends State<LaamsMenuCell<V>> {
+  OverlayPortalController _overlayController = OverlayPortalController();
+  LayerLink _link = LayerLink();
+  late TextEditingController _textController;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialValueTitle);
+    _focusNode = FocusNode();
+    _focusNode.addListener(() async {
+      if (_focusNode.hasFocus && widget.enabled) {
+        if (widget.selectAllOnFocus) {
+          _textController.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: _textController.text.length,
+          );
+        }
+        _overlayController.show();
+      }
+
+      if (!_focusNode.hasFocus) {
+        await Future.delayed(const Duration(milliseconds: 10));
+        _overlayController.hide();
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant LaamsMenuCell<V> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      _textController.text = widget.initialValueTitle ?? _textController.text;
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
 
   Alignment _inferAlignment(
     BuildContext context,
@@ -99,64 +138,64 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
     return Alignment.center;
   }
 
-  void _handleOnSelected(V? value) {
-    _controller.hide();
-    if (widget.onSelected != null) widget.onSelected!(value);
+  void _handleManualSelect(CellMenuItem<V>? value, bool hideMenu) {
+    if (hideMenu) _overlayController.hide();
+    _focusNode.requestFocus();
+    _focusNode.nextFocus();
+    widget.onSelected(value);
+  }
+
+  void _handleEditingCompleted() {
+    try {
+      final found = widget.options.firstWhere(_find);
+      widget.onSelected(found);
+      _focusNode.nextFocus();
+    } catch (_) {}
+  }
+
+  bool _find(CellMenuItem<V> e) {
+    final title = e.titleText.toLowerCase();
+    final text = _textController.text.toLowerCase();
+    return title.contains(text.trim().toLowerCase());
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isLoading) return const LaamsLoadingCell();
     final theme = Theme.of(context);
-    final hintStyle = theme.inputDecorationTheme.hintStyle;
 
-    final hint = Text(
-      widget.hintText ?? '',
-      style: hintStyle?.copyWith(fontSize: 14),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+    const inputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide(color: Colors.transparent),
     );
 
-    final border = Border.all(width: 2, color: theme.primaryColor);
-    final radius = BorderRadius.circular(5);
-    final decoration = BoxDecoration(
-      color: (_isHovered || _isFocused) ? theme.cardColor : null,
-      borderRadius: _isFocused ? radius : null,
-      border: _isFocused ? border : null,
+    final inputFocusedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide(color: theme.primaryColor, width: 2),
     );
 
-    Widget cell = Container(
-      alignment: widget.anchorAlignment,
-      height: widget.height,
-      width: widget.width,
-      margin: widget.margin,
-      padding: widget.padding,
+    final decoration = InputDecoration(
+      hintText: widget.hintText,
+      fillColor: theme.scaffoldBackgroundColor,
+      focusColor: theme.cardColor,
+      hoverColor: theme.cardColor,
+      focusedBorder: inputFocusedBorder,
+      border: inputBorder,
+      disabledBorder: inputBorder,
+      enabledBorder: inputBorder,
+      counterText: '',
+    );
+
+    Widget cell = TextField(
+      controller: _textController,
+      focusNode: _focusNode,
+      textInputAction: TextInputAction.next,
+      onTap: widget.enabled ? _overlayController.show : null,
       decoration: decoration,
-      child: widget.cell ?? hint,
+      enabled: widget.enabled,
+      maxLength: widget.maxLength,
+      onEditingComplete: _handleEditingCompleted,
     );
-
-    final optionExists = widget.options.any(
-      (e) => e.value == widget.initialValue,
-    );
-
-    if (widget.initialValue != null && optionExists && widget.cell == null) {
-      final found = widget.options.firstWhere(
-        (e) => e.value == widget.initialValue,
-      );
-
-      cell = LaamsCellOption<V>(
-        value: found.value,
-        height: widget.height,
-        width: widget.width,
-        borderRadius: _isFocused ? radius : null,
-        border: _isFocused ? border : null,
-        alignment: widget.anchorAlignment,
-        margin: const EdgeInsets.symmetric(horizontal: 0.5, vertical: 1.5),
-        padding: const EdgeInsets.symmetric(horizontal: 3),
-        backgroundColor: found.backgroundColor,
-        foregroundColor: found.foregroundColor,
-        titleText: found.titleText,
-      );
-    }
 
     if (widget.enabled) {
       cell = CompositedTransformTarget(
@@ -165,40 +204,33 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
       );
 
       cell = OverlayPortal.targetsRootOverlay(
-        controller: _controller,
+        controller: _overlayController,
         overlayChildBuilder: _buildOverlay,
         child: cell,
       );
     }
 
-    final detector = FocusableActionDetector(
-      onFocusChange: (v) => v ? _controller.show() : _controller.hide(),
-      onShowFocusHighlight: (v) => setState(() => _isFocused = v),
-      onShowHoverHighlight: (v) => setState(() => _isHovered = v),
-      enabled: widget.enabled,
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
       child: cell,
-    );
-
-    return GestureDetector(
-      onTap: _controller.show,
-      child: detector,
     );
   }
 
   Widget _buildOverlay(BuildContext context) {
     Widget container = _OverlayContent(
-      onSelected: _handleOnSelected,
-      margin: widget.optionsMargin,
-      padding: widget.optionsPadding,
-      header: widget.optionsHeader,
-      scrollController: widget.optionsScrollController,
+      onSelected: _handleManualSelect,
+      margin: widget.margin,
+      padding: widget.padding,
+      header: widget.header,
+      scrollController: widget.scrollController,
+      textController: _textController,
       initialValue: widget.initialValue,
       options: widget.options,
-      footer: widget.optionsFooter,
+      footer: widget.footer,
     );
 
     container = TapRegion(
-      onTapOutside: (_) => _controller.hide(),
+      onTapOutside: (_) => _overlayController.hide(),
       child: container,
     );
 
@@ -212,21 +244,22 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
     );
 
     return PositionedDirectional(
-      height: widget.menuHeight,
-      width: widget.menuWidth,
+      height: widget.height,
+      width: widget.width,
       child: container,
     );
   }
 }
 
 class _OverlayContent<V> extends StatefulWidget {
-  final void Function(V?) onSelected;
+  final void Function(CellMenuItem<V>?, bool hideMenu) onSelected;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Widget? header;
   final ScrollController? scrollController;
+  final TextEditingController textController;
   final V? initialValue;
-  final List<LaamsCellOption<V>> options;
+  final List<CellMenuItem<V>> options;
   final Widget? footer;
 
   const _OverlayContent({
@@ -235,6 +268,7 @@ class _OverlayContent<V> extends StatefulWidget {
     required this.padding,
     required this.header,
     required this.scrollController,
+    required this.textController,
     required this.initialValue,
     required this.options,
     required this.footer,
@@ -245,12 +279,28 @@ class _OverlayContent<V> extends StatefulWidget {
 }
 
 class _OverlayContentState<V> extends State<_OverlayContent<V>> {
+  V? _found;
   late ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
+    _found = widget.initialValue;
     _controller = widget.scrollController ?? ScrollController();
+    widget.textController.addListener(() => _findItem());
+  }
+
+  void _findItem() {
+    try {
+      final found = widget.options.firstWhere(
+        (e) {
+          final title = e.titleText.toLowerCase();
+          final text = widget.textController.text.toLowerCase();
+          return title.contains(text);
+        },
+      );
+      setState(() => _found = found.value);
+    } catch (_) {}
   }
 
   @override
@@ -298,16 +348,14 @@ class _OverlayContentState<V> extends State<_OverlayContent<V>> {
 
   Widget? _buildOptions(BuildContext context, int index) {
     final option = widget.options[index];
-    final selected = option.value == widget.initialValue;
-    return LaamsCellOption<V>(
-      onTap: option.onTap ?? () => widget.onSelected(option.value),
+    return CellMenuItem<V>(
+      onTap: option.onTap ?? () => widget.onSelected(option, true),
       height: option.height,
       width: option.width,
       margin: option.margin,
       padding: option.padding,
       clipBehavior: option.clipBehavior,
       backgroundColor: option.backgroundColor,
-      selectedBackroundColor: option.selectedBackroundColor,
       foregroundColor: option.foregroundColor,
       border: option.border,
       boxShadow: option.boxShadow,
@@ -367,12 +415,12 @@ class _OverlayContentState<V> extends State<_OverlayContent<V>> {
       horizontalSpacing: option.horizontalSpacing,
       verticalSpacing: option.verticalSpacing,
       enabled: option.enabled,
-      selected: option.selected ?? selected,
+      selected: option.value == _found,
     );
   }
 }
 
-class LaamsCellOption<V> extends StatelessWidget {
+class CellMenuItem<V> extends StatelessWidget {
   final void Function()? onTap;
   final AlignmentGeometry alignment;
   final double? height;
@@ -381,7 +429,6 @@ class LaamsCellOption<V> extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Clip clipBehavior;
   final Color? backgroundColor;
-  final Color? selectedBackroundColor;
   final Color? foregroundColor;
   final BoxBorder? border;
   final List<BoxShadow>? boxShadow;
@@ -441,9 +488,9 @@ class LaamsCellOption<V> extends StatelessWidget {
   final double horizontalSpacing;
   final double verticalSpacing;
   final bool enabled;
-  final bool? selected;
+  final bool selected;
 
-  const LaamsCellOption({
+  const CellMenuItem({
     super.key,
     this.onTap,
     this.alignment = AlignmentDirectional.centerStart,
@@ -453,7 +500,6 @@ class LaamsCellOption<V> extends StatelessWidget {
     this.padding = const EdgeInsets.all(8),
     this.clipBehavior = Clip.none,
     this.backgroundColor,
-    this.selectedBackroundColor,
     this.foregroundColor,
     this.border,
     this.boxShadow,
@@ -513,7 +559,7 @@ class LaamsCellOption<V> extends StatelessWidget {
     this.horizontalSpacing = 5,
     this.verticalSpacing = 3,
     this.enabled = true,
-    this.selected,
+    this.selected = false,
   });
 
   @override
@@ -608,13 +654,11 @@ class LaamsCellOption<V> extends StatelessWidget {
       );
     }
 
-    final bgColor = switch (selected == true) {
-      true => selectedBackroundColor ?? theme.cardColor,
-      false => backgroundColor ?? theme.scaffoldBackgroundColor,
-    };
-
     final decoration = BoxDecoration(
-      color: bgColor,
+      color: switch (selected) {
+        true => theme.cardColor,
+        false => backgroundColor ?? theme.scaffoldBackgroundColor,
+      },
       border: border ?? Border.all(width: 0.5, color: theme.shadowColor),
       boxShadow: boxShadow,
       borderRadius: borderRadius,
@@ -632,11 +676,7 @@ class LaamsCellOption<V> extends StatelessWidget {
     );
 
     if (onTap != null && enabled) {
-      container = InkWell(
-        focusColor: Colors.red,
-        onTap: onTap,
-        child: container,
-      );
+      container = InkWell(onTap: onTap, child: container);
     }
 
     return container;

@@ -41,7 +41,7 @@ class LaamsEditableCell<T> extends StatefulWidget {
     this.width,
     this.alignment = AlignmentDirectional.centerStart,
     this.margin,
-    this.padding = const EdgeInsets.symmetric(horizontal: 5),
+    this.padding = const EdgeInsets.symmetric(horizontal: 8),
     this.backgroundColor,
     this.keyboardType,
     this.textInputAction = TextInputAction.next,
@@ -78,6 +78,14 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     _controller = TextEditingController(text: _initialValue);
     _focusNode = FocusNode();
     _focusNode.addListener(() => _handleUnfocus());
+  }
+
+  @override
+  void didUpdateWidget(covariant LaamsEditableCell<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _controller.text = _initialValue ?? '';
+    }
   }
 
   @override
@@ -285,8 +293,13 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     );
 
     const errorBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red, width: 0.5),
+      borderSide: BorderSide(color: Colors.red, width: 2),
       borderRadius: BorderRadius.zero,
+    );
+
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide(color: theme.primaryColor, width: 2),
     );
 
     Widget? suffix;
@@ -311,7 +324,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
       hoverColor: widget.backgroundColor ?? theme.cardColor,
       errorBorder: errorBorder,
       enabledBorder: border,
-      focusedBorder: border,
+      focusedBorder: focusedBorder,
       disabledBorder: border,
       focusedErrorBorder: errorBorder,
       contentPadding: widget.padding,

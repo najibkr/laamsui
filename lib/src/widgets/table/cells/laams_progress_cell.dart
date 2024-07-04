@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class LaamsProgressCell extends StatelessWidget {
   final double height;
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
   final double percentage;
   final Color? indicatorColor;
   const LaamsProgressCell({
     super.key,
     this.height = double.infinity,
-    this.margin = const EdgeInsets.all(2),
+    this.margin,
     required this.percentage,
     this.indicatorColor,
   });
@@ -41,6 +41,6 @@ class LaamsProgressCell extends StatelessWidget {
       children: [progress, Positioned(child: title)],
     );
 
-    return Padding(padding: margin, child: stack);
+    return Padding(padding: margin ?? EdgeInsets.zero, child: stack);
   }
 }

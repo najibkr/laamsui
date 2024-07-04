@@ -88,6 +88,7 @@ class _LaamsTableToolbarState extends State<LaamsTableToolbar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final iconCol = theme.textTheme.bodyLarge?.color;
 
     Widget? checkbox;
     if (widget.showSelectAll) {
@@ -104,6 +105,7 @@ class _LaamsTableToolbarState extends State<LaamsTableToolbar> {
         onPressed: () => setState(() => _showSearchBar = true),
         icon: LaamsIcons.search,
         tooltip: widget.searchHint,
+        iconColor: iconCol,
       );
     }
 

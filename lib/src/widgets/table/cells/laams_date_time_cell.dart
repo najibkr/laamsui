@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/src/laams_icons.dart';
+import 'package:laamsui/laamsui.dart' show LaamsIcons;
 
 class LaamsDateTimeCell extends StatefulWidget {
   final void Function()? onTap;

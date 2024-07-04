@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/src/extensions/viewport_extension.dart';
+import 'package:laamsui/extensions.dart';
 
 class LaamsTableButton extends StatefulWidget {
   final void Function()? onPressed;
@@ -124,15 +124,13 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
 
   @override
   Widget build(BuildContext context) {
-    // final isMobile = context.isS;
-    // final isMobile = LaamsDevice.isS(context);
     final theme = Theme.of(context);
 
     Widget? child;
     if (widget.icon != null) {
       child = Icon(
         widget.icon,
-        color: widget.iconColor,
+        color: widget.iconColor ?? theme.textTheme.bodyLarge?.color,
         size: widget.iconSize,
       );
     }

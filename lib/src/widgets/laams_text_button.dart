@@ -16,6 +16,9 @@ class LaamsTextButton extends StatelessWidget {
   final Color? iconColor;
   final double? iconSize;
   final String label;
+  final double? labelFontSize;
+  final Color? labelColor;
+  final FontWeight? labelfontWeight;
   final bool isExpanded;
 
   const LaamsTextButton({
@@ -35,6 +38,9 @@ class LaamsTextButton extends StatelessWidget {
     this.iconColor,
     this.iconSize = 20.0,
     required this.label,
+    this.labelColor,
+    this.labelFontSize,
+    this.labelfontWeight,
     this.isExpanded = false,
   });
 
@@ -43,6 +49,11 @@ class LaamsTextButton extends StatelessWidget {
     final theme = Theme.of(context);
     final bgColor = backgroundColor ?? theme.cardColor;
     final foreColor = foregroundColor ?? theme.primaryColor;
+    final defLabelStyle = theme.textTheme.bodyLarge?.copyWith(
+      fontSize: labelFontSize,
+      fontWeight: labelfontWeight ?? FontWeight.w500,
+      color: labelColor ?? foreColor,
+    );
 
     Color? mapColor(Set<WidgetState> state) {
       final isHovered = state.contains(WidgetState.hovered);
@@ -75,13 +86,14 @@ class LaamsTextButton extends StatelessWidget {
       );
     }
 
-    Widget content = Text(label);
+    Widget content = Text(label, style: defLabelStyle);
+
     if (iconWidget != null) {
       content = Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [iconWidget, Text(label)],
+        children: [iconWidget, content],
       );
     }
 

@@ -99,6 +99,54 @@ class LaamsMessageCard extends StatelessWidget {
     this.spacing = 12,
   }) : isSliver = false;
 
+  const LaamsMessageCard.sliver({
+    super.key,
+    this.height,
+    this.width = 550,
+    this.margin,
+    this.padding = const EdgeInsets.all(20),
+    this.vector,
+    this.svgPath,
+    this.svgPackage = 'laamsui',
+    this.icon,
+    this.iconColor,
+    this.vectorSize = 120,
+
+    // Title-Related Fields:
+    this.titleText,
+    this.titleTextFontSize,
+    this.titleTextColor,
+    this.titleTextFontWeight,
+    this.titleTextStyle,
+    this.titleTextAlign,
+    this.titleTextMaxLines,
+    this.titleTextLineSpacing,
+    this.titleTextOverflow,
+
+    // Message-Related Fields:
+    this.messageText,
+    this.messageTextFontSize,
+    this.messageTextColor,
+    this.messageTextFontWeight,
+    this.messageTextStyle,
+    this.messageTextAlign,
+    this.messageTextMaxLines,
+    this.messageTextLineSpacing,
+    this.messageTextOverflow,
+
+    // Buttons-Related Fields:
+    this.onAccept,
+    this.acceptIcon,
+    this.acceptLabel,
+    this.onReject,
+    this.rejectIcon,
+    this.rejectLabel,
+    this.buttonsWidth = 140,
+
+    // Other Fields:
+    this.spacing = 12,
+  }) : isSliver = true;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -117,7 +165,13 @@ class LaamsMessageCard extends StatelessWidget {
       );
     }
 
-    if (icon != null) header = Icon(icon, size: vectorSize, color: iconColor);
+    if (icon != null) {
+      header = Icon(
+        icon,
+        size: vectorSize,
+        color: iconColor ?? theme.primaryColor,
+      );
+    }
     if (vector != null) header = vector;
 
     Widget? title;
@@ -226,7 +280,7 @@ class LaamsMessageCard extends StatelessWidget {
     return Icon(
       LaamsIcons.notifications_outline,
       size: 100,
-      color: iconColor,
+      color: iconColor ?? Theme.of(context).primaryColor,
     );
   }
 }

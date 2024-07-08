@@ -19,6 +19,9 @@ class LaamsTextButton extends StatelessWidget {
   final double? labelFontSize;
   final Color? labelColor;
   final FontWeight? labelfontWeight;
+  final IconData? trailingIcon;
+  final Color? trailingIconColor;
+  final double? trailingIconSize;
   final bool isExpanded;
 
   const LaamsTextButton({
@@ -41,6 +44,9 @@ class LaamsTextButton extends StatelessWidget {
     this.labelColor,
     this.labelFontSize,
     this.labelfontWeight,
+    this.trailingIcon,
+    this.trailingIconColor,
+    this.trailingIconSize = 20.0,
     this.isExpanded = false,
   });
 
@@ -82,18 +88,34 @@ class LaamsTextButton extends StatelessWidget {
     if (icon != null) {
       iconWidget = Padding(
         padding: const EdgeInsetsDirectional.only(end: 5),
-        child: Icon(icon, size: iconSize, color: iconColor),
+        child: Icon(icon, size: iconSize, color: iconColor ?? foreColor),
       );
     }
 
     Widget content = Text(label, style: defLabelStyle);
 
-    if (iconWidget != null) {
+    Widget? trailing;
+    if (trailingIcon != null) {
+      trailing = Padding(
+        padding: const EdgeInsetsDirectional.only(start: 5),
+        child: Icon(
+          trailingIcon,
+          size: trailingIconSize,
+          color: trailingIconColor ?? foreColor,
+        ),
+      );
+    }
+
+    if (iconWidget != null || trailing != null) {
       content = Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [iconWidget, content],
+        children: [
+          if (iconWidget != null) iconWidget,
+          content,
+          if (trailing != null) trailing,
+        ],
       );
     }
 

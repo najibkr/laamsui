@@ -47,6 +47,7 @@ class LaamsMessageCard extends StatelessWidget {
   final IconData? rejectIcon;
   final String? rejectLabel;
   final double? buttonsWidth;
+  final EdgeInsetsGeometry buttonsPadding;
 
   // Other Fields
   final double spacing;
@@ -94,6 +95,7 @@ class LaamsMessageCard extends StatelessWidget {
     this.rejectIcon,
     this.rejectLabel,
     this.buttonsWidth = 140,
+    this.buttonsPadding = const EdgeInsetsDirectional.fromSTEB(5, 9, 15, 9),
 
     // Other Fields:
     this.spacing = 12,
@@ -142,6 +144,7 @@ class LaamsMessageCard extends StatelessWidget {
     this.rejectIcon,
     this.rejectLabel,
     this.buttonsWidth = 140,
+    this.buttonsPadding = const EdgeInsetsDirectional.fromSTEB(5, 9, 15, 9),
 
     // Other Fields:
     this.spacing = 12,
@@ -219,6 +222,7 @@ class LaamsMessageCard extends StatelessWidget {
         width: buttonsWidth,
         backgroundColor: const Color(0xFF00B050).withOpacity(0.2),
         foregroundColor: const Color(0xFF00b050),
+        padding: buttonsPadding,
       );
     }
 
@@ -233,6 +237,7 @@ class LaamsMessageCard extends StatelessWidget {
         foregroundColor: Colors.red,
         hoverColor: Colors.red[100],
         focusedColor: Colors.red[200],
+        padding: buttonsPadding,
       );
     }
 

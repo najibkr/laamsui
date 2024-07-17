@@ -130,7 +130,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
     if (widget.icon != null) {
       child = Icon(
         widget.icon,
-        color: widget.iconColor ?? theme.textTheme.bodyLarge?.color,
+        color: widget.iconColor ?? theme.primaryColor,
         size: widget.iconSize,
       );
     }

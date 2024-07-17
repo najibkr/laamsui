@@ -12,6 +12,7 @@ class LaamsTextButton extends StatelessWidget {
   final Color? hoverColor;
   final Color? focusedColor;
   final BorderRadiusGeometry borderRadius;
+  final BorderSide border;
   final IconData? icon;
   final Color? iconColor;
   final double? iconSize;
@@ -37,6 +38,7 @@ class LaamsTextButton extends StatelessWidget {
     this.hoverColor,
     this.focusedColor,
     this.borderRadius = const BorderRadius.all(Radius.circular(50)),
+    this.border = BorderSide.none,
     this.icon,
     this.iconColor,
     this.iconSize = 20.0,
@@ -71,9 +73,7 @@ class LaamsTextButton extends StatelessWidget {
     }
 
     RoundedRectangleBorder? mapShape(Set<WidgetState> state) {
-      return RoundedRectangleBorder(
-        borderRadius: borderRadius,
-      );
+      return RoundedRectangleBorder(borderRadius: borderRadius, side: border);
     }
 
     var buttonStyle = ButtonStyle(

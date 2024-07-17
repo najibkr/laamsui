@@ -322,7 +322,7 @@ class LaamsTable<Entity> extends StatelessWidget {
       TableStatusType.failure => LaamsTableMessage(
           onAccept: onRetry,
           assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'jaguar',
+          assetPackage: status.assetPackage ?? 'laamsui',
           title: status.title ?? '',
           message: status.message ?? '',
           buttonLabel: retryLabel,
@@ -330,7 +330,7 @@ class LaamsTable<Entity> extends StatelessWidget {
       TableStatusType.emptySearch => LaamsTableMessage(
           onAccept: onCancelSearch != null ? () => onCancelSearch!('') : null,
           assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'jaguar',
+          assetPackage: status.assetPackage ?? 'laamsui',
           title: status.title ?? '',
           message: status.message ?? '',
           buttonLabel: retryLabel,
@@ -338,7 +338,7 @@ class LaamsTable<Entity> extends StatelessWidget {
       TableStatusType.empty => LaamsTableMessage(
           onAccept: onAddNew,
           assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'jaguar',
+          assetPackage: status.assetPackage ?? 'laamsui',
           title: status.title ?? '',
           message: status.message ?? '',
           buttonLabel: addNewLabel,

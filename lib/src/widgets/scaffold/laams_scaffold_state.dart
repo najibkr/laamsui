@@ -53,7 +53,7 @@ class LaamsScaffoldData extends InheritedWidget {
 
   static LaamsScaffoldData of(BuildContext context) {
     final LaamsScaffoldData? result = maybeOf(context);
-    assert(result != null, 'No JaguarScaffoldData found in context');
+    assert(result != null, 'No LaamsScaffoldData found in context');
     return result!;
   }
 }

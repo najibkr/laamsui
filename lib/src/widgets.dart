@@ -5,7 +5,7 @@ export 'widgets/laams_list_tile.dart';
 export 'widgets/laams_message_card.dart';
 export 'widgets/laams_overlay.dart';
 export 'widgets/laams_search_field.dart';
-export 'widgets/laams_stats_tile.dart';
+export 'widgets/laams_stats.dart';
 export 'widgets/laams_tabbed_scaffold.dart';
 export 'widgets/laams_text.dart';
 export 'widgets/laams_text_button.dart';

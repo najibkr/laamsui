@@ -1,3 +1,7 @@
+## 0.6.13
+- Fixed bugs and improvements
+- Added Image
+
 ## 0.6.12
 - Fixed bugs and improvements
 

@@ -21,7 +21,7 @@ class LaamsImagePlaceholder extends StatelessWidget {
   });
 
   String get _abbreviatedLabel {
-    if (semanticLabel.trim().isEmpty) return 'P';
+    if (semanticLabel.trim().isEmpty) return '';
     return semanticLabel.trim()[0];
   }
 

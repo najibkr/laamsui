@@ -33,11 +33,11 @@ class LaamsText extends StatelessWidget {
     this.height,
     this.width,
     this.margin,
-    this.padding = const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+    this.padding,
     this.backgroundColor,
     this.border,
     this.boxShadow,
-    this.borderRadius = const BorderRadius.all(Radius.circular(5)),
+    this.borderRadius,
 
     // Text-Related Fields:
     this.fontFamily,
@@ -51,7 +51,7 @@ class LaamsText extends StatelessWidget {
     this.style,
     this.textOverflow,
     this.maxlines,
-    this.textAlign = TextAlign.center,
+    this.textAlign = TextAlign.start,
   });
 
   @override

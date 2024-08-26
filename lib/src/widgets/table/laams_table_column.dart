@@ -124,6 +124,7 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
       container = OverlayPortal(
         controller: _controller,
         overlayChildBuilder: _buildOverlay,
+        child: container,
       );
     }
 

@@ -89,6 +89,7 @@ class LaamsTable<Entity> extends StatelessWidget {
 
   // Header-Related Fields:
   final Widget? titleBar;
+  final Widget? toolbar;
   final double? toolbarHeight;
   final double? toolbarWidth;
   final EdgeInsetsGeometry? toolbarMargin;
@@ -153,6 +154,7 @@ class LaamsTable<Entity> extends StatelessWidget {
 
     // Header-Related Fields:
     this.titleBar,
+    this.toolbar,
     this.toolbarHeight,
     this.toolbarWidth,
     this.toolbarMargin,
@@ -257,25 +259,28 @@ class LaamsTable<Entity> extends StatelessWidget {
   }
 
   Widget _buildLayout(BuildContext context, BoxConstraints consts) {
-    final toolbar = LaamsTableToolbar(
-      height: toolbarHeight,
-      width: toolbarWidth,
-      margin: toolbarMargin,
-      padding: toolbarPadding,
-      backgroundColor: toolbarBackgroundColor,
-      borderRadius: toolbarBorderRadius,
-      border: toolbarBorder,
-      boxShadow: toolbarBoxShadow,
-      onSelectAll: onSelectAll,
-      showSelectAll: showSelectAll,
-      selectAllTooltip: selectAllTooltip,
-      areAllSelected: areAllSelected,
-      selectedItemsActions: selectedItemsActions,
-      showSelectedItemsActions: showSelectedItemsActions,
-      onSearch: onSearch,
-      searchHint: searchHint,
-      actions: toolBarActions,
-    );
+    final newToolbar = switch (toolbar != null) {
+      true => toolbar,
+      false => LaamsTableToolbar(
+          height: toolbarHeight,
+          width: toolbarWidth,
+          margin: toolbarMargin,
+          padding: toolbarPadding,
+          backgroundColor: toolbarBackgroundColor,
+          borderRadius: toolbarBorderRadius,
+          border: toolbarBorder,
+          boxShadow: toolbarBoxShadow,
+          onSelectAll: onSelectAll,
+          showSelectAll: showSelectAll,
+          selectAllTooltip: selectAllTooltip,
+          areAllSelected: areAllSelected,
+          selectedItemsActions: selectedItemsActions,
+          showSelectedItemsActions: showSelectedItemsActions,
+          onSearch: onSearch,
+          searchHint: searchHint,
+          actions: toolBarActions,
+        ),
+    };
 
     Widget table = switch (_shouldShowMobileView(consts.maxWidth)) {
       true => _LaamsTableMoible(
@@ -348,7 +353,7 @@ class LaamsTable<Entity> extends StatelessWidget {
 
     final items = [
       if (titleBar != null) titleBar!,
-      toolbar,
+      if (newToolbar != null) newToolbar,
       table,
       if (footer != null) footer!,
     ];

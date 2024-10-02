@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:laamsui/extensions.dart';
 import 'package:laamsui/laamsui.dart' show LaamsLoading, IndicatorType;
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsStats extends StatelessWidget {
   final bool isSliver;

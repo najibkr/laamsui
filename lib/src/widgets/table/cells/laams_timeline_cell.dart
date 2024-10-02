@@ -1,7 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:laamsui/extensions.dart';
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsTimelineCell extends StatefulWidget {
   final AlignmentDirectional overlayAnchorAlignment;

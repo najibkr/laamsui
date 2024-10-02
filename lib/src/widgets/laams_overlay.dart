@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:laamsui/extensions.dart';
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsOverlay extends StatefulWidget {
   final AlignmentDirectional overlayAnchorAlignment;

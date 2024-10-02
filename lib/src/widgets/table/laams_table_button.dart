@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laamsui/extensions.dart';
+import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsTableButton extends StatefulWidget {
   final void Function()? onPressed;

@@ -323,7 +323,10 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     Widget? header = widget.header ?? tab.header;
     if (header == null && tab.hasHeader) {
       header = FlexibleSpaceBar(
-        background: _LaamsScaffoldHeader(data: tab, topSpacing: _toolbarHeight),
+        background: _LaamsScaffoldHeader(
+          data: tab,
+          topSpacing: _toolbarHeight + 25,
+        ),
         collapseMode: CollapseMode.none,
         stretchModes: const [StretchMode.zoomBackground],
       );

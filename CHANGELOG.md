@@ -1,4 +1,4 @@
-## 0.6.20
+## 0.6.21
 - Fixed bugs and improvements
 
 ## 0.6.17

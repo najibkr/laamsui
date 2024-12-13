@@ -325,7 +325,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       header = FlexibleSpaceBar(
         background: _LaamsScaffoldHeader(
           data: tab,
-          topSpacing: _toolbarHeight + 25,
+          topSpacing: _toolbarHeight + MediaQuery.paddingOf(context).top,
         ),
         collapseMode: CollapseMode.none,
         stretchModes: const [StretchMode.zoomBackground],

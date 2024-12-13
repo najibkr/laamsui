@@ -32,7 +32,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
 
   const LaamsTabbedScaffold({
     super.key,
-    this.isAppBarPrimary = false,
+    this.isAppBarPrimary = true,
     this.isAppBarPinned = false,
     this.isAppBarFloating = false,
     this.titleBarHeight = 50,

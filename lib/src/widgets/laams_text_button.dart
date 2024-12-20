@@ -65,7 +65,7 @@ class LaamsTextButton extends StatelessWidget {
 
     Color? mapColor(Set<WidgetState> state) {
       final isHovered = state.contains(WidgetState.hovered);
-      final defaultColor = theme.primaryColor.withOpacity(0.1);
+      final defaultColor = theme.primaryColor.withValues(alpha: 0.1);
       if (isHovered) return hoverColor ?? defaultColor;
       final isFocused = state.contains(WidgetState.focused);
       if (isFocused) return focusedColor ?? defaultColor;

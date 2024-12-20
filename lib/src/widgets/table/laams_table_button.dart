@@ -109,7 +109,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,
-      barrierColor: widget.barrierColor ?? Colors.grey.withOpacity(0.3),
+      barrierColor: widget.barrierColor ?? Colors.grey.withValues(alpha: 0.3),
       shape: const RoundedRectangleBorder(borderRadius: borderRadius),
       builder: (context) => _ButtonMobileDialog(
         height: widget.overlayMobileHeight,

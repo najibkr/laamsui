@@ -113,7 +113,7 @@ class _LaamsStatsCardState<Stat extends num>
     );
 
     final iconDecoration = BoxDecoration(
-      color: widget.color.withOpacity(0.3),
+      color: widget.color.withValues(alpha: 0.3),
       gradient: iconGradient,
       boxShadow: [BoxShadow(color: widget.color[100]!, blurRadius: 4)],
       borderRadius: BorderRadius.circular(200),

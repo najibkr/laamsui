@@ -75,9 +75,11 @@ class LaamsTableMessage extends StatelessWidget {
       );
       final buttonStyle = ButtonStyle(
         foregroundColor: WidgetStateProperty.all(btnColor),
-        backgroundColor: WidgetStateProperty.all(btnColor.withOpacity(0.1)),
-        surfaceTintColor: WidgetStateProperty.all(btnColor.withOpacity(0.2)),
-        overlayColor: WidgetStateProperty.all(btnColor.withOpacity(0.2)),
+        backgroundColor:
+            WidgetStateProperty.all(btnColor.withValues(alpha: 0.1)),
+        surfaceTintColor:
+            WidgetStateProperty.all(btnColor.withValues(alpha: 0.2)),
+        overlayColor: WidgetStateProperty.all(btnColor.withValues(alpha: 0.2)),
       );
 
       btn = TextButton(

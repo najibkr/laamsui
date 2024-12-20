@@ -220,7 +220,7 @@ class LaamsMessageCard extends StatelessWidget {
         icon: acceptIcon,
         label: acceptLabel ?? '',
         width: buttonsWidth,
-        backgroundColor: const Color(0xFF00B050).withOpacity(0.2),
+        backgroundColor: const Color(0xFF00B050).withValues(alpha: 0.2),
         foregroundColor: const Color(0xFF00b050),
         padding: buttonsPadding,
       );
@@ -336,7 +336,7 @@ class LaamsMessageBtn extends StatelessWidget {
 
     Color? mapColor(Set<WidgetState> state) {
       final isHovered = state.contains(WidgetState.hovered);
-      final defaultColor = theme.primaryColor.withOpacity(0.1);
+      final defaultColor = theme.primaryColor.withValues(alpha: 0.1);
       if (isHovered) return hoverColor ?? defaultColor;
       final isFocused = state.contains(WidgetState.focused);
       if (isFocused) return focusedColor ?? defaultColor;

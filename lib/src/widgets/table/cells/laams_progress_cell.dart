@@ -23,8 +23,8 @@ class LaamsProgressCell extends StatelessWidget {
 
     final progress = LinearProgressIndicator(
       value: percentage / 100,
-      backgroundColor: color?.withOpacity(0.1),
-      color: color?.withOpacity(0.25),
+      backgroundColor: color?.withValues(alpha: 0.1),
+      color: color?.withValues(alpha: 0.25),
       semanticsValue: '20%',
       semanticsLabel: '20%',
       minHeight: height,

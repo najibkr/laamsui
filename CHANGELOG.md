@@ -1,3 +1,6 @@
+## 0.6.23
+- Upgraded dependencies, fixed deprecations for flutter 3.27.0
+
 ## 0.6.22
 - Fixed bugs and improvements
 

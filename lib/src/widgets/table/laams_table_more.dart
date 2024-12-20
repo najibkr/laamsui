@@ -45,7 +45,7 @@ class LaamsTableMore extends StatelessWidget {
             if (states.contains(WidgetState.hovered)) {
               return theme.primaryColor;
             }
-            return theme.primaryColor.withOpacity(0.8);
+            return theme.primaryColor.withValues(alpha: 0.8);
           },
         ),
       );

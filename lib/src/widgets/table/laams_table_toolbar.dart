@@ -216,7 +216,7 @@ class _Checkbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hColor = theme.primaryColor.withOpacity(0.2);
+    final hColor = theme.primaryColor.withValues(alpha: 0.2);
     Widget checkbox = Checkbox(
       onChanged: onSelected == null ? null : (_) => onSelected!(),
       value: areAllSelected,

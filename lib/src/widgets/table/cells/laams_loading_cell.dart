@@ -8,7 +8,7 @@ class LaamsLoadingCell extends StatelessWidget {
   Widget build(BuildContext context) {
     var boxDecoration = BoxDecoration(
       borderRadius: BorderRadius.circular(200),
-      color: Theme.of(context).primaryColor.withOpacity(0.15),
+      color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
     );
     var container = Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),

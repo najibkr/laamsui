@@ -75,7 +75,7 @@ class LaamsFormDialog extends StatelessWidget {
       barrierDismissible: barrierDismissible,
       useSafeArea: useSafeARea,
       useRootNavigator: useRootNavigator,
-      barrierColor: barrierColor ?? Colors.grey.withOpacity(0.3),
+      barrierColor: barrierColor ?? Colors.grey.withValues(alpha: 0.3),
       builder: (context) => switch (MediaQuery.sizeOf(context).width < 600) {
         true => Dialog.fullscreen(
             backgroundColor: backgroundColor,

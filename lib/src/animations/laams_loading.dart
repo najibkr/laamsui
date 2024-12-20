@@ -247,9 +247,12 @@ class LaamsLoading extends StatelessWidget {
 
       final buttonStyle = ButtonStyle(
         foregroundColor: WidgetStateProperty.all(Colors.red),
-        backgroundColor: WidgetStateProperty.all(Colors.red.withOpacity(0.1)),
-        surfaceTintColor: WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
-        overlayColor: WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
+        backgroundColor:
+            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.1)),
+        surfaceTintColor:
+            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.2)),
+        overlayColor:
+            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.2)),
       );
 
       btn = TextButton(

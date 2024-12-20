@@ -67,7 +67,7 @@ class _LaamsOverlayState extends State<LaamsOverlay> {
     }
     return showModalBottomSheet<T>(
       context: context,
-      barrierColor: Colors.grey.withOpacity(0.3),
+      barrierColor: Colors.grey.withValues(alpha: 0.3),
       isScrollControlled: true,
       useRootNavigator: true,
       useSafeArea: false,

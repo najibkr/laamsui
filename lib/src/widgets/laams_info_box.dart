@@ -106,11 +106,11 @@ class LaamsInfoBox extends StatelessWidget {
     final bgkColor = switch (status.isFailure || status.isInvalid) {
       true => switch (failureBackgroundColor != null) {
           true => failureBackgroundColor,
-          false => Colors.red.withOpacity(0.08),
+          false => Colors.red.withValues(alpha: 0.08),
         },
       false => switch (backgroundColor != null) {
           true => backgroundColor,
-          false => theme.primaryColor.withOpacity(0.08),
+          false => theme.primaryColor.withValues(alpha: 0.08),
         },
     };
 

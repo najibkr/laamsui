@@ -16,7 +16,7 @@ class LaamsCheckboxCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final overalyColor = theme.primaryColor.withOpacity(0.1);
+    final overalyColor = theme.primaryColor.withValues(alpha: 0.1);
     Color? fillColor(Set<WidgetState> data) {
       if (data.contains(WidgetState.selected)) {
         return theme.shadowColor;

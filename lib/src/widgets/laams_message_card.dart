@@ -333,6 +333,7 @@ class LaamsMessageBtn extends StatelessWidget {
     final theme = Theme.of(context);
     final bgColor = backgroundColor ?? theme.cardColor;
     final foreColor = foregroundColor ?? theme.primaryColor;
+    final icoColor = iconColor ?? foregroundColor ?? theme.primaryColor;
 
     Color? mapColor(Set<WidgetState> state) {
       final isHovered = state.contains(WidgetState.hovered);
@@ -361,7 +362,7 @@ class LaamsMessageBtn extends StatelessWidget {
     if (icon != null) {
       iconWidget = Padding(
         padding: const EdgeInsetsDirectional.only(end: 5),
-        child: Icon(icon, size: iconSize, color: iconColor),
+        child: Icon(icon, size: iconSize, color: icoColor),
       );
     }
 

@@ -31,6 +31,7 @@ extension LaamsImageTypeExt on LaamsImageType {
   bool get isAuto => this == LaamsImageType.auto;
 }
 
+@Deprecated('Use [WolfImage] instead')
 class LaamsImage extends StatelessWidget {
   final void Function()? onPressed;
   final void Function()? onLongPress;

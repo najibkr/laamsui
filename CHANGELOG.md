@@ -1,4 +1,4 @@
-## 0.6.25
+## 0.6.26
 - Fixed Network image bug for the web
 
 ## 0.6.24

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'laams_image_placeholder.dart';
@@ -48,6 +49,20 @@ class LaamsImageNetwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Image.network(
+        uri,
+        alignment: alignment,
+        height: height,
+        width: width,
+        fit: boxFit,
+        matchTextDirection: matchTextDirection,
+        headers: headers,
+        errorBuilder: (c, o, s) => _buildError(c, o.toString(), s),
+        loadingBuilder: (c, child, s) =>
+            _buildPlaceholder(context, s.toString()),
+      );
+    }
     return CachedNetworkImage(
       alignment: alignment,
       height: height,

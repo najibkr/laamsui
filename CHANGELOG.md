@@ -1,3 +1,6 @@
+## 0.6.25
+- Fixed Network image bug for the web
+
 ## 0.6.24
 - Upgraded dependencies, fixed deprecations for flutter 3.27.0
 

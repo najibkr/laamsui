@@ -30,6 +30,7 @@ class LaamsEditableCell<T> extends StatefulWidget {
   final Widget? suffixIcon;
   final int? minLines;
   final int? maxLines;
+  final bool autoSelect;
 
   const LaamsEditableCell({
     super.key,
@@ -62,6 +63,7 @@ class LaamsEditableCell<T> extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.suffixIcon,
+    this.autoSelect = true,
   });
 
   @override
@@ -131,7 +133,15 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
   }
 
   void _handleUnfocus() {
-    if (_focusNode.hasFocus) return;
+    if (_focusNode.hasFocus) {
+      if (!widget.autoSelect) return;
+      _controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _controller.text.length,
+      );
+      return;
+    }
+
     if (widget.value == _controller.text) return;
     if (widget.onUnfocused == null) return;
 

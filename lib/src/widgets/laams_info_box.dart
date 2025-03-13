@@ -4,12 +4,7 @@ import 'package:laamsui/src/animations/laams_loading.dart';
 import 'package:laamsui/src/constants/svgs_constants.dart';
 import 'package:laamsui/src/extensions/viewport_extension.dart';
 
-enum LaamsInfoBoxStatus {
-  idle,
-  invalid,
-  loading,
-  failure,
-}
+enum LaamsInfoBoxStatus { idle, invalid, loading, failure }
 
 extension LaamsInfoBoxStatusExt on LaamsInfoBoxStatus {
   bool get isIdle => this == LaamsInfoBoxStatus.idle;
@@ -84,34 +79,31 @@ class LaamsInfoBox extends StatelessWidget {
 
     final leading = switch (status.isLoading) {
       true => LaamsLoading.card(
-          null,
-          indicatorSize: Size(vectorSize, vectorSize),
-          margin: EdgeInsetsDirectional.only(end: isNarrow ? 8 : 15.0),
-        ),
+        null,
+        indicatorSize: Size(vectorSize, vectorSize),
+        margin: EdgeInsetsDirectional.only(end: isNarrow ? 8 : 15.0),
+      ),
       false => SvgPicture.asset(
-          vectorUrl,
-          height: vectorSize,
-          width: vectorSize,
-          semanticsLabel: 'Info',
-          package: 'laamsui',
-        ),
+        vectorUrl,
+        height: vectorSize,
+        width: vectorSize,
+        semanticsLabel: 'Info',
+        package: 'laamsui',
+      ),
     };
 
     // Message:
-    Widget newMessage = Text(
-      message,
-      style: defultMsgStyle,
-    );
+    Widget newMessage = Text(message, style: defultMsgStyle);
 
     final bgkColor = switch (status.isFailure || status.isInvalid) {
       true => switch (failureBackgroundColor != null) {
-          true => failureBackgroundColor,
-          false => Colors.red.withValues(alpha: 0.08),
-        },
+        true => failureBackgroundColor,
+        false => Colors.red.withValues(alpha: 0.08),
+      },
       false => switch (backgroundColor != null) {
-          true => backgroundColor,
-          false => theme.primaryColor.withValues(alpha: 0.08),
-        },
+        true => backgroundColor,
+        false => theme.primaryColor.withValues(alpha: 0.08),
+      },
     };
 
     final boxDecoration = BoxDecoration(

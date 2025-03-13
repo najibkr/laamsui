@@ -30,29 +30,44 @@ class _BallGridPulseState extends State<BallGridPulse>
     for (int i = 0; i < _ballNum; i++) {
       final duration = random.nextInt(1000) + 600;
       final delay = random.nextInt(1000) - 200;
-      _animationControllers.add(AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: duration),
-      ));
-      _scaleAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.5), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.5, end: 1.0), weight: 1),
-      ]).animate(CurvedAnimation(
-        parent: _animationControllers[i],
-        curve: Curves.linear,
-      )));
-      _opacityAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 1),
-      ]).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
+      _animationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: Duration(milliseconds: duration),
+        ),
+      );
+      _scaleAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.5), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.5, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
+      _opacityAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
       _animationControllers[i].repeat(reverse: true);
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: delay)).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -76,10 +91,7 @@ class _BallGridPulseState extends State<BallGridPulse>
         scale: _scaleAnimations[i],
         child: FadeTransition(
           opacity: _opacityAnimations[i],
-          child: IndicatorShapeWidget(
-            shape: Shape.circle,
-            index: i,
-          ),
+          child: IndicatorShapeWidget(shape: Shape.circle, index: i),
         ),
       );
     }

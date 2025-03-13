@@ -104,7 +104,10 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     if (prior >= 0) return prior;
     final path = widget.currentPath;
     final index = widget.tabs.indexWhere((e) => e.path == path);
-    return switch (index < 0) { true => 0, false => index };
+    return switch (index < 0) {
+      true => 0,
+      false => index,
+    };
   }
 
   bool get _hasTitleBar {
@@ -208,7 +211,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     return Row(
       children: [
         Expanded(child: scrollView),
-        tab.endSideBar ?? const SizedBox()
+        tab.endSideBar ?? const SizedBox(),
       ],
     );
   }
@@ -301,8 +304,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         onTap: (index) => widget.onTabSelected(widget.tabs[index].path),
         labelColor: theme.primaryColor,
         unselectedLabelColor: theme.textTheme.bodyLarge?.color,
-        labelStyle:
-            theme.textTheme.bodyLarge?.copyWith(fontSize: isS ? 15 : 14),
+        labelStyle: theme.textTheme.bodyLarge?.copyWith(
+          fontSize: isS ? 15 : 14,
+        ),
         labelPadding: EdgeInsets.symmetric(horizontal: tabPadding),
         overlayColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
         tabs: widget.tabs.map(tabs).toList(),
@@ -547,22 +551,13 @@ class _LaamsScaffoldHeader extends StatelessWidget {
       child: header,
     );
 
-    header = Align(
-      alignment: data.headerBoxAlignment,
-      child: header,
-    );
+    header = Align(alignment: data.headerBoxAlignment, child: header);
 
     if (data.headerMargin != null) {
-      header = Padding(
-        padding: data.headerMargin!,
-        child: header,
-      );
+      header = Padding(padding: data.headerMargin!, child: header);
     }
 
-    header = Padding(
-      padding: EdgeInsets.only(top: topSpacing),
-      child: header,
-    );
+    header = Padding(padding: EdgeInsets.only(top: topSpacing), child: header);
 
     if (data.headerBackgroundColor != null) {
       final decoration = BoxDecoration(color: data.headerBackgroundColor);

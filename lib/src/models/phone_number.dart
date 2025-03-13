@@ -9,11 +9,7 @@ class PhoneNumber {
     required this.number,
   });
 
-  const PhoneNumber.init({
-    this.countryCode,
-    this.areaCode,
-    this.number,
-  });
+  const PhoneNumber.init({this.countryCode, this.areaCode, this.number});
 
   PhoneNumber copyWith({
     String? countryCode,

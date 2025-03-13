@@ -1,3 +1,6 @@
+## 0.6.28
+- Fixed bugs and upgraded dependencies
+
 ## 0.6.26
 - Fixed Network image bug for the web
 

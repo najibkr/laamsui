@@ -25,20 +25,27 @@ class _LineScaleState extends State<LineScale> with TickerProviderStateMixin {
     const cubic = Cubic(0.2, 0.68, 0.18, 0.08);
 
     for (int i = 0; i < 5; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(seconds: 1)));
+      _animationControllers.add(
+        AnimationController(vsync: this, duration: const Duration(seconds: 1)),
+      );
 
-      _animations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.4), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.4, end: 1.0), weight: 1),
-      ]).animate(
-          CurvedAnimation(parent: _animationControllers[i], curve: cubic)));
+      _animations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.4), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.4, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(parent: _animationControllers[i], curve: cubic),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -55,26 +62,27 @@ class _LineScaleState extends State<LineScale> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = _animations
-        .asMap()
-        .entries
-        .map(
-          (entry) => Expanded(
-            child: AnimatedBuilder(
-              animation: entry.value,
-              builder: (BuildContext context, Widget? child) {
-                return FractionallySizedBox(
-                  heightFactor: entry.value.value,
-                  child: IndicatorShapeWidget(
-                    shape: Shape.line,
-                    index: entry.key,
-                  ),
-                );
-              },
-            ),
-          ),
-        )
-        .toList();
+    List<Widget> widgets =
+        _animations
+            .asMap()
+            .entries
+            .map(
+              (entry) => Expanded(
+                child: AnimatedBuilder(
+                  animation: entry.value,
+                  builder: (BuildContext context, Widget? child) {
+                    return FractionallySizedBox(
+                      heightFactor: entry.value.value,
+                      child: IndicatorShapeWidget(
+                        shape: Shape.line,
+                        index: entry.key,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            )
+            .toList();
 
     for (int i = 0; i < widgets.length - 1; i++) {
       if (i % 2 == 0) {

@@ -24,8 +24,10 @@ class _BallClipRotatePulseState extends State<BallClipRotatePulse>
   void initState() {
     super.initState();
     const cubic = Cubic(0.09, 0.57, 0.49, 0.9);
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
 
     _outCircleScale = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 1),
@@ -52,29 +54,31 @@ class _BallClipRotatePulseState extends State<BallClipRotatePulse>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animationController,
-      builder: (_, child) => Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
-        children: <Widget>[
-          Transform(
+      builder:
+          (_, child) => Stack(
             alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..scale(_outCircleScale.value)
-              ..rotateZ(_outCircleRotate.value),
-            child: const IndicatorShapeWidget(
-              shape: Shape.ringTwoHalfVertical,
-              index: 0,
-            ),
+            fit: StackFit.expand,
+            children: <Widget>[
+              Transform(
+                alignment: Alignment.center,
+                transform:
+                    Matrix4.identity()
+                      ..scale(_outCircleScale.value)
+                      ..rotateZ(_outCircleRotate.value),
+                child: const IndicatorShapeWidget(
+                  shape: Shape.ringTwoHalfVertical,
+                  index: 0,
+                ),
+              ),
+              Transform.scale(
+                scale: _innerCircle.value * 0.3,
+                child: const IndicatorShapeWidget(
+                  shape: Shape.circle,
+                  index: 1,
+                ),
+              ),
+            ],
           ),
-          Transform.scale(
-            scale: _innerCircle.value * 0.3,
-            child: const IndicatorShapeWidget(
-              shape: Shape.circle,
-              index: 1,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

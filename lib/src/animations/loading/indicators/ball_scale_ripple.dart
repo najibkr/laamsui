@@ -21,8 +21,10 @@ class _BallScaleRippleState extends State<BallScaleRipple>
   void initState() {
     super.initState();
     const cubic = Cubic(0.21, 0.53, 0.56, 0.8);
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     _opacityAnimation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 70),
       TweenSequenceItem(tween: Tween(begin: 0.7, end: 0.0), weight: 30),

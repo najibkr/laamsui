@@ -25,19 +25,26 @@ class _LineScalePulseOutState extends State<LineScalePulseOut>
     super.initState();
     const cubic = Cubic(0.85, 0.25, 0.37, 0.85);
     for (int i = 0; i < 5; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(seconds: 1)));
-      _animations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.4), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.4, end: 1.0), weight: 1),
-      ]).animate(
-          CurvedAnimation(parent: _animationControllers[i], curve: cubic)));
+      _animationControllers.add(
+        AnimationController(vsync: this, duration: const Duration(seconds: 1)),
+      );
+      _animations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.4), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.4, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(parent: _animationControllers[i], curve: cubic),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -63,10 +70,7 @@ class _LineScalePulseOutState extends State<LineScalePulseOut>
             builder: (BuildContext context, Widget? child) {
               return FractionallySizedBox(
                 heightFactor: _animations[i ~/ 2].value,
-                child: IndicatorShapeWidget(
-                  shape: Shape.line,
-                  index: i ~/ 2,
-                ),
+                child: IndicatorShapeWidget(shape: Shape.line, index: i ~/ 2),
               );
             },
           ),

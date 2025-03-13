@@ -93,11 +93,7 @@ class LaamsTextCell extends StatelessWidget {
     );
 
     if (icon != null) {
-      textWidget = Icon(
-        icon,
-        size: iconSize,
-        color: iconColor,
-      );
+      textWidget = Icon(icon, size: iconSize, color: iconColor);
     }
 
     if (isTextSelectable) {

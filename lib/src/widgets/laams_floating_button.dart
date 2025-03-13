@@ -58,7 +58,8 @@ class LaamsFloatingButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     final defShadow = BoxShadow(
-      color: decorationColor?.withValues(alpha: 0.5) ??
+      color:
+          decorationColor?.withValues(alpha: 0.5) ??
           theme.primaryColor.withValues(alpha: 0.5),
       blurRadius: 8,
     );
@@ -100,11 +101,9 @@ class LaamsFloatingButton extends StatelessWidget {
     final btnDecoration = BoxDecoration(
       color: backgroundColor ?? theme.scaffoldBackgroundColor,
       borderRadius: borderRadius,
-      border: border ??
-          Border.all(
-            width: 3,
-            color: decorationColor ?? theme.primaryColor,
-          ),
+      border:
+          border ??
+          Border.all(width: 3, color: decorationColor ?? theme.primaryColor),
       boxShadow: boxShadow ?? [defShadow],
     );
 

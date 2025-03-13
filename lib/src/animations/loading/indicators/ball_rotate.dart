@@ -23,14 +23,18 @@ class _BallRotateState extends State<BallRotate>
 
     /// If set b to -0.13, value is negative, [TweenSequence]'s transform will throw error.
     const cubic = Cubic(0.7, 0.87, 0.22, 0.86);
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     _scaleAnimation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 1),
       TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 1),
     ]).animate(CurvedAnimation(parent: _animationController, curve: cubic));
-    _rotateAnimation = Tween(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: _animationController, curve: cubic));
+    _rotateAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animationController, curve: cubic));
     _animationController.repeat();
   }
 
@@ -60,16 +64,10 @@ class _BallRotateState extends State<BallRotate>
     );
   }
 
-  _buildSingleCircle(
-    double opacity,
-    int index,
-  ) {
+  _buildSingleCircle(double opacity, int index) {
     return Opacity(
       opacity: opacity,
-      child: IndicatorShapeWidget(
-        shape: Shape.circle,
-        index: index,
-      ),
+      child: IndicatorShapeWidget(shape: Shape.circle, index: index),
     );
   }
 }

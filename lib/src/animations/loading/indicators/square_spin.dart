@@ -25,21 +25,34 @@ class _SquareSpinState extends State<SquareSpin>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 3000));
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    );
     const cubic = Cubic(.09, .57, .49, .9);
-    _xAnimation = Tween<double>(begin: 0, end: pi).animate(CurvedAnimation(
+    _xAnimation = Tween<double>(begin: 0, end: pi).animate(
+      CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0, 0.25, curve: cubic)));
-    _yAnimation = Tween<double>(begin: 0, end: pi).animate(CurvedAnimation(
+        curve: const Interval(0, 0.25, curve: cubic),
+      ),
+    );
+    _yAnimation = Tween<double>(begin: 0, end: pi).animate(
+      CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.25, 0.5, curve: cubic)));
-    _xAnimation2 = Tween<double>(begin: pi, end: 0).animate(CurvedAnimation(
+        curve: const Interval(0.25, 0.5, curve: cubic),
+      ),
+    );
+    _xAnimation2 = Tween<double>(begin: pi, end: 0).animate(
+      CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.5, 0.75, curve: cubic)));
+        curve: const Interval(0.5, 0.75, curve: cubic),
+      ),
+    );
     _yAnimation2 = Tween<double>(begin: pi, end: 2 * pi).animate(
-        CurvedAnimation(
-            parent: _animationController,
-            curve: const Interval(0.75, 1, curve: cubic)));
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.75, 1, curve: cubic),
+      ),
+    );
 
     _animationController.repeat();
   }
@@ -66,12 +79,12 @@ class _SquareSpinState extends State<SquareSpin>
         }
         return Transform(
           alignment: Alignment.center,
-          transform: Matrix4.identity()
-
-            /// Whooops, must add this line to 3D effect.
-            ..setEntry(3, 2, 0.006)
-            ..rotateX(x)
-            ..rotateY(y),
+          transform:
+              Matrix4.identity()
+                /// Whooops, must add this line to 3D effect.
+                ..setEntry(3, 2, 0.006)
+                ..rotateX(x)
+                ..rotateY(y),
           child: child,
         );
       },

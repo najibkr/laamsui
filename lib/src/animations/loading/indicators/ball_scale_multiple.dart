@@ -25,22 +25,38 @@ class _BallScaleMultipleState extends State<BallScaleMultiple>
   void initState() {
     super.initState();
     for (int i = 0; i < 3; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(seconds: 1)));
+      _animationControllers.add(
+        AnimationController(vsync: this, duration: const Duration(seconds: 1)),
+      );
 
-      _scaleAnimations.add(Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
-      _opacityAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 5),
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 95),
-      ]).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
+      _scaleAnimations.add(
+        Tween(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
+      _opacityAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 5),
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 95),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -63,10 +79,7 @@ class _BallScaleMultipleState extends State<BallScaleMultiple>
         scale: _scaleAnimations[i],
         child: FadeTransition(
           opacity: _opacityAnimations[i],
-          child: IndicatorShapeWidget(
-            shape: Shape.circle,
-            index: i,
-          ),
+          child: IndicatorShapeWidget(shape: Shape.circle, index: i),
         ),
       );
     }

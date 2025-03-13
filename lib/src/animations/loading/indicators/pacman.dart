@@ -36,37 +36,59 @@ class _PacmanState extends State<Pacman> with TickerProviderStateMixin {
 
   void initPacmanAnimation() {
     _pacmanAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
     _rotateAnimation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: pi / 4, end: 0.0), weight: 1),
       TweenSequenceItem(tween: Tween(begin: 0.0, end: pi / 4), weight: 1),
-    ]).animate(CurvedAnimation(
-      parent: _pacmanAnimationController,
-      curve: const Cubic(0.25, 0.1, 0.25, 1.0),
-    ));
+    ]).animate(
+      CurvedAnimation(
+        parent: _pacmanAnimationController,
+        curve: const Cubic(0.25, 0.1, 0.25, 1.0),
+      ),
+    );
 
     _pacmanAnimationController.repeat();
   }
 
   void initBallAnimation() {
     for (int i = 0; i < _ballNum; i++) {
-      _ballAnimationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 1000)));
+      _ballAnimationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 1000),
+        ),
+      );
 
-      _translateXAnimations.add(Tween(begin: 0.0, end: -1.0).animate(
+      _translateXAnimations.add(
+        Tween(begin: 0.0, end: -1.0).animate(
           CurvedAnimation(
-              parent: _ballAnimationControllers[i], curve: Curves.linear)));
-      _opacityAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 70),
-        TweenSequenceItem(tween: Tween(begin: 0.7, end: 0.7), weight: 30),
-      ]).animate(CurvedAnimation(
-          parent: _ballAnimationControllers[i], curve: Curves.linear)));
+            parent: _ballAnimationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
+      _opacityAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 70),
+          TweenSequenceItem(tween: Tween(begin: 0.7, end: 0.7), weight: 30),
+        ]).animate(
+          CurvedAnimation(
+            parent: _ballAnimationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _ballAnimationControllers[i].repeat();
-        return 0;
-      })));
+            _ballAnimationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -84,62 +106,64 @@ class _PacmanState extends State<Pacman> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (ctx, constraint) {
-      final pacmanSize = constraint.maxWidth / 2;
+    return LayoutBuilder(
+      builder: (ctx, constraint) {
+        final pacmanSize = constraint.maxWidth / 2;
 
-      final pacman = Positioned.fromRect(
-        rect: Rect.fromLTWH(
-          constraint.maxWidth / 8,
-          constraint.maxHeight / 4,
-          pacmanSize,
-          pacmanSize,
-        ),
-        child: AnimatedBuilder(
-          animation: _rotateAnimation,
-          builder: (_, child) {
-            return IndicatorShapeWidget(
-              shape: Shape.arc,
-              data: _rotateAnimation.value,
-              index: 0,
-            );
-          },
-        ),
-      );
-
-      final circleSize = constraint.maxWidth / 8;
-      final widgets = List<Widget>.filled(_ballNum + 1, Container());
-      for (int i = 0; i < _ballNum; i++) {
-        widgets[i] = Positioned.fromRect(
+        final pacman = Positioned.fromRect(
           rect: Rect.fromLTWH(
+            constraint.maxWidth / 8,
+            constraint.maxHeight / 4,
+            pacmanSize,
+            pacmanSize,
+          ),
+          child: AnimatedBuilder(
+            animation: _rotateAnimation,
+            builder: (_, child) {
+              return IndicatorShapeWidget(
+                shape: Shape.arc,
+                data: _rotateAnimation.value,
+                index: 0,
+              );
+            },
+          ),
+        );
+
+        final circleSize = constraint.maxWidth / 8;
+        final widgets = List<Widget>.filled(_ballNum + 1, Container());
+        for (int i = 0; i < _ballNum; i++) {
+          widgets[i] = Positioned.fromRect(
+            rect: Rect.fromLTWH(
               constraint.maxWidth - circleSize,
               constraint.maxHeight / 2 - circleSize / 2,
               circleSize,
-              circleSize),
-          child: FadeTransition(
-            opacity: _opacityAnimations[i],
-            child: AnimatedBuilder(
-              animation: _translateXAnimations[i],
-              child: const IndicatorShapeWidget(shape: Shape.circle),
-              builder: (_, child) {
-                return Transform.translate(
-                  offset: Offset(
-                      _translateXAnimations[i].value * constraint.maxWidth / 2,
-                      0.0),
-                  child: IndicatorShapeWidget(
-                    shape: Shape.circle,
-                    index: i + 1,
-                  ),
-                );
-              },
+              circleSize,
             ),
-          ),
-        );
-      }
-      widgets[_ballNum] = pacman;
+            child: FadeTransition(
+              opacity: _opacityAnimations[i],
+              child: AnimatedBuilder(
+                animation: _translateXAnimations[i],
+                child: const IndicatorShapeWidget(shape: Shape.circle),
+                builder: (_, child) {
+                  return Transform.translate(
+                    offset: Offset(
+                      _translateXAnimations[i].value * constraint.maxWidth / 2,
+                      0.0,
+                    ),
+                    child: IndicatorShapeWidget(
+                      shape: Shape.circle,
+                      index: i + 1,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        }
+        widgets[_ballNum] = pacman;
 
-      return Stack(
-        children: widgets,
-      );
-    });
+        return Stack(children: widgets);
+      },
+    );
   }
 }

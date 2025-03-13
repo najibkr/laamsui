@@ -90,11 +90,7 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
     );
 
     if (widget.icon != null) {
-      items = Icon(
-        widget.icon,
-        size: widget.iconSize,
-        color: widget.iconColor,
-      );
+      items = Icon(widget.icon, size: widget.iconSize, color: widget.iconColor);
     }
 
     if (widget.sortIcon != null) {
@@ -108,10 +104,7 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
     }
 
     if (widget.onSort != null && widget.sortIcon == null) {
-      items = GestureDetector(
-        onTap: widget.onSort,
-        child: items,
-      );
+      items = GestureDetector(onTap: widget.onSort, child: items);
     }
 
     Widget container = Container(

@@ -345,9 +345,7 @@ class LaamsMessageBtn extends StatelessWidget {
     }
 
     RoundedRectangleBorder? mapShape(Set<WidgetState> state) {
-      return RoundedRectangleBorder(
-        borderRadius: borderRadius,
-      );
+      return RoundedRectangleBorder(borderRadius: borderRadius);
     }
 
     var buttonStyle = ButtonStyle(

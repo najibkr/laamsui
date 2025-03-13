@@ -20,10 +20,13 @@ class _BallScaleState extends State<BallScale>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     _scaleAnimation = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
     _opacityAnimation = ReverseAnimation(_scaleAnimation);
     _animationController.repeat();
   }

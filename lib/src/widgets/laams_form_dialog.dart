@@ -59,8 +59,9 @@ class LaamsFormDialog extends StatelessWidget {
     EdgeInsetsGeometry? margin = const EdgeInsets.fromLTRB(10, 35, 10, 35),
     Color? barrierColor,
     Color? backgroundColor,
-    BorderRadiusGeometry? borderRadius =
-        const BorderRadius.all(Radius.circular(20)),
+    BorderRadiusGeometry? borderRadius = const BorderRadius.all(
+      Radius.circular(20),
+    ),
     required void Function(BuildContext context) onClose,
     required String titleText,
     void Function(BuildContext context)? onAction,
@@ -76,20 +77,42 @@ class LaamsFormDialog extends StatelessWidget {
       useSafeArea: useSafeARea,
       useRootNavigator: useRootNavigator,
       barrierColor: barrierColor ?? Colors.grey.withValues(alpha: 0.3),
-      builder: (context) => switch (MediaQuery.sizeOf(context).width < 600) {
-        true => Dialog.fullscreen(
-            backgroundColor: backgroundColor,
-            child: LaamsFormDialog._(
+      builder:
+          (context) => switch (MediaQuery.sizeOf(context).width < 600) {
+            true => Dialog.fullscreen(
+              backgroundColor: backgroundColor,
+              child: LaamsFormDialog._(
+                isPrimary: isInnerScaffoldPrimary,
+                resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+                isFullScreen: true,
+                centerTitle: centerTitle,
+                isFormScrollable: isFormScrollable,
+                height: null,
+                width: null,
+                margin: null,
+                backgroundColor: backgroundColor,
+                borderRadius: null,
+                onClose: onClose,
+                titleText: titleText,
+                onAction: onAction,
+                actionIcon: actionIcon,
+                actionText: actionText,
+                formPadding: formPadding,
+                form: form,
+                navBar: navBar,
+              ),
+            ),
+            false => LaamsFormDialog._(
               isPrimary: isInnerScaffoldPrimary,
               resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-              isFullScreen: true,
+              isFullScreen: false,
               centerTitle: centerTitle,
               isFormScrollable: isFormScrollable,
-              height: null,
-              width: null,
-              margin: null,
+              height: height,
+              width: width,
+              margin: margin,
               backgroundColor: backgroundColor,
-              borderRadius: null,
+              borderRadius: borderRadius,
               onClose: onClose,
               titleText: titleText,
               onAction: onAction,
@@ -99,28 +122,7 @@ class LaamsFormDialog extends StatelessWidget {
               form: form,
               navBar: navBar,
             ),
-          ),
-        false => LaamsFormDialog._(
-            isPrimary: isInnerScaffoldPrimary,
-            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-            isFullScreen: false,
-            centerTitle: centerTitle,
-            isFormScrollable: isFormScrollable,
-            height: height,
-            width: width,
-            margin: margin,
-            backgroundColor: backgroundColor,
-            borderRadius: borderRadius,
-            onClose: onClose,
-            titleText: titleText,
-            onAction: onAction,
-            actionIcon: actionIcon,
-            actionText: actionText,
-            formPadding: formPadding,
-            form: form,
-            navBar: navBar,
-          ),
-      },
+          },
     );
   }
 
@@ -144,9 +146,9 @@ class LaamsFormDialog extends StatelessWidget {
     final hasAction = (actionText ?? '').trim().isNotEmpty;
     final actionStyle = switch (isFullScreen) {
       true => theme.textTheme.bodyLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: theme.primaryColor,
-        ),
+        fontWeight: FontWeight.bold,
+        color: theme.primaryColor,
+      ),
       false => theme.textTheme.displayLarge?.copyWith(fontSize: 18),
     };
 
@@ -159,10 +161,7 @@ class LaamsFormDialog extends StatelessWidget {
       ),
     );
 
-    final title = Text(
-      titleText,
-      style: theme.textTheme.displaySmall,
-    );
+    final title = Text(titleText, style: theme.textTheme.displaySmall);
 
     final actionBtn = GestureDetector(
       onTap: () => _handleOnSave(context, isVisible),
@@ -199,18 +198,18 @@ class LaamsFormDialog extends StatelessWidget {
 
     Widget body = switch (isFormScrollable) {
       true => SingleChildScrollView(
-          child: Padding(padding: formPadding, child: form),
-        ),
+        child: Padding(padding: formPadding, child: form),
+      ),
       false => Padding(padding: formPadding, child: form),
     };
 
     final floatingBtn = switch (hasAction && !isVisible) {
       true => LaamsFloatingButton(
-          onPressed: () {},
-          icon: actionIcon ?? Icons.save_outlined,
-          titleText: actionText ?? '',
-          margin: const EdgeInsets.only(bottom: 10),
-        ),
+        onPressed: () {},
+        icon: actionIcon ?? Icons.save_outlined,
+        titleText: actionText ?? '',
+        margin: const EdgeInsets.only(bottom: 10),
+      ),
       false => null,
     };
 
@@ -228,9 +227,7 @@ class LaamsFormDialog extends StatelessWidget {
 
     if (isFullScreen) return scaffold;
 
-    final decoration = BoxDecoration(
-      borderRadius: borderRadius,
-    );
+    final decoration = BoxDecoration(borderRadius: borderRadius);
     final container = Container(
       height: height,
       width: width,

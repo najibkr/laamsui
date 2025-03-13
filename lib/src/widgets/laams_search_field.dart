@@ -155,10 +155,7 @@ class _LaamsSearchFieldState extends State<LaamsSearchField> {
         child: icon,
       );
 
-      deleteIcon = GestureDetector(
-        onTap: _cancelSearch,
-        child: deleteIcon,
-      );
+      deleteIcon = GestureDetector(onTap: _cancelSearch, child: deleteIcon);
     }
 
     final inputDecoration = InputDecoration(

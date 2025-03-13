@@ -182,9 +182,10 @@ class LaamsLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<Color> safeColors = indicatorColors == null || indicatorColors!.isEmpty
-        ? [theme.primaryColor]
-        : indicatorColors!;
+    List<Color> safeColors =
+        indicatorColors == null || indicatorColors!.isEmpty
+            ? [theme.primaryColor]
+            : indicatorColors!;
 
     final loading = switch (indicatorType) {
       IndicatorType.ballPulse => const BallPulse(),
@@ -247,12 +248,15 @@ class LaamsLoading extends StatelessWidget {
 
       final buttonStyle = ButtonStyle(
         foregroundColor: WidgetStateProperty.all(Colors.red),
-        backgroundColor:
-            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.1)),
-        surfaceTintColor:
-            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.2)),
-        overlayColor:
-            WidgetStateProperty.all(Colors.red.withValues(alpha: 0.2)),
+        backgroundColor: WidgetStateProperty.all(
+          Colors.red.withValues(alpha: 0.1),
+        ),
+        surfaceTintColor: WidgetStateProperty.all(
+          Colors.red.withValues(alpha: 0.2),
+        ),
+        overlayColor: WidgetStateProperty.all(
+          Colors.red.withValues(alpha: 0.2),
+        ),
       );
 
       btn = TextButton(
@@ -290,8 +294,9 @@ class LaamsLoading extends StatelessWidget {
       );
 
       return switch (type) {
-        WidgetType.sliver =>
-          SliverToBoxAdapter(child: Center(child: indicator)),
+        WidgetType.sliver => SliverToBoxAdapter(
+          child: Center(child: indicator),
+        ),
         WidgetType.screen => Scaffold(body: Center(child: indicator)),
         _ => Center(child: indicator),
       };
@@ -334,10 +339,7 @@ class LaamsLoading extends StatelessWidget {
       child: indicator,
     );
 
-    indicator = Align(
-      alignment: alignment,
-      child: indicator,
-    );
+    indicator = Align(alignment: alignment, child: indicator);
 
     return switch (type) {
       WidgetType.sliver => SliverToBoxAdapter(child: indicator),

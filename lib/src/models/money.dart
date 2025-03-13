@@ -13,11 +13,7 @@ class Money {
     required this.precision,
   });
 
-  const Money.init([
-    this.fmu = 0,
-    this.currency = '',
-    this.precision = 100000,
-  ]);
+  const Money.init([this.fmu = 0, this.currency = '', this.precision = 100000]);
 
   factory Money.fromFMU(int fmu, String currency, [int precision = 100000]) {
     precision = precision > 100000 ? 100000 : precision;

@@ -40,8 +40,10 @@ class LaamsOptionsCell<V> extends StatefulWidget {
     this.menuHeight = 350,
     this.menuWidth = 280,
     this.optionsMargin,
-    this.optionsPadding =
-        const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+    this.optionsPadding = const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 15,
+    ),
     this.hintText,
     this.optionsHeader,
     this.optionsScrollController,
@@ -159,10 +161,7 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
     }
 
     if (widget.enabled) {
-      cell = CompositedTransformTarget(
-        link: _link,
-        child: cell,
-      );
+      cell = CompositedTransformTarget(link: _link, child: cell);
 
       cell = OverlayPortal.targetsRootOverlay(
         controller: _controller,
@@ -179,10 +178,7 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
       child: cell,
     );
 
-    return GestureDetector(
-      onTap: _controller.show,
-      child: detector,
-    );
+    return GestureDetector(onTap: _controller.show, child: detector);
   }
 
   Widget _buildOverlay(BuildContext context) {

@@ -198,10 +198,7 @@ class _LaamsMenuCellState<V> extends State<LaamsMenuCell<V>> {
     );
 
     if (widget.enabled) {
-      cell = CompositedTransformTarget(
-        link: _link,
-        child: cell,
-      );
+      cell = CompositedTransformTarget(link: _link, child: cell);
 
       cell = OverlayPortal.targetsRootOverlay(
         controller: _overlayController,
@@ -210,10 +207,7 @@ class _LaamsMenuCellState<V> extends State<LaamsMenuCell<V>> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(0.5),
-      child: cell,
-    );
+    return Padding(padding: const EdgeInsets.all(0.5), child: cell);
   }
 
   Widget _buildOverlay(BuildContext context) {
@@ -292,13 +286,11 @@ class _OverlayContentState<V> extends State<_OverlayContent<V>> {
 
   void _findItem() {
     try {
-      final found = widget.options.firstWhere(
-        (e) {
-          final title = e.titleText.toLowerCase();
-          final text = widget.textController.text.toLowerCase();
-          return title.contains(text);
-        },
-      );
+      final found = widget.options.firstWhere((e) {
+        final title = e.titleText.toLowerCase();
+        final text = widget.textController.text.toLowerCase();
+        return title.contains(text);
+      });
       setState(() => _found = found.value);
     } catch (_) {}
   }

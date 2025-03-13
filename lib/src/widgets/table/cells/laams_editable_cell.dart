@@ -110,10 +110,7 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
     if (T is String || T == String) return TextInputType.text;
     if (T is int || T == int) return TextInputType.number;
     if (T is double || T == double) {
-      return const TextInputType.numberWithOptions(
-        signed: true,
-        decimal: true,
-      );
+      return const TextInputType.numberWithOptions(signed: true, decimal: true);
     }
     return TextInputType.text;
   }

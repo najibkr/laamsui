@@ -71,8 +71,8 @@ class _ShapePainter extends CustomPainter {
     this.data,
     this.strokeWidth, {
     this.pathColor,
-  })  : _paint = Paint()..isAntiAlias = true,
-        super();
+  }) : _paint = Paint()..isAntiAlias = true,
+       super();
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -126,7 +126,11 @@ class _ShapePainter extends CustomPainter {
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.stroke;
         final rect = Rect.fromLTWH(
-            size.width / 4, size.height / 4, size.width / 2, size.height / 2);
+          size.width / 4,
+          size.height / 4,
+          size.width / 2,
+          size.height / 2,
+        );
         canvas.drawArc(rect, -3 * pi / 4, pi / 2, false, _paint);
         canvas.drawArc(rect, 3 * pi / 4, -pi / 2, false, _paint);
         break;
@@ -135,29 +139,35 @@ class _ShapePainter extends CustomPainter {
           ..color = color
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.stroke;
-        canvas.drawCircle(Offset(size.width / 2, size.height / 2),
-            size.shortestSide / 2, _paint);
+        canvas.drawCircle(
+          Offset(size.width / 2, size.height / 2),
+          size.shortestSide / 2,
+          _paint,
+        );
         break;
       case Shape.line:
         _paint
           ..color = color
           ..style = PaintingStyle.fill;
         canvas.drawRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromLTWH(0, 0, size.width, size.height),
-                Radius.circular(size.shortestSide / 2)),
-            _paint);
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(0, 0, size.width, size.height),
+            Radius.circular(size.shortestSide / 2),
+          ),
+          _paint,
+        );
         break;
       case Shape.triangle:
         final offsetY = size.height / 4;
         _paint
           ..color = color
           ..style = PaintingStyle.fill;
-        Path path = Path()
-          ..moveTo(0, size.height - offsetY)
-          ..lineTo(size.width / 2, size.height / 2 - offsetY)
-          ..lineTo(size.width, size.height - offsetY)
-          ..close();
+        Path path =
+            Path()
+              ..moveTo(0, size.height - offsetY)
+              ..lineTo(size.width / 2, size.height / 2 - offsetY)
+              ..lineTo(size.width, size.height - offsetY)
+              ..close();
         canvas.drawPath(path, _paint);
         break;
       case Shape.arc:
@@ -166,7 +176,12 @@ class _ShapePainter extends CustomPainter {
           ..color = color
           ..style = PaintingStyle.fill;
         canvas.drawArc(
-            Offset.zero & size, data!, pi * 2 - 2 * data!, true, _paint);
+          Offset.zero & size,
+          data!,
+          pi * 2 - 2 * data!,
+          true,
+          _paint,
+        );
         break;
       case Shape.circleSemi:
         _paint

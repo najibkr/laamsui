@@ -23,8 +23,10 @@ class _BallPulseRiseState extends State<BallPulseRise>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     const cubic = Cubic(0.15, 0.46, 0.9, 0.6);
 
     _oddScaleAnimation = TweenSequence([
@@ -79,9 +81,7 @@ class _BallPulseRiseState extends State<BallPulseRise>
             child: child,
           );
         }
-        return Stack(
-          children: widgets,
-        );
+        return Stack(children: widgets);
       },
     );
   }
@@ -92,23 +92,24 @@ class _BallPulseRiseState extends State<BallPulseRise>
       builder: (_, child) {
         return Transform(
           alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..scale(index.isEven
-                ? _evenScaleAnimation.value
-                : _oddScaleAnimation.value)
-            ..translate(
-                0.0,
-                index.isEven
-                    ? _evenTranslateAnimation.value * deltaY
-                    : _oddTranslateAnimation.value * deltaY)
-            ..setEntry(3, 2, 0.006),
+          transform:
+              Matrix4.identity()
+                ..scale(
+                  index.isEven
+                      ? _evenScaleAnimation.value
+                      : _oddScaleAnimation.value,
+                )
+                ..translate(
+                  0.0,
+                  index.isEven
+                      ? _evenTranslateAnimation.value * deltaY
+                      : _oddTranslateAnimation.value * deltaY,
+                )
+                ..setEntry(3, 2, 0.006),
           child: child,
         );
       },
-      child: IndicatorShapeWidget(
-        shape: Shape.circle,
-        index: index,
-      ),
+      child: IndicatorShapeWidget(shape: Shape.circle, index: index),
     );
   }
 }

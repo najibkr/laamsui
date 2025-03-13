@@ -24,24 +24,43 @@ class _BallBeatState extends State<BallBeat> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     for (int i = 0; i < 3; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 700)));
-      _scaleAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.75), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.75, end: 1.0), weight: 1),
-      ]).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
-      _opacityAnimations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.2), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.2, end: 1.0), weight: 1),
-      ]).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
+      _animationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 700),
+        ),
+      );
+      _scaleAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.75), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.75, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
+      _opacityAnimations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.2), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.2, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -58,31 +77,33 @@ class _BallBeatState extends State<BallBeat> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (ctx, constraint) {
-      List<Widget> widgets = List.filled(5, Container());
-      for (int i = 0; i < 5; i++) {
-        if (i.isEven) {
-          widgets[i] = Expanded(
-            child: FadeTransition(
-              opacity: _opacityAnimations[i ~/ 2],
-              child: ScaleTransition(
-                scale: _scaleAnimations[i ~/ 2],
-                child: IndicatorShapeWidget(
-                  shape: Shape.circle,
-                  index: i ~/ 2,
+    return LayoutBuilder(
+      builder: (ctx, constraint) {
+        List<Widget> widgets = List.filled(5, Container());
+        for (int i = 0; i < 5; i++) {
+          if (i.isEven) {
+            widgets[i] = Expanded(
+              child: FadeTransition(
+                opacity: _opacityAnimations[i ~/ 2],
+                child: ScaleTransition(
+                  scale: _scaleAnimations[i ~/ 2],
+                  child: IndicatorShapeWidget(
+                    shape: Shape.circle,
+                    index: i ~/ 2,
+                  ),
                 ),
               ),
-            ),
-          );
-        } else {
-          widgets[i] = const SizedBox(width: 2);
+            );
+          } else {
+            widgets[i] = const SizedBox(width: 2);
+          }
         }
-      }
 
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: widgets,
-      );
-    });
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: widgets,
+        );
+      },
+    );
   }
 }

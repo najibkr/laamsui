@@ -275,10 +275,7 @@ class LaamsImage extends StatelessWidget {
     );
 
     if (positionedChildren.isNotEmpty) {
-      image = Stack(
-        alignment: stackAlignment,
-        children: positionedChildren,
-      );
+      image = Stack(alignment: stackAlignment, children: positionedChildren);
     }
 
     if (onPressed != null || onLongPress != null || onDoubleTap != null) {

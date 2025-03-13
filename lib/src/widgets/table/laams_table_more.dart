@@ -39,21 +39,16 @@ class LaamsTableMore extends StatelessWidget {
     if (!areAllLoaded) {
       final theme = Theme.of(context);
       var buttonStyle = ButtonStyle(
-        foregroundColor: WidgetStateProperty.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.disabled)) return null;
-            if (states.contains(WidgetState.hovered)) {
-              return theme.primaryColor;
-            }
-            return theme.primaryColor.withValues(alpha: 0.8);
-          },
-        ),
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) return null;
+          if (states.contains(WidgetState.hovered)) {
+            return theme.primaryColor;
+          }
+          return theme.primaryColor.withValues(alpha: 0.8);
+        }),
       );
 
-      Widget content = Padding(
-        padding: padding,
-        child: Text(loadMoreLabel),
-      );
+      Widget content = Padding(padding: padding, child: Text(loadMoreLabel));
 
       content = TextButton(
         onPressed: onFetchMore,

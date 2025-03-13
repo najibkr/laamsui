@@ -75,18 +75,16 @@ class LaamsTableMessage extends StatelessWidget {
       );
       final buttonStyle = ButtonStyle(
         foregroundColor: WidgetStateProperty.all(btnColor),
-        backgroundColor:
-            WidgetStateProperty.all(btnColor.withValues(alpha: 0.1)),
-        surfaceTintColor:
-            WidgetStateProperty.all(btnColor.withValues(alpha: 0.2)),
+        backgroundColor: WidgetStateProperty.all(
+          btnColor.withValues(alpha: 0.1),
+        ),
+        surfaceTintColor: WidgetStateProperty.all(
+          btnColor.withValues(alpha: 0.2),
+        ),
         overlayColor: WidgetStateProperty.all(btnColor.withValues(alpha: 0.2)),
       );
 
-      btn = TextButton(
-        onPressed: onAccept,
-        style: buttonStyle,
-        child: btn,
-      );
+      btn = TextButton(onPressed: onAccept, style: buttonStyle, child: btn);
     }
 
     final box = Column(

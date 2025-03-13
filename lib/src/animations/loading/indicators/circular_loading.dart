@@ -5,11 +5,8 @@ import 'package:flutter/material.dart';
 class CircularLoading extends StatefulWidget {
   final double radius;
   final double dotRadius;
-  const CircularLoading([
-    this.radius = 18,
-    this.dotRadius = 6,
-    Key? key,
-  ]) : super(key: key);
+  const CircularLoading([this.radius = 18, this.dotRadius = 6, Key? key])
+    : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -33,10 +30,11 @@ class _CircularLoadingState extends State<CircularLoading>
     dotRadius = widget.dotRadius;
 
     controller = AnimationController(
-        lowerBound: 0.0,
-        upperBound: 1.0,
-        duration: const Duration(milliseconds: 3000),
-        vsync: this);
+      lowerBound: 0.0,
+      upperBound: 1.0,
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    );
 
     animationRotation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -162,11 +160,7 @@ class _CircularLoadingState extends State<CircularLoading>
 class Dot extends StatelessWidget {
   final double? radius;
   final Color color;
-  const Dot({
-    super.key,
-    this.radius,
-    required this.color,
-  });
+  const Dot({super.key, this.radius, required this.color});
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -224,18 +224,16 @@ class _Checkbox extends StatelessWidget {
       checkColor: Colors.white,
       hoverColor: hColor,
       side: BorderSide(width: 2, color: theme.primaryColor),
-      fillColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.hovered)) {
-            return hColor;
-          } else if (states.contains(WidgetState.selected)) {
-            return theme.primaryColor;
-          } else if (states.contains(WidgetState.disabled)) {
-            return theme.cardColor;
-          }
-          return Colors.transparent;
-        },
-      ),
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.hovered)) {
+          return hColor;
+        } else if (states.contains(WidgetState.selected)) {
+          return theme.primaryColor;
+        } else if (states.contains(WidgetState.disabled)) {
+          return theme.cardColor;
+        }
+        return Colors.transparent;
+      }),
     );
 
     if (tooltip != null) {

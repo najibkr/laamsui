@@ -114,7 +114,8 @@ class _LaamsAutocompleteCellState<T> extends State<LaamsAutocompleteCell<T>> {
       elevation: WidgetStateProperty.all(10),
       shape: WidgetStateProperty.all(shape),
       padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 20)),
+        const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      ),
     );
     final val = widget.initialValue;
     final initialValue = switch (widget.entries.any((e) => e.value == val)) {

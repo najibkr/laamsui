@@ -58,8 +58,10 @@ class LaamsTableButton extends StatefulWidget {
     this.overlayMobileHeight,
     this.overlayWidth = 280,
     this.overlayMargin = const EdgeInsets.only(top: 5, left: 5, right: 5),
-    this.overlayPadding =
-        const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+    this.overlayPadding = const EdgeInsets.symmetric(
+      horizontal: 15,
+      vertical: 20,
+    ),
     this.overlayBackgroundColor,
     this.overlayBorderRadius = const BorderRadius.all(Radius.circular(10)),
     this.overlayBorder,
@@ -111,14 +113,15 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       useRootNavigator: true,
       barrierColor: widget.barrierColor ?? Colors.grey.withValues(alpha: 0.3),
       shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-      builder: (context) => _ButtonMobileDialog(
-        height: widget.overlayMobileHeight,
-        padding: widget.overlayPadding,
-        decoration: decoration,
-        actions: widget.overlayActions,
-        separator: widget.overlayActionsSepartor,
-        child: widget.overlayChild,
-      ),
+      builder:
+          (context) => _ButtonMobileDialog(
+            height: widget.overlayMobileHeight,
+            padding: widget.overlayPadding,
+            decoration: decoration,
+            actions: widget.overlayActions,
+            separator: widget.overlayActionsSepartor,
+            child: widget.overlayChild,
+          ),
     );
   }
 
@@ -192,10 +195,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       );
     }
 
-    child = GestureDetector(
-      onTap: () => _handleOnTap(context),
-      child: child,
-    );
+    child = GestureDetector(onTap: () => _handleOnTap(context), child: child);
 
     return Padding(
       padding: widget.childMargin ?? EdgeInsets.zero,
@@ -217,8 +217,8 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
     if (widget.overlayActions.isNotEmpty) {
       child = ListView.separated(
         physics: const BouncingScrollPhysics(),
-        separatorBuilder: (_, __) =>
-            widget.overlayActionsSepartor ?? const SizedBox(),
+        separatorBuilder:
+            (_, __) => widget.overlayActionsSepartor ?? const SizedBox(),
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemCount: widget.overlayActions.length,
         itemBuilder: (context, index) => widget.overlayActions[index],
@@ -297,7 +297,8 @@ class _ButtonMobileDialog extends StatelessWidget {
       padding: padding,
       decoration: decoration,
       child: Column(
-          children: [top, Expanded(child: newChild ?? const SizedBox())]),
+        children: [top, Expanded(child: newChild ?? const SizedBox())],
+      ),
     );
   }
 }
@@ -352,11 +353,7 @@ class LaamsTableAction extends StatelessWidget {
       fontWeight: labelFontWeight ?? FontWeight.w500,
     );
 
-    final iconWidget = Icon(
-      icon,
-      color: iconColor,
-      size: iconSize,
-    );
+    final iconWidget = Icon(icon, color: iconColor, size: iconSize);
 
     final title = Text(
       label,
@@ -388,9 +385,6 @@ class LaamsTableAction extends StatelessWidget {
       child: content,
     );
 
-    return GestureDetector(
-      onTap: onPressed,
-      child: child,
-    );
+    return GestureDetector(onTap: onPressed, child: child);
   }
 }

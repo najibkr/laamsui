@@ -1,9 +1,4 @@
-enum CellType {
-  text,
-  editable,
-  autocomplete,
-  options,
-}
+enum CellType { text, editable, autocomplete, options }
 
 extension CellTypeExt on CellType {
   bool get isText => this == CellType.text;

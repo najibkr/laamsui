@@ -59,8 +59,8 @@ class LaamsImageNetwork extends StatelessWidget {
         matchTextDirection: matchTextDirection,
         headers: headers,
         errorBuilder: (c, o, s) => _buildError(c, o.toString(), s),
-        loadingBuilder: (c, child, s) =>
-            _buildPlaceholder(context, s.toString()),
+        loadingBuilder:
+            (c, child, s) => _buildPlaceholder(context, s.toString()),
       );
     }
     return CachedNetworkImage(

@@ -12,14 +12,7 @@ import 'laams_table_more.dart';
 import 'laams_table_row.dart';
 import 'laams_table_toolbar.dart';
 
-enum TableStatusType {
-  querying,
-  success,
-  loading,
-  failure,
-  emptySearch,
-  empty,
-}
+enum TableStatusType { querying, success, loading, failure, emptySearch, empty }
 
 extension LaamsTableStatusTypeExt on TableStatusType {
   bool get isQuerying => this == TableStatusType.querying;
@@ -158,8 +151,10 @@ class LaamsTable<Entity> extends StatelessWidget {
     this.toolbarHeight,
     this.toolbarWidth,
     this.toolbarMargin,
-    this.toolbarPadding =
-        const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20),
+    this.toolbarPadding = const EdgeInsets.symmetric(
+      vertical: 5.0,
+      horizontal: 20,
+    ),
     this.toolbarBackgroundColor,
     this.toolbarBorderRadius,
     this.toolbarBorder,
@@ -262,92 +257,92 @@ class LaamsTable<Entity> extends StatelessWidget {
     final newToolbar = switch (toolbar != null) {
       true => toolbar,
       false => LaamsTableToolbar(
-          height: toolbarHeight,
-          width: toolbarWidth,
-          margin: toolbarMargin,
-          padding: toolbarPadding,
-          backgroundColor: toolbarBackgroundColor,
-          borderRadius: toolbarBorderRadius,
-          border: toolbarBorder,
-          boxShadow: toolbarBoxShadow,
-          onSelectAll: onSelectAll,
-          showSelectAll: showSelectAll,
-          selectAllTooltip: selectAllTooltip,
-          areAllSelected: areAllSelected,
-          selectedItemsActions: selectedItemsActions,
-          showSelectedItemsActions: showSelectedItemsActions,
-          onSearch: onSearch,
-          searchHint: searchHint,
-          actions: toolBarActions,
-        ),
+        height: toolbarHeight,
+        width: toolbarWidth,
+        margin: toolbarMargin,
+        padding: toolbarPadding,
+        backgroundColor: toolbarBackgroundColor,
+        borderRadius: toolbarBorderRadius,
+        border: toolbarBorder,
+        boxShadow: toolbarBoxShadow,
+        onSelectAll: onSelectAll,
+        showSelectAll: showSelectAll,
+        selectAllTooltip: selectAllTooltip,
+        areAllSelected: areAllSelected,
+        selectedItemsActions: selectedItemsActions,
+        showSelectedItemsActions: showSelectedItemsActions,
+        onSearch: onSearch,
+        searchHint: searchHint,
+        actions: toolBarActions,
+      ),
     };
 
     Widget table = switch (_shouldShowMobileView(consts.maxWidth)) {
       true => _LaamsTableMoible(
-          itemCount: rows.length,
-          moreButton: moreButton,
-          itemBuilder: mobileRowBuilder!,
-        ),
+        itemCount: rows.length,
+        moreButton: moreButton,
+        itemBuilder: mobileRowBuilder!,
+      ),
       _ => TableView.builder(
-          verticalDetails: ScrollableDetails.vertical(
-            controller: verticalScrollController,
-            physics: const BouncingScrollPhysics(),
-          ),
-          columnCount: columns.length,
-          columnBuilder: (i) => _buildColumn(context, i, consts.maxWidth),
-          pinnedColumnCount: _pinnedColumns,
-          pinnedRowCount: _pinnedRows,
-          rowCount: _rowsCount,
-          rowBuilder: (i) => _buildRow(context, i),
-          cellBuilder: _buildCell,
+        verticalDetails: ScrollableDetails.vertical(
+          controller: verticalScrollController,
+          physics: const BouncingScrollPhysics(),
         ),
+        columnCount: columns.length,
+        columnBuilder: (i) => _buildColumn(context, i, consts.maxWidth),
+        pinnedColumnCount: _pinnedColumns,
+        pinnedRowCount: _pinnedRows,
+        rowCount: _rowsCount,
+        rowBuilder: (i) => _buildRow(context, i),
+        cellBuilder: _buildCell,
+      ),
     };
 
     table = switch (tableHeight != null || tableWidth != null) {
       true => SizedBox(
-          width: tableWidth,
-          height: (tableHeight ?? 0) + columnsHeight,
-          child: table,
-        ),
+        width: tableWidth,
+        height: (tableHeight ?? 0) + columnsHeight,
+        child: table,
+      ),
       false => Expanded(child: table),
     };
 
     table = switch (status.type) {
       TableStatusType.loading => LaamsLoading.card(
-          status.message,
-          indicatorType: IndicatorType.ballPulseRise,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          indicatorSize: const Size(80, 50),
-          width: 400,
-          onButtonPressed: onCancel,
-          buttonLabel: cancelLabel,
-          spacing: 15,
-          messageMaxLines: 3,
-        ),
+        status.message,
+        indicatorType: IndicatorType.ballPulseRise,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        indicatorSize: const Size(80, 50),
+        width: 400,
+        onButtonPressed: onCancel,
+        buttonLabel: cancelLabel,
+        spacing: 15,
+        messageMaxLines: 3,
+      ),
       TableStatusType.failure => LaamsTableMessage(
-          onAccept: onRetry,
-          assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'laamsui',
-          title: status.title ?? '',
-          message: status.message ?? '',
-          buttonLabel: retryLabel,
-        ),
+        onAccept: onRetry,
+        assetName: status.assetName ?? svgNotfound03,
+        assetPackage: status.assetPackage ?? 'laamsui',
+        title: status.title ?? '',
+        message: status.message ?? '',
+        buttonLabel: retryLabel,
+      ),
       TableStatusType.emptySearch => LaamsTableMessage(
-          onAccept: onCancelSearch != null ? () => onCancelSearch!('') : null,
-          assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'laamsui',
-          title: status.title ?? '',
-          message: status.message ?? '',
-          buttonLabel: retryLabel,
-        ),
+        onAccept: onCancelSearch != null ? () => onCancelSearch!('') : null,
+        assetName: status.assetName ?? svgNotfound03,
+        assetPackage: status.assetPackage ?? 'laamsui',
+        title: status.title ?? '',
+        message: status.message ?? '',
+        buttonLabel: retryLabel,
+      ),
       TableStatusType.empty => LaamsTableMessage(
-          onAccept: onAddNew,
-          assetName: status.assetName ?? svgNotfound03,
-          assetPackage: status.assetPackage ?? 'laamsui',
-          title: status.title ?? '',
-          message: status.message ?? '',
-          buttonLabel: addNewLabel,
-        ),
+        onAccept: onAddNew,
+        assetName: status.assetName ?? svgNotfound03,
+        assetPackage: status.assetPackage ?? 'laamsui',
+        title: status.title ?? '',
+        message: status.message ?? '',
+        buttonLabel: addNewLabel,
+      ),
       _ => table,
     };
 
@@ -447,10 +442,7 @@ class LaamsTable<Entity> extends StatelessWidget {
       false => theme.scaffoldBackgroundColor,
     };
 
-    final decoration = TableSpanDecoration(
-      color: bgColor,
-      border: border,
-    );
+    final decoration = TableSpanDecoration(color: bgColor, border: border);
 
     final row = rows[index - 1];
     return TableSpan(
@@ -459,14 +451,14 @@ class LaamsTable<Entity> extends StatelessWidget {
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
-          () => TapGestureRecognizer(),
-          (TapGestureRecognizer t) => t.onTap = row.onTap,
-        ),
+              () => TapGestureRecognizer(),
+              (TapGestureRecognizer t) => t.onTap = row.onTap,
+            ),
         LongPressGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<LongPressGestureRecognizer>(
-          () => LongPressGestureRecognizer(),
-          (LongPressGestureRecognizer t) => t.onLongPress = row.onLongPress,
-        ),
+              () => LongPressGestureRecognizer(),
+              (LongPressGestureRecognizer t) => t.onLongPress = row.onLongPress,
+            ),
       },
     );
   }

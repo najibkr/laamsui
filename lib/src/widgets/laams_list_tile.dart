@@ -367,23 +367,23 @@ class LaamsListTile extends StatelessWidget {
 
     Widget tile = switch (animationDuration != null) {
       true => AnimatedContainer(
-          duration: animationDuration!,
-          curve: curve ?? Curves.linear,
-          height: height,
-          width: width,
-          margin: margin,
-          padding: padding,
-          decoration: decoration,
-          child: content,
-        ),
+        duration: animationDuration!,
+        curve: curve ?? Curves.linear,
+        height: height,
+        width: width,
+        margin: margin,
+        padding: padding,
+        decoration: decoration,
+        child: content,
+      ),
       false => Container(
-          height: height,
-          width: width,
-          margin: margin,
-          padding: padding,
-          decoration: decoration,
-          child: content,
-        ),
+        height: height,
+        width: width,
+        margin: margin,
+        padding: padding,
+        decoration: decoration,
+        child: content,
+      ),
     };
 
     if (onPressed != null || onLongPress != null || onDoubleTap != null) {

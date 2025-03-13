@@ -6,15 +6,9 @@ class Percent {
 
   double get amount => fmu / precision;
 
-  const Percent._({
-    required this.fmu,
-    required this.precision,
-  });
+  const Percent._({required this.fmu, required this.precision});
 
-  const Percent.init([
-    this.fmu = 0,
-    this.precision = 100,
-  ]);
+  const Percent.init([this.fmu = 0, this.precision = 100]);
 
   factory Percent.fromFMU(int fmu, [int precision = 100]) {
     precision = precision > 1000 ? 1000 : precision;
@@ -71,10 +65,7 @@ class Percent {
   }
 
   Map<String, dynamic> toMap(bool isFirestore) {
-    return <String, dynamic>{
-      'fmu': fmu,
-      'precision': precision,
-    };
+    return <String, dynamic>{'fmu': fmu, 'precision': precision};
   }
 
   @override

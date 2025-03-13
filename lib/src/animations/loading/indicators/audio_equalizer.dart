@@ -14,12 +14,7 @@ class AudioEqualizer extends StatefulWidget {
 class _AudioEqualizerState extends State<AudioEqualizer>
     with TickerProviderStateMixin {
   static const _lineNum = 4;
-  static const _durations = [
-    4300,
-    2500,
-    1700,
-    3100,
-  ];
+  static const _durations = [4300, 2500, 1700, 3100];
   static const _values = [
     0.0,
     0.7,
@@ -41,15 +36,24 @@ class _AudioEqualizerState extends State<AudioEqualizer>
   void initState() {
     super.initState();
     for (int i = 0; i < _lineNum; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: Duration(milliseconds: _durations[i])));
+      _animationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: Duration(milliseconds: _durations[i]),
+        ),
+      );
       final sequences = <TweenSequenceItem<double>>[];
       for (int j = 0; j < _values.length - 1; j++) {
-        sequences.add(TweenSequenceItem(
-            tween: Tween(begin: _values[j], end: _values[j + 1]), weight: 1));
+        sequences.add(
+          TweenSequenceItem(
+            tween: Tween(begin: _values[j], end: _values[j + 1]),
+            weight: 1,
+          ),
+        );
       }
-      _animations
-          .add(TweenSequence(sequences).animate(_animationControllers[i]));
+      _animations.add(
+        TweenSequence(sequences).animate(_animationControllers[i]),
+      );
       _animationControllers[i].repeat();
     }
   }
@@ -72,16 +76,13 @@ class _AudioEqualizerState extends State<AudioEqualizer>
             animation: _animations[i ~/ 2],
             builder: (_, child) {
               return Transform(
-                transform: Matrix4.identity()
-                  ..scale(1.0, _animations[i ~/ 2].value),
+                transform:
+                    Matrix4.identity()..scale(1.0, _animations[i ~/ 2].value),
                 alignment: Alignment.bottomCenter,
                 child: child,
               );
             },
-            child: IndicatorShapeWidget(
-              shape: Shape.rectangle,
-              index: i ~/ 2,
-            ),
+            child: IndicatorShapeWidget(shape: Shape.rectangle, index: i ~/ 2),
           ),
         );
       } else {

@@ -23,11 +23,7 @@ class LaamsStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: stats,
-    );
+    Widget content = Wrap(spacing: 10, runSpacing: 10, children: stats);
 
     if (width != null || margin != null || padding != null) {
       content = Container(
@@ -83,10 +79,7 @@ class _LaamsStatsCardState<Stat extends num>
   }
 
   String _formatStat(String lang) {
-    return '${NumberFormat.decimalPatternDigits(
-      locale: lang,
-      decimalDigits: 0,
-    ).format(widget.stat)} ${widget.unit ?? ''}'
+    return '${NumberFormat.decimalPatternDigits(locale: lang, decimalDigits: 0).format(widget.stat)} ${widget.unit ?? ''}'
         .trim();
   }
 
@@ -96,8 +89,9 @@ class _LaamsStatsCardState<Stat extends num>
     final theme = Theme.of(context);
     const space = SizedBox(width: 8);
     final lang = context.currentLocale.languageCode;
-    final statsStyle =
-        theme.textTheme.displayLarge?.copyWith(color: widget.color);
+    final statsStyle = theme.textTheme.displayLarge?.copyWith(
+      color: widget.color,
+    );
     final titleStyle = theme.textTheme.displaySmall?.copyWith(
       fontWeight: FontWeight.w500,
       color: theme.textTheme.bodyLarge?.color,

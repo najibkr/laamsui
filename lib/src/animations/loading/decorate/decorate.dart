@@ -23,8 +23,8 @@ class DecorateData {
     this.backgroundColor,
     double? strokeWidth,
     this.pathBackgroundColor,
-  })  : _strokeWidth = strokeWidth,
-        assert(colors.length > 0);
+  }) : _strokeWidth = strokeWidth,
+       assert(colors.length > 0);
 
   double get strokeWidth => _strokeWidth ?? _kDefaultStrokeWidth;
 

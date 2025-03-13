@@ -25,20 +25,30 @@ class _LineScalePulseOutRapidState extends State<LineScalePulseOutRapid>
     super.initState();
     const cubic = Cubic(0.11, 0.49, 0.38, 0.78);
     for (int i = 0; i < 5; i++) {
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 900)));
-      _animations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.3), weight: 80),
-        TweenSequenceItem(tween: Tween(begin: 0.3, end: 1.0), weight: 10),
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.0), weight: 10),
-      ]).animate(
-          CurvedAnimation(parent: _animationControllers[i], curve: cubic)));
+      _animationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 900),
+        ),
+      );
+      _animations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.3), weight: 80),
+          TweenSequenceItem(tween: Tween(begin: 0.3, end: 1.0), weight: 10),
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.0), weight: 10),
+        ]).animate(
+          CurvedAnimation(parent: _animationControllers[i], curve: cubic),
+        ),
+      );
 
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: _beginTimes[i])).then((t) {
-        _animationControllers[i].repeat();
-        return 0;
-      })));
+            _animationControllers[i].repeat();
+            return 0;
+          }),
+        ),
+      );
     }
   }
 
@@ -64,10 +74,7 @@ class _LineScalePulseOutRapidState extends State<LineScalePulseOutRapid>
             builder: (BuildContext context, Widget? child) {
               return FractionallySizedBox(
                 heightFactor: _animations[i ~/ 2].value,
-                child: IndicatorShapeWidget(
-                  shape: Shape.line,
-                  index: i ~/ 2,
-                ),
+                child: IndicatorShapeWidget(shape: Shape.line, index: i ~/ 2),
               );
             },
           ),

@@ -102,10 +102,12 @@ class _LaamsTimelineCellState<V> extends State<LaamsTimelineCell> {
       final days = second?.difference(first ?? DateTime.now()).inDays;
       return '$days ${widget.suffixText}';
     }
-    return widget.selectedDates.map((e) {
-      if (e == null) return e;
-      return DateFormat.yMMMd(context.currentLocale.languageCode).format(e);
-    }).join(' - ');
+    return widget.selectedDates
+        .map((e) {
+          if (e == null) return e;
+          return DateFormat.yMMMd(context.currentLocale.languageCode).format(e);
+        })
+        .join(' - ');
   }
 
   void _handleOnSelected(List<DateTime> value) {
@@ -119,13 +121,14 @@ class _LaamsTimelineCellState<V> extends State<LaamsTimelineCell> {
       barrierColor: Colors.transparent,
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 10,
-      builder: (context) => _BottomSheetContent(
-        onSelected: widget.onSelected,
-        firstDate: widget.firstDate,
-        currentDate: widget.currentDate,
-        lastDate: widget.lastDate,
-        selectedDates: widget.selectedDates,
-      ),
+      builder:
+          (context) => _BottomSheetContent(
+            onSelected: widget.onSelected,
+            firstDate: widget.firstDate,
+            currentDate: widget.currentDate,
+            lastDate: widget.lastDate,
+            selectedDates: widget.selectedDates,
+          ),
     );
   }
 
@@ -164,10 +167,7 @@ class _LaamsTimelineCellState<V> extends State<LaamsTimelineCell> {
     );
 
     if (widget.enabled && !isS) {
-      cell = CompositedTransformTarget(
-        link: _link,
-        child: cell,
-      );
+      cell = CompositedTransformTarget(link: _link, child: cell);
 
       cell = OverlayPortal(
         controller: _controller,
@@ -351,9 +351,10 @@ class _DatesPicker extends StatelessWidget {
         controlsTextStyle: ctrlsStyle?.copyWith(fontWeight: FontWeight.bold),
         lastDate: lastDate ?? DateTime(date.year + 100),
       ),
-      value: selectedDates
-        ..removeWhere((e) => e == null)
-        ..sort(),
+      value:
+          selectedDates
+            ..removeWhere((e) => e == null)
+            ..sort(),
       onValueChanged: onSelected,
     );
   }

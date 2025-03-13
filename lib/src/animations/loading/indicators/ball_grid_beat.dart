@@ -19,18 +19,18 @@ class _BallGridBeatState extends State<BallGridBeat>
     with TickerProviderStateMixin {
   static const _ballNum = 9;
 
-//  static const _DURATIONS = [
-//    720,
-//    1020,
-//    1280,
-//    1420,
-//    1450,
-//    1180,
-//    870,
-//    1450,
-//    1060,
-//  ];
-//  static const _BEGIN_TIMES = [-60, 250, 170, 480, 310, 30, 460, 780, 450];
+  //  static const _DURATIONS = [
+  //    720,
+  //    1020,
+  //    1280,
+  //    1420,
+  //    1450,
+  //    1180,
+  //    870,
+  //    1450,
+  //    1060,
+  //  ];
+  //  static const _BEGIN_TIMES = [-60, 250, 170, 480, 310, 30, 460, 780, 450];
   final List<AnimationController> _animationControllers = [];
   final List<Animation<double>> _animations = [];
   final List<CancelableOperation> _delayFeatures = [];
@@ -42,17 +42,30 @@ class _BallGridBeatState extends State<BallGridBeat>
     for (int i = 0; i < _ballNum; i++) {
       final duration = random.nextInt(1000) + 600;
       final delay = random.nextInt(1000) - 200;
-      _animationControllers.add(AnimationController(
-          vsync: this, duration: Duration(milliseconds: duration)));
-      _animations.add(TweenSequence([
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 1),
-        TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 1),
-      ]).animate(CurvedAnimation(
-          parent: _animationControllers[i], curve: Curves.linear)));
-      _delayFeatures.add(CancelableOperation.fromFuture(
+      _animationControllers.add(
+        AnimationController(
+          vsync: this,
+          duration: Duration(milliseconds: duration),
+        ),
+      );
+      _animations.add(
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.7), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationControllers[i],
+            curve: Curves.linear,
+          ),
+        ),
+      );
+      _delayFeatures.add(
+        CancelableOperation.fromFuture(
           Future.delayed(Duration(milliseconds: delay)).then((t) {
-        _animationControllers[i].repeat();
-      })));
+            _animationControllers[i].repeat();
+          }),
+        ),
+      );
     }
   }
 
@@ -76,10 +89,7 @@ class _BallGridBeatState extends State<BallGridBeat>
         scale: _animations[i],
         child: FadeTransition(
           opacity: _animations[i],
-          child: IndicatorShapeWidget(
-            shape: Shape.circle,
-            index: i,
-          ),
+          child: IndicatorShapeWidget(shape: Shape.circle, index: i),
         ),
       );
     }

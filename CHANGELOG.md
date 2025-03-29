@@ -1,3 +1,6 @@
+## 0.6.29
+- Fixed bugs and upgraded dependencies
+
 ## 0.6.28
 - Fixed bugs and upgraded dependencies
 

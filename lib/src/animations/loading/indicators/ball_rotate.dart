@@ -64,7 +64,7 @@ class _BallRotateState extends State<BallRotate>
     );
   }
 
-  _buildSingleCircle(double opacity, int index) {
+  Widget _buildSingleCircle(double opacity, int index) {
     return Opacity(
       opacity: opacity,
       child: IndicatorShapeWidget(shape: Shape.circle, index: index),

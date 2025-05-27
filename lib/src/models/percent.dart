@@ -77,22 +77,22 @@ class Percent {
     return fmu == other.fmu && precision == other.precision;
   }
 
-  bool operator >=(other) {
+  bool operator >=(dynamic other) {
     if (other is! Percent) return false;
     return fmu >= other.fmu && precision == other.precision;
   }
 
-  bool operator <=(other) {
+  bool operator <=(dynamic other) {
     if (other is! Percent) return false;
     return fmu <= other.fmu && precision == other.precision;
   }
 
-  bool operator >(other) {
+  bool operator >(dynamic other) {
     if (other is! Percent) return false;
     return fmu > other.fmu && precision == other.precision;
   }
 
-  bool operator <(other) {
+  bool operator <(dynamic other) {
     if (other is! Percent) return false;
     return fmu < other.fmu && precision == other.precision;
   }

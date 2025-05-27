@@ -218,7 +218,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       child = ListView.separated(
         physics: const BouncingScrollPhysics(),
         separatorBuilder:
-            (_, __) => widget.overlayActionsSepartor ?? const SizedBox(),
+            (_, _) => widget.overlayActionsSepartor ?? const SizedBox(),
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemCount: widget.overlayActions.length,
         itemBuilder: (context, index) => widget.overlayActions[index],
@@ -284,7 +284,7 @@ class _ButtonMobileDialog extends StatelessWidget {
     if (actions.isNotEmpty) {
       newChild = ListView.separated(
         physics: const BouncingScrollPhysics(),
-        separatorBuilder: (_, __) => separator ?? const SizedBox(),
+        separatorBuilder: (_, _) => separator ?? const SizedBox(),
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemCount: actions.length,
         itemBuilder: (context, index) => actions[index],

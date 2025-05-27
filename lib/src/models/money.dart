@@ -95,28 +95,28 @@ class Money {
         precision == other.precision;
   }
 
-  bool operator >=(other) {
+  bool operator >=(dynamic other) {
     if (other is! Money) return false;
     return fmu >= other.fmu &&
         currency == other.currency &&
         precision == other.precision;
   }
 
-  bool operator <=(other) {
+  bool operator <=(dynamic other) {
     if (other is! Money) return false;
     return fmu <= other.fmu &&
         currency == other.currency &&
         precision == other.precision;
   }
 
-  bool operator >(other) {
+  bool operator >(dynamic other) {
     if (other is! Money) return false;
     return fmu > other.fmu &&
         currency == other.currency &&
         precision == other.precision;
   }
 
-  bool operator <(other) {
+  bool operator <(dynamic other) {
     if (other is! Money) return false;
     return fmu < other.fmu &&
         currency == other.currency &&

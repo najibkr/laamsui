@@ -1,3 +1,6 @@
+## 0.6.34
+- Fixed bugs and upgraded dependencies
+
 ## 0.6.33
 - Fixed bugs and upgraded dependencies
 

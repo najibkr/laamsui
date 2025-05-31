@@ -100,7 +100,9 @@ class _LaamsEditableCellState<T> extends State<LaamsEditableCell<T>> {
   String? get _initialValue {
     if (widget.value == null) return null;
     if (T is String || T == String) return '${widget.value}';
-    if (T is double || T == double) return '${widget.value}';
+    if (T is double || T == double) {
+      return (widget.value as double?)?.toStringAsFixed(2);
+    }
     if (T is int || T == int) return '${widget.value}';
     return null;
   }

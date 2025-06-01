@@ -20,6 +20,7 @@ enum IndicatorType {
   ballScaleMultiple,
   ballPulseSync,
   ballBeat,
+  //
   lineScalePulseOut,
   lineScalePulseOutRapid,
   ballScaleRipple,

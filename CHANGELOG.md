@@ -1,3 +1,6 @@
+## 1.0.1
+- Fixed bugs and upgraded dependencies
+
 ## 1.0.0
 - Fixed bugs and upgraded dependencies
 

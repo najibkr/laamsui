@@ -211,7 +211,6 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
           iconColor: theme.textTheme.bodyLarge?.color,
           margin: EdgeInsets.zero,
           padding: const EdgeInsets.all(5),
-          backgroundColor: theme.shadowColor,
         );
       }
 
@@ -429,7 +428,7 @@ class _IconButton extends StatefulWidget {
   final void Function()? onPressed;
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
-  final Color? backgroundColor;
+  // final Color? backgroundColor;
   final IconData icon;
   final Color? iconColor;
   final double? iconSize;
@@ -438,7 +437,7 @@ class _IconButton extends StatefulWidget {
     required this.onPressed,
     this.margin = const EdgeInsets.symmetric(horizontal: 2),
     this.padding = const EdgeInsets.all(7),
-    this.backgroundColor,
+    // this.backgroundColor,
     required this.icon,
     this.iconColor,
     this.iconSize,
@@ -455,11 +454,11 @@ class _IconButtonState extends State<_IconButton> {
   Color? _bgColor(Color? themeColor) {
     if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       final enabled = widget.onPressed != null;
-      if (!enabled) return widget.backgroundColor;
+      if (!enabled) return null;
       final color = widget.iconColor ?? themeColor;
       if (_focused) return color?.withValues(alpha: 0.2);
       if (_hovered) return color?.withValues(alpha: 0.1);
-      return widget.backgroundColor;
+      return null;
     }
     return null;
   }

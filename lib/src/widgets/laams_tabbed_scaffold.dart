@@ -430,34 +430,18 @@ class _IconButton extends StatefulWidget {
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
   final Color? backgroundColor;
-  final Color? hoveredBackgroundColor;
-  final Color? focusedBackgroundColor;
-  final BoxBorder? border;
-  final List<BoxShadow>? boxShadow;
-  final BorderRadiusGeometry? borderRadius;
   final IconData icon;
   final Color? iconColor;
   final double? iconSize;
-  final String? tooltip;
-  final bool enabled;
-  final bool autofocus;
 
   const _IconButton({
     required this.onPressed,
     this.margin = const EdgeInsets.symmetric(horizontal: 2),
     this.padding = const EdgeInsets.all(7),
     this.backgroundColor,
-    this.hoveredBackgroundColor,
-    this.focusedBackgroundColor,
-    this.border,
-    this.boxShadow,
-    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     required this.icon,
     this.iconColor,
     this.iconSize,
-    this.tooltip,
-    this.enabled = true,
-    this.autofocus = false,
   });
 
   @override
@@ -470,13 +454,11 @@ class _IconButtonState extends State<_IconButton> {
 
   Color? _bgColor(Color? themeColor) {
     if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      final enabled = widget.enabled && widget.onPressed != null;
+      final enabled = widget.onPressed != null;
       if (!enabled) return widget.backgroundColor;
-      final hoverColor = widget.hoveredBackgroundColor;
-      final focusColor = widget.focusedBackgroundColor;
       final color = widget.iconColor ?? themeColor;
-      if (_focused) return focusColor ?? color?.withValues(alpha: 0.2);
-      if (_hovered) return hoverColor ?? color?.withValues(alpha: 0.1);
+      if (_focused) return color?.withValues(alpha: 0.2);
+      if (_hovered) return color?.withValues(alpha: 0.1);
       return widget.backgroundColor;
     }
     return null;
@@ -493,13 +475,11 @@ class _IconButtonState extends State<_IconButton> {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = widget.enabled && widget.onPressed != null;
+    final enabled = widget.onPressed != null;
     final theme = Theme.of(context);
     final decoration = BoxDecoration(
       color: _bgColor(theme.primaryIconTheme.color),
-      border: widget.border,
-      boxShadow: widget.boxShadow,
-      borderRadius: widget.borderRadius,
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
     );
 
     Widget button = Icon(
@@ -517,10 +497,6 @@ class _IconButtonState extends State<_IconButton> {
       child: button,
     );
 
-    if ((widget.tooltip ?? '').isNotEmpty && enabled) {
-      button = Tooltip(message: widget.tooltip, child: button);
-    }
-
     button = GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: enabled ? (_) => setState(() => _focused = true) : null,
@@ -531,7 +507,6 @@ class _IconButtonState extends State<_IconButton> {
     );
 
     button = FocusableActionDetector(
-      autofocus: widget.autofocus,
       onShowHoverHighlight: (v) => setState(() => _hovered = v),
       onShowFocusHighlight: (v) => setState(() => _focused = v),
       enabled: enabled,

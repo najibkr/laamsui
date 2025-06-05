@@ -1,12 +1,11 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsTabbedScaffold extends StatefulWidget {
-  final bool isAppBarPrimary;
-  final bool isAppBarPinned;
-  final bool isAppBarFloating;
   final double titleBarHeight;
-  final EdgeInsetsGeometry titleBarPadding;
   final void Function(BuildContext context)? onLeading;
   final Widget? leading;
   final IconData? leadingIcon;
@@ -26,17 +25,11 @@ class LaamsTabbedScaffold extends StatefulWidget {
   final bool hideSingleTab;
   final TabAlignment? tabsAlignment;
   final String currentPath;
-  final FlexibleSpaceBar? header;
-  final double? headerHeight;
   final Widget body;
 
   const LaamsTabbedScaffold({
     super.key,
-    this.isAppBarPrimary = true,
-    this.isAppBarPinned = false,
-    this.isAppBarFloating = false,
     this.titleBarHeight = 50,
-    this.titleBarPadding = const EdgeInsets.symmetric(horizontal: 22),
     this.onLeading,
     this.leading,
     this.leadingIcon,
@@ -48,7 +41,7 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.titleTextColor,
     this.titleTextFontWeight,
     this.centerTitle = false,
-    this.titleSpacing = 12,
+    this.titleSpacing = 8,
     this.actions = const <Widget>[],
     required this.onTabSelected,
     required this.tabs,
@@ -56,8 +49,6 @@ class LaamsTabbedScaffold extends StatefulWidget {
     this.tabsAlignment,
     this.hideSingleTab = true,
     required this.currentPath,
-    this.header,
-    this.headerHeight,
     required this.body,
   });
 
@@ -68,6 +59,8 @@ class LaamsTabbedScaffold extends StatefulWidget {
 class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     with SingleTickerProviderStateMixin {
   int _tabIndex = 0;
+  bool _isScrolled = false;
+
   late ScrollController _scrollController;
   late TabController _tabController;
 
@@ -120,23 +113,20 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
   }
 
   bool get _hasTopTabBar {
-    if (widget.header != null) return false;
     if (widget.tabs.isEmpty) return false;
     if (widget.hideSingleTab && widget.tabs.length < 2) return false;
     return true;
   }
 
-  double get _toolbarHeight {
-    if (!_hasTitleBar && !_hasTopTabBar) return 0;
-    if (_hasTitleBar && !_hasTopTabBar) return widget.titleBarHeight;
-    if (!_hasTitleBar && _hasTopTabBar) return 46 + 3;
-    return widget.titleBarHeight + (46 + 3);
+  double _toolbarHeight(BuildContext context) {
+    final pad = MediaQuery.paddingOf(context).top;
+    if (!_hasTitleBar && !_hasTopTabBar) return 0 + pad;
+    if (_hasTitleBar && !_hasTopTabBar) return widget.titleBarHeight + pad;
+    return widget.titleBarHeight + (40) + pad;
   }
 
-  double get _appBarHeight {
-    final hHeight = widget.headerHeight ?? widget.tabs[_tabIndex].headerHeight;
-    if (hHeight != null) return hHeight;
-    return _toolbarHeight;
+  double _appBarHeight(BuildContext context) {
+    return _toolbarHeight(context);
   }
 
   bool _areTabsScrollable(BuildContext context) {
@@ -161,16 +151,23 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     final innerMaxExtent = note.metrics.maxScrollExtent;
     final outerOffset = _scrollController.offset;
     final innerOffset = note.metrics.pixels;
+    final appBarHeight = _appBarHeight(context);
 
-    if (outerOffset != innerOffset && innerOffset <= _appBarHeight) {
-      final smallInnerOffset = innerMaxExtent <= _appBarHeight;
+    if ((outerOffset >= appBarHeight) && !_isScrolled) {
+      setState(() => _isScrolled = true);
+    } else if ((outerOffset < appBarHeight) && _isScrolled) {
+      setState(() => _isScrolled = false);
+    }
+
+    if (outerOffset != innerOffset && innerOffset <= appBarHeight) {
+      final smallInnerOffset = innerMaxExtent <= appBarHeight;
       final scrolledEnough = innerOffset >= innerMaxExtent;
       if (smallInnerOffset && scrolledEnough) return false;
       _scrollController.jumpTo(innerOffset);
     }
 
-    if (innerOffset >= _appBarHeight && outerOffset != _appBarHeight) {
-      _scrollController.jumpTo(_appBarHeight);
+    if (innerOffset >= appBarHeight && outerOffset != appBarHeight) {
+      _scrollController.jumpTo(appBarHeight);
     }
 
     return false;
@@ -181,28 +178,14 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
     final tab = widget.tabs[_tabIndex];
     final isL = context.isL;
 
-    Widget page = widget.body;
-    if (tab.bodyWidth != null || tab.bodyHeight != null) {
-      page = SizedBox(
-        height: tab.bodyHeight,
-        width: tab.bodyWidth,
-        child: page,
-      );
-      page = Align(alignment: tab.bodyAlignment, child: page);
-    }
-
-    if (tab.bodyMargin != null) {
-      page = Padding(padding: tab.bodyMargin!, child: page);
-    }
-
     Widget scrollView = NotificationListener<ScrollUpdateNotification>(
       onNotification: _listenToScroll,
       child: NestedScrollView(
         controller: _scrollController,
         floatHeaderSlivers: false,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         headerSliverBuilder: _builHeaders,
-        body: page,
+        body: SafeArea(top: _isScrolled, child: widget.body),
       ),
     );
 
@@ -218,47 +201,52 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
   List<Widget> _builHeaders(BuildContext context, bool innerBoxIsScrolled) {
     final theme = Theme.of(context);
-    final isS = MediaQuery.of(context).size.width <= 500;
     final tab = widget.tabs[_tabIndex];
-
-    Widget? leading = widget.leading;
-    if (widget.leadingIcon != null) {
-      leading = Icon(
-        widget.leadingIcon,
-        color: widget.leadingIconColor ?? theme.textTheme.bodyLarge?.color,
-        size: widget.leadingIconSize,
-      );
-
-      leading = GestureDetector(
-        onTap: () => widget.onLeading!(context),
-        child: Padding(padding: const EdgeInsets.all(2.5), child: leading),
-      );
-    }
-
-    Widget? title;
-    if (widget.titleText != null) {
-      final style = theme.textTheme.displayLarge?.copyWith(
-        color: widget.titleTextColor ?? theme.textTheme.bodyLarge?.color,
-        fontSize: widget.titleTextFontSize,
-        fontWeight: widget.titleTextFontWeight,
-      );
-
-      title = Text(
-        widget.titleText ?? '',
-        style: style,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        textAlign: widget.centerTitle ? TextAlign.center : TextAlign.start,
-      );
-    }
+    final devicePad = MediaQuery.paddingOf(context).top;
 
     Widget? titleBar;
     if (_hasTitleBar) {
+      Widget? leading = widget.leading;
+      if (widget.leadingIcon != null) {
+        leading = _IconButton(
+          onPressed:
+              widget.onLeading == null
+                  ? null
+                  : () => widget.onLeading!(context),
+          icon: widget.leadingIcon ?? Icons.menu,
+          iconSize: widget.leadingIconSize,
+          iconColor: theme.textTheme.bodyLarge?.color,
+          margin: EdgeInsets.zero,
+          padding: const EdgeInsets.all(5),
+        );
+      }
+
+      Widget? title;
+      if (widget.titleText != null) {
+        final style = theme.textTheme.displayLarge?.copyWith(
+          color: widget.titleTextColor ?? theme.textTheme.bodyLarge?.color,
+          fontSize: widget.titleTextFontSize,
+          fontWeight: widget.titleTextFontWeight,
+          fontVariations: const [
+            FontVariation('wght', 700),
+            FontVariation('slnt', 0),
+          ],
+        );
+
+        title = Text(
+          widget.titleText ?? '',
+          style: style,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: widget.centerTitle ? TextAlign.center : TextAlign.start,
+        );
+      }
+
       final children = [
         if (leading != null) leading,
-        const SizedBox(width: 8),
+        if (leading != null) SizedBox(width: widget.titleSpacing),
         if (title != null) Expanded(child: widget.title ?? title),
-        const SizedBox(width: 8),
+        if (widget.actions.isNotEmpty) SizedBox(width: widget.titleSpacing),
         ...widget.actions,
       ];
 
@@ -270,7 +258,8 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
 
       titleBar = Container(
         height: widget.titleBarHeight,
-        padding: widget.titleBarPadding,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.fromLTRB(0, devicePad, 0, 0),
         child: row,
       );
     }
@@ -288,9 +277,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       }
 
       final tabPadding = switch (_getTabsAlignment(context)) {
-        TabAlignment.fill => 3.0,
+        TabAlignment.fill => 0.0,
         TabAlignment.center => 5.0,
-        _ => isS ? 16.0 : 18.0,
+        _ => 12.0,
       };
 
       tabBar = TabBar(
@@ -300,12 +289,16 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
         indicatorColor: theme.textTheme.bodyLarge?.color,
         dividerColor: theme.cardColor,
         dividerHeight: 1.5,
-        indicatorWeight: 3,
+        indicatorWeight: 2,
         onTap: (index) => widget.onTabSelected(widget.tabs[index].path),
         labelColor: theme.textTheme.bodyLarge?.color,
         unselectedLabelColor: theme.textTheme.bodyLarge?.color,
         labelStyle: theme.textTheme.bodyLarge?.copyWith(
-          fontSize: isS ? 15 : 14,
+          fontSize: 13,
+          fontVariations: [
+            const FontVariation('wght', 500),
+            const FontVariation('slnt', 0),
+          ],
         ),
         labelPadding: EdgeInsets.symmetric(horizontal: tabPadding),
         overlayColor: WidgetStateProperty.all(theme.scaffoldBackgroundColor),
@@ -314,48 +307,33 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       if (widget.hideSingleTab && widget.tabs.length < 2) tabBar = null;
     }
 
-    Widget? toolBar;
-    if (titleBar != null || tabBar != null) {
-      if (titleBar != null && tabBar == null) toolBar = titleBar;
-      if (titleBar == null && tabBar != null) toolBar = tabBar;
-      if (titleBar != null && tabBar != null) {
-        toolBar = Column(children: [titleBar, tabBar]);
-      }
-      if (widget.header != null) toolBar = titleBar;
-    }
-
-    Widget? header = widget.header ?? tab.header;
-    if (header == null && tab.hasHeader) {
-      header = FlexibleSpaceBar(
-        background: _LaamsScaffoldHeader(
-          data: tab,
-          topSpacing: _toolbarHeight + MediaQuery.paddingOf(context).top,
-        ),
-        collapseMode: CollapseMode.none,
-        stretchModes: const [StretchMode.zoomBackground],
-      );
-    }
-
     Widget sliverAppBar = SliverAppBar(
       automaticallyImplyLeading: false,
-      primary: widget.isAppBarPrimary,
-      pinned: widget.isAppBarPinned,
-      floating: widget.isAppBarFloating,
+      // primary: widget.isAppBarPrimary,
+      primary: false,
+      // pinned: widget.isAppBarPinned,
+      pinned: false,
+      // floating: widget.isAppBarFloating,
+      floating: true,
       snap: false,
+
       forceElevated: false,
-      expandedHeight: _appBarHeight,
-      collapsedHeight: _toolbarHeight,
-      toolbarHeight: _toolbarHeight,
+      toolbarHeight: widget.titleBarHeight + MediaQuery.paddingOf(context).top,
       leadingWidth: 0,
       titleSpacing: 0,
       elevation: 0,
       backgroundColor: theme.scaffoldBackgroundColor,
       surfaceTintColor: theme.scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
-      title: toolBar,
+      title: titleBar,
       centerTitle: true,
-      flexibleSpace: header,
-      bottom: widget.header != null ? tabBar : null,
+      bottom: switch (tabBar != null) {
+        false => null,
+        true => PreferredSize(
+          preferredSize: const Size.fromHeight(40),
+          child: tabBar ?? const SizedBox(),
+        ),
+      },
     );
 
     if (tab.hasScrollObsorber) {
@@ -377,25 +355,6 @@ class LaamsScaffoldTabData {
   final double iconSize;
   final String label;
   final PreferredSizeWidget? header;
-  final EdgeInsetsGeometry? headerMargin;
-  final double? headerHeight;
-  final Color? headerBackgroundColor;
-  final AlignmentDirectional headerBoxAlignment;
-  final MainAxisAlignment headerMainAxisAlignment;
-  final CrossAxisAlignment headerCrossAxisAlignment;
-  final String? headerTitle;
-  final int? headerTitleMaxLines;
-  final String? headerDescription;
-  final int? headerDescriptonMaxLines;
-  final double? headerDescriptionWidth;
-  final TextAlign headerTextsAlignment;
-  final double headerSpacing;
-
-  // Body Fields:
-  final double? bodyWidth;
-  final double? bodyHeight;
-  final AlignmentGeometry bodyAlignment;
-  final EdgeInsetsGeometry? bodyMargin;
 
   // final Widget? body;
   final Widget? endSideBar;
@@ -406,36 +365,12 @@ class LaamsScaffoldTabData {
     this.hasScrollObsorber = true,
     this.icon,
     this.activeIcon,
-    this.iconSize = 20,
+    this.iconSize = 18,
     required this.label,
     this.header,
-    this.headerMargin = const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-    this.headerHeight,
-    this.headerBackgroundColor,
-    this.headerBoxAlignment = AlignmentDirectional.center,
-    this.headerMainAxisAlignment = MainAxisAlignment.center,
-    this.headerCrossAxisAlignment = CrossAxisAlignment.start,
-    this.headerTitle,
-    this.headerTitleMaxLines = 1,
-    this.headerDescription,
-    this.headerDescriptonMaxLines = 2,
-    this.headerDescriptionWidth = 650,
-    this.headerTextsAlignment = TextAlign.start,
-    this.headerSpacing = 4,
-    this.bodyWidth,
-    this.bodyHeight,
-    this.bodyAlignment = Alignment.center,
-    this.bodyMargin,
     this.endSideBar,
     this.isSelected,
   });
-
-  bool get hasHeader {
-    if (header != null) return true;
-    if ((headerTitle ?? '').isNotEmpty) return true;
-    if ((headerDescription ?? '').isNotEmpty) return true;
-    return false;
-  }
 }
 
 class _LaamsScaffoldTab extends StatelessWidget {
@@ -461,7 +396,7 @@ class _LaamsScaffoldTab extends StatelessWidget {
     final noIcon = data.icon == null && data.activeIcon == null;
     final isS = MediaQuery.of(context).size.width <= 500;
 
-    const labelPad = EdgeInsetsDirectional.only(start: 6);
+    const labelPad = EdgeInsetsDirectional.only(start: 5);
     final label = Padding(
       padding: noIcon ? EdgeInsets.zero : labelPad,
       child: Text(data.label),
@@ -469,7 +404,7 @@ class _LaamsScaffoldTab extends StatelessWidget {
 
     if (noIcon) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: label,
       );
     }
@@ -490,80 +425,105 @@ class _LaamsScaffoldTab extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: row,
     );
   }
 }
 
-class _LaamsScaffoldHeader extends StatelessWidget {
-  final LaamsScaffoldTabData data;
-  final double topSpacing;
-  const _LaamsScaffoldHeader({required this.data, required this.topSpacing});
+class _IconButton extends StatefulWidget {
+  final void Function()? onPressed;
+  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry padding;
+  // final Color? backgroundColor;
+  final IconData icon;
+  final Color? iconColor;
+  final double? iconSize;
+
+  const _IconButton({
+    required this.onPressed,
+    this.margin = const EdgeInsets.symmetric(horizontal: 2),
+    this.padding = const EdgeInsets.all(7),
+    // this.backgroundColor,
+    required this.icon,
+    this.iconColor,
+    this.iconSize,
+  });
+
+  @override
+  State<_IconButton> createState() => _IconButtonState();
+}
+
+class _IconButtonState extends State<_IconButton> {
+  bool _focused = false;
+  bool _hovered = false;
+
+  Color? _bgColor(Color? themeColor) {
+    if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      final enabled = widget.onPressed != null;
+      if (!enabled) return null;
+      final color = widget.iconColor ?? themeColor;
+      if (_focused) return color?.withValues(alpha: 0.2);
+      if (_hovered) return color?.withValues(alpha: 0.1);
+      return null;
+    }
+    return null;
+  }
+
+  Color? _iconColor(Color? themeColor) {
+    final color = widget.iconColor ?? themeColor;
+    if (kIsWeb) return color;
+    final faded = color?.withValues(alpha: 0.5);
+    if (Platform.isIOS) return _focused ? faded : color;
+    if (Platform.isAndroid) return _focused ? faded : color;
+    return color;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: _buildState);
-  }
-
-  Widget _buildState(BuildContext context, BoxConstraints consts) {
-    final isS = consts.maxWidth <= 500;
-    final isM = consts.maxWidth <= 770;
+    final enabled = widget.onPressed != null;
     final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.displaySmall?.copyWith(
-      fontWeight: FontWeight.bold,
-      fontSize: isS ? 22 : 35,
+    final decoration = BoxDecoration(
+      color: _bgColor(theme.primaryIconTheme.color),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
     );
 
-    final titleWidget = Text(
-      data.headerTitle ?? '',
-      style: titleStyle,
-      textAlign: data.headerTextsAlignment,
-      maxLines: data.headerTitleMaxLines,
-      overflow: TextOverflow.ellipsis,
+    Widget button = Icon(
+      widget.icon,
+      size: widget.iconSize ?? theme.primaryIconTheme.size,
+      color: _iconColor(theme.primaryIconTheme.color),
     );
 
-    final descWidget = Container(
-      width: isM ? null : data.headerDescriptionWidth,
-      padding: EdgeInsets.only(top: data.headerSpacing),
-      child: Text(
-        data.headerDescription ?? '',
-        style: theme.textTheme.bodyLarge,
-        textAlign: data.headerTextsAlignment,
-        maxLines: data.headerDescriptonMaxLines,
-        overflow: TextOverflow.ellipsis,
-      ),
+    button = AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeIn,
+      margin: widget.margin,
+      padding: widget.padding,
+      decoration: decoration,
+      child: button,
     );
 
-    Widget header = Column(
-      mainAxisAlignment: data.headerMainAxisAlignment,
-      crossAxisAlignment: data.headerCrossAxisAlignment,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        titleWidget,
-        if ((data.headerDescription ?? '').isNotEmpty) descWidget,
-      ],
+    button = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTapDown: enabled ? (_) => setState(() => _focused = true) : null,
+      onTapUp: enabled ? (_) => setState(() => _focused = false) : null,
+      onTapCancel: enabled ? () => setState(() => _focused = false) : null,
+      onTap: widget.onPressed,
+      child: Semantics(button: true, child: button),
     );
 
-    header = SizedBox(
-      width: data.bodyWidth,
-      height: data.headerHeight,
-      child: header,
+    button = FocusableActionDetector(
+      onShowHoverHighlight: (v) => setState(() => _hovered = v),
+      onShowFocusHighlight: (v) => setState(() => _focused = v),
+      enabled: enabled,
+      child: button,
     );
 
-    header = Align(alignment: data.headerBoxAlignment, child: header);
+    button = MouseRegion(
+      cursor: enabled && kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
+      child: button,
+    );
 
-    if (data.headerMargin != null) {
-      header = Padding(padding: data.headerMargin!, child: header);
-    }
-
-    header = Padding(padding: EdgeInsets.only(top: topSpacing), child: header);
-
-    if (data.headerBackgroundColor != null) {
-      final decoration = BoxDecoration(color: data.headerBackgroundColor);
-      header = DecoratedBox(decoration: decoration, child: header);
-    }
-
-    return header;
+    return Align(alignment: Alignment.center, child: button);
   }
 }

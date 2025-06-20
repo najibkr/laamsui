@@ -218,10 +218,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_svg
-      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
+      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -236,10 +236,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: "0b1e06223bee260dee31a171fb1153e306907563a0b0225e8c1733211911429a"
+      sha256: "02ff498f6279470ff7f60c998a69b872f26696ceec237c8402e63a2133868ddf"
       url: "https://pub.dev"
     source: hosted
-    version: "15.1.2"
+    version: "15.2.3"
   http:
     dependency: transitive
     description:
@@ -270,7 +270,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.6.34"
+    version: "1.0.4"
   leak_tracker:
     dependency: transitive
     description:
@@ -552,10 +552,10 @@ packages:
     dependency: transitive
     description:
       name: two_dimensional_scrollables
-      sha256: "1b0b29095d86df509d115ac668f85c3fcb0bd1554ccf89c289ca4769bead49db"
+      sha256: f02e99bae8b457f710c2a717dfbd0a32a5bbe332c0814bc559d9549a5b117db3
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.4"
+    version: "0.3.6"
   typed_data:
     dependency: transitive
     description:

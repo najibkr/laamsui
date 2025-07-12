@@ -18,7 +18,7 @@ dependencies:
   flutter_animate: ^4.5.2
   two_dimensional_scrollables: ^0.3.6
   flutter_keyboard_visibility: ^6.0.0
-  go_router: ^15.2.3
+  go_router: ^16.0.0
   calendar_date_picker2: ^2.0.1
   cached_network_image: ^3.4.1
 

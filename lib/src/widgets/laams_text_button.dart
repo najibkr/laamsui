@@ -123,7 +123,7 @@ class LaamsTextButton extends StatelessWidget {
 
     if (isExpanded) content = Center(child: content);
     Widget button = TextButton(
-      onPressed: enabled ? null : onPressed,
+      onPressed: enabled ? onPressed : null,
       style: buttonStyle,
 
       child: Padding(padding: padding, child: content),

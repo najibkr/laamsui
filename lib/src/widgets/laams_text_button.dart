@@ -24,6 +24,7 @@ class LaamsTextButton extends StatelessWidget {
   final Color? trailingIconColor;
   final double? trailingIconSize;
   final bool isExpanded;
+  final bool enabled;
 
   const LaamsTextButton({
     super.key,
@@ -50,6 +51,7 @@ class LaamsTextButton extends StatelessWidget {
     this.trailingIconColor,
     this.trailingIconSize = 20.0,
     this.isExpanded = false,
+    this.enabled = true,
   });
 
   @override
@@ -121,8 +123,9 @@ class LaamsTextButton extends StatelessWidget {
 
     if (isExpanded) content = Center(child: content);
     Widget button = TextButton(
-      onPressed: onPressed,
+      onPressed: enabled ? null : onPressed,
       style: buttonStyle,
+
       child: Padding(padding: padding, child: content),
     );
 

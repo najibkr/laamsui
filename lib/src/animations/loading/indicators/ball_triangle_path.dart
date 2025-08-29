@@ -152,11 +152,11 @@ class _BallTrianglePathState extends State<BallTrianglePath>
       animation: _animationController,
       builder: (_, child) {
         return Transform(
-          transform:
-              Matrix4.identity()..translate(
-                animation.value.dx * (size.width - circleSize),
-                animation.value.dy * (size.height - circleSize),
-              ),
+          transform: Matrix4.translationValues(
+            animation.value.dx * (size.width - circleSize),
+            animation.value.dy * (size.height - circleSize),
+            0.0, // z-axis translation
+          ),
           child: child,
         );
       },

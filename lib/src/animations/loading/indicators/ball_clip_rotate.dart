@@ -52,10 +52,11 @@ class _BallClipRotateState extends State<BallClipRotate>
       builder: (_, child) {
         return Transform(
           alignment: Alignment.center,
-          transform:
-              Matrix4.identity()
-                ..scale(_scaleAnimation.value)
-                ..rotateZ(_rotateAnimation.value),
+          transform: Matrix4.diagonal3Values(
+            _scaleAnimation.value, // scaleX
+            _scaleAnimation.value, // scaleY
+            1.0, // scaleZ (always 1 for 2D)
+          )..rotateZ(_rotateAnimation.value),
           child: child,
         );
       },

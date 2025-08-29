@@ -61,10 +61,11 @@ class _BallClipRotatePulseState extends State<BallClipRotatePulse>
             children: <Widget>[
               Transform(
                 alignment: Alignment.center,
-                transform:
-                    Matrix4.identity()
-                      ..scale(_outCircleScale.value)
-                      ..rotateZ(_outCircleRotate.value),
+                transform: Matrix4.diagonal3Values(
+                  _outCircleScale.value, // scaleX
+                  _outCircleScale.value, // scaleY
+                  1.0, // scaleZ (keep 1.0 for 2D transforms)
+                )..rotateZ(_outCircleRotate.value),
                 child: const IndicatorShapeWidget(
                   shape: Shape.ringTwoHalfVertical,
                   index: 0,

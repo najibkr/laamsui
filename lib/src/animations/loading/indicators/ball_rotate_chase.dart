@@ -72,13 +72,11 @@ class _BallRotateChaseState extends State<BallRotateChase>
               builder: (_, child) {
                 return Transform(
                   alignment: Alignment.center,
-                  transform:
-                      Matrix4.identity()..translate(
-                        deltaX * sin(_translateAnimations[i].value),
-                        deltaY * -cos(_translateAnimations[i].value),
-                      ),
-
-                  /// scale must in child, if upper would align topLeft.
+                  transform: Matrix4.translationValues(
+                    deltaX * sin(_translateAnimations[i].value),
+                    deltaY * -cos(_translateAnimations[i].value),
+                    0.0, // z-axis translation
+                  ),
                   child: ScaleTransition(
                     scale: _scaleAnimations[i],
                     child: child,

@@ -67,11 +67,11 @@ class _BallZigZagDeflectState extends State<BallZigZagDeflect>
                   Positioned.fromRect(
                     rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
                     child: Transform(
-                      transform:
-                          Matrix4.identity()..translate(
-                            deltaX * _animation.value.dx,
-                            deltaY * _animation.value.dy,
-                          ),
+                      transform: Matrix4.translationValues(
+                        deltaX * _animation.value.dx,
+                        deltaY * _animation.value.dy,
+                        0.0, // z-axis translation
+                      ),
                       child: const IndicatorShapeWidget(
                         shape: Shape.circle,
                         index: 0,
@@ -81,11 +81,11 @@ class _BallZigZagDeflectState extends State<BallZigZagDeflect>
                   Positioned.fromRect(
                     rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
                     child: Transform(
-                      transform:
-                          Matrix4.identity()..translate(
-                            deltaX * -_animation.value.dx,
-                            deltaY * -_animation.value.dy,
-                          ),
+                      transform: Matrix4.translationValues(
+                        deltaX * _animation.value.dx,
+                        deltaY * _animation.value.dy,
+                        0.0, // z-axis translation
+                      ),
                       child: const IndicatorShapeWidget(
                         shape: Shape.circle,
                         index: 1,

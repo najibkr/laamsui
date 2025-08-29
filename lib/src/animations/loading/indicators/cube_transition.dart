@@ -109,13 +109,17 @@ class _CubeTransitionState extends State<CubeTransition>
                     child: Transform(
                       alignment: Alignment.center,
                       transform:
-                          Matrix4.identity()
-                            ..translate(
-                              _translateAnimation.value!.width * deltaX,
-                              _translateAnimation.value!.height * deltaY,
-                            )
-                            ..rotateZ(_rotateAnimation.value)
-                            ..scale(_scaleAnimation.value),
+                          Matrix4.translationValues(
+                            _translateAnimation.value!.width * deltaX,
+                            _translateAnimation.value!.height * deltaY,
+                            0.0, // z translation
+                          ) *
+                          Matrix4.rotationZ(_rotateAnimation.value) *
+                          Matrix4.diagonal3Values(
+                            _scaleAnimation.value, // scaleX
+                            _scaleAnimation.value, // scaleY
+                            1.0, // scaleZ
+                          ),
                       child: const IndicatorShapeWidget(
                         shape: Shape.rectangle,
                         index: 0,
@@ -132,13 +136,17 @@ class _CubeTransitionState extends State<CubeTransition>
                     child: Transform(
                       alignment: Alignment.center,
                       transform:
-                          Matrix4.identity()
-                            ..translate(
-                              -_translateAnimation.value!.width * deltaX,
-                              -_translateAnimation.value!.height * deltaY,
-                            )
-                            ..rotateZ(_rotateAnimation.value)
-                            ..scale(_scaleAnimation.value),
+                          Matrix4.translationValues(
+                            -_translateAnimation.value!.width * deltaX,
+                            -_translateAnimation.value!.height * deltaY,
+                            0.0, // z-axis translation
+                          ) *
+                          Matrix4.rotationZ(_rotateAnimation.value) *
+                          Matrix4.diagonal3Values(
+                            _scaleAnimation.value, // scaleX
+                            _scaleAnimation.value, // scaleY
+                            1.0, // scaleZ
+                          ),
                       child: const IndicatorShapeWidget(
                         shape: Shape.rectangle,
                         index: 1,

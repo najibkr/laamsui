@@ -1,3 +1,6 @@
+## 1.1.0
+- Updated dependencies and fixed some bugs
+
 ## 1.0.12
 - Updated dependencies and fixed some bugs
 

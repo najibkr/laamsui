@@ -71,6 +71,8 @@ class LaamsTextButton extends StatelessWidget {
       if (isHovered) return hoverColor ?? defaultColor;
       final isFocused = state.contains(WidgetState.focused);
       if (isFocused) return focusedColor ?? defaultColor;
+      final isPressed = state.contains(WidgetState.pressed);
+      if (isPressed) return focusedColor ?? defaultColor;
       return null;
     }
 

@@ -1,3 +1,6 @@
+## 1.1.4
+- Updated dependencies and fixed some bugs
+
 ## 1.1.3
 - Updated dependencies and fixed some bugs
 

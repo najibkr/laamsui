@@ -148,7 +148,8 @@ class _LaamsOverlayState extends State<LaamsOverlay> {
   Widget build(BuildContext context) {
     Widget overlay = widget.anchor;
     if (!(context.isS)) {
-      overlay = OverlayPortal.targetsRootOverlay(
+      overlay = OverlayPortal(
+        overlayLocation: OverlayChildLocation.rootOverlay,
         controller: _controller,
         overlayChildBuilder: _buildOverlay,
         child: CompositedTransformTarget(link: _link, child: widget.anchor),

@@ -200,7 +200,8 @@ class _LaamsMenuCellState<V> extends State<LaamsMenuCell<V>> {
     if (widget.enabled) {
       cell = CompositedTransformTarget(link: _link, child: cell);
 
-      cell = OverlayPortal.targetsRootOverlay(
+      cell = OverlayPortal(
+        overlayLocation: OverlayChildLocation.rootOverlay,
         controller: _overlayController,
         overlayChildBuilder: _buildOverlay,
         child: cell,

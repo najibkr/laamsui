@@ -163,8 +163,9 @@ class _LaamsOptionsCellState<V> extends State<LaamsOptionsCell<V>> {
     if (widget.enabled) {
       cell = CompositedTransformTarget(link: _link, child: cell);
 
-      cell = OverlayPortal.targetsRootOverlay(
+      cell = OverlayPortal(
         controller: _controller,
+        overlayLocation: OverlayChildLocation.rootOverlay,
         overlayChildBuilder: _buildOverlay,
         child: cell,
       );

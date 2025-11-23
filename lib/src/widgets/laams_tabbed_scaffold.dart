@@ -209,10 +209,9 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       Widget? leading = widget.leading;
       if (widget.leadingIcon != null) {
         leading = _IconButton(
-          onPressed:
-              widget.onLeading == null
-                  ? null
-                  : () => widget.onLeading!(context),
+          onPressed: widget.onLeading == null
+              ? null
+              : () => widget.onLeading!(context),
           icon: widget.leadingIcon ?? Icons.menu,
           iconSize: widget.leadingIconSize,
           iconColor: theme.textTheme.bodyLarge?.color,

@@ -26,12 +26,13 @@ class _BallClipRotateState extends State<BallClipRotate>
       vsync: this,
       duration: const Duration(milliseconds: 750),
     );
-    _scaleAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 1),
-    ]).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.linear),
-    );
+    _scaleAnimation =
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.linear),
+        );
     _rotateAnimation = Tween(begin: 0.0, end: 2 * pi).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.linear),
     );

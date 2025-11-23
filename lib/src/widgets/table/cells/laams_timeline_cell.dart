@@ -121,14 +121,13 @@ class _LaamsTimelineCellState<V> extends State<LaamsTimelineCell> {
       barrierColor: Colors.transparent,
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 10,
-      builder:
-          (context) => _BottomSheetContent(
-            onSelected: widget.onSelected,
-            firstDate: widget.firstDate,
-            currentDate: widget.currentDate,
-            lastDate: widget.lastDate,
-            selectedDates: widget.selectedDates,
-          ),
+      builder: (context) => _BottomSheetContent(
+        onSelected: widget.onSelected,
+        firstDate: widget.firstDate,
+        currentDate: widget.currentDate,
+        lastDate: widget.lastDate,
+        selectedDates: widget.selectedDates,
+      ),
     );
   }
 
@@ -351,10 +350,9 @@ class _DatesPicker extends StatelessWidget {
         controlsTextStyle: ctrlsStyle?.copyWith(fontWeight: FontWeight.bold),
         lastDate: lastDate ?? DateTime(date.year + 100),
       ),
-      value:
-          selectedDates
-            ..removeWhere((e) => e == null)
-            ..sort(),
+      value: selectedDates
+        ..removeWhere((e) => e == null)
+        ..sort(),
       onValueChanged: onSelected,
     );
   }

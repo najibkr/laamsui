@@ -82,22 +82,21 @@ class _LaamsOverlayState extends State<LaamsOverlay> {
         ),
       ),
       clipBehavior: Clip.antiAlias,
-      builder:
-          (_) => LaamsOverlayProvider(
-            show: () => _showOverlay(context),
-            hide: () => _hideOverlay(context),
-            isShown: _controller.isShowing,
-            child: _OverlayContent(
-              height: widget.mobileHeight,
-              margin: null,
-              padding: widget.padding,
-              backgroundColor: widget.backgroundColor,
-              borderRadius: null,
-              boxShadow: widget.boxShadow,
-              border: widget.border,
-              content: Builder(builder: widget.contentBuilder),
-            ),
-          ),
+      builder: (_) => LaamsOverlayProvider(
+        show: () => _showOverlay(context),
+        hide: () => _hideOverlay(context),
+        isShown: _controller.isShowing,
+        child: _OverlayContent(
+          height: widget.mobileHeight,
+          margin: null,
+          padding: widget.padding,
+          backgroundColor: widget.backgroundColor,
+          borderRadius: null,
+          boxShadow: widget.boxShadow,
+          border: widget.border,
+          content: Builder(builder: widget.contentBuilder),
+        ),
+      ),
     );
   }
 
@@ -273,7 +272,12 @@ class _OverlayContent extends StatelessWidget {
         ),
       );
 
-      newContent = Column(children: [indicator, Expanded(child: content)]);
+      newContent = Column(
+        children: [
+          indicator,
+          Expanded(child: content),
+        ],
+      );
     }
 
     final decoration = BoxDecoration(

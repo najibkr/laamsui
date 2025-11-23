@@ -142,7 +142,10 @@ class _LaamsStatsCardState<Stat extends num>
 
     Widget detail = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [newTitle, Expanded(child: FittedBox(child: newStat))],
+      children: [
+        newTitle,
+        Expanded(child: FittedBox(child: newStat)),
+      ],
     );
 
     detail = SizedBox(
@@ -153,7 +156,11 @@ class _LaamsStatsCardState<Stat extends num>
     final content = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
-      children: [iconWidget, space, Expanded(child: detail)],
+      children: [
+        iconWidget,
+        space,
+        Expanded(child: detail),
+      ],
     );
 
     final cardGradient = LinearGradient(
@@ -177,8 +184,9 @@ class _LaamsStatsCardState<Stat extends num>
 
     if (widget.onPressed != null) {
       card = GestureDetector(
-        onTap:
-            widget.onPressed == null ? null : () => widget.onPressed!(context),
+        onTap: widget.onPressed == null
+            ? null
+            : () => widget.onPressed!(context),
         child: card,
       );
     }

@@ -162,12 +162,11 @@ class _ShapePainter extends CustomPainter {
         _paint
           ..color = color
           ..style = PaintingStyle.fill;
-        Path path =
-            Path()
-              ..moveTo(0, size.height - offsetY)
-              ..lineTo(size.width / 2, size.height / 2 - offsetY)
-              ..lineTo(size.width, size.height - offsetY)
-              ..close();
+        Path path = Path()
+          ..moveTo(0, size.height - offsetY)
+          ..lineTo(size.width / 2, size.height / 2 - offsetY)
+          ..lineTo(size.width, size.height - offsetY)
+          ..close();
         canvas.drawPath(path, _paint);
         break;
       case Shape.arc:

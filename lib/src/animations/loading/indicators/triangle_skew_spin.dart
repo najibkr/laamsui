@@ -61,12 +61,11 @@ class _TriangleSkewSpinState extends State<TriangleSkewSpin>
       builder: (_, child) {
         return Transform(
           alignment: Alignment.center,
-          transform:
-              Matrix4.identity()
-                /// Whooops, must add this line to 3D effect.
-                ..setEntry(3, 2, 0.006)
-                ..rotateX(_animation.value.dx)
-                ..rotateY(_animation.value.dy),
+          transform: Matrix4.identity()
+            /// Whooops, must add this line to 3D effect.
+            ..setEntry(3, 2, 0.006)
+            ..rotateX(_animation.value.dx)
+            ..rotateY(_animation.value.dy),
           child: child,
         );
       },

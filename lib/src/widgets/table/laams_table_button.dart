@@ -113,15 +113,14 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
       useRootNavigator: true,
       barrierColor: widget.barrierColor ?? Colors.grey.withValues(alpha: 0.3),
       shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-      builder:
-          (context) => _ButtonMobileDialog(
-            height: widget.overlayMobileHeight,
-            padding: widget.overlayPadding,
-            decoration: decoration,
-            actions: widget.overlayActions,
-            separator: widget.overlayActionsSepartor,
-            child: widget.overlayChild,
-          ),
+      builder: (context) => _ButtonMobileDialog(
+        height: widget.overlayMobileHeight,
+        padding: widget.overlayPadding,
+        decoration: decoration,
+        actions: widget.overlayActions,
+        separator: widget.overlayActionsSepartor,
+        child: widget.overlayChild,
+      ),
     );
   }
 
@@ -217,8 +216,8 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
     if (widget.overlayActions.isNotEmpty) {
       child = ListView.separated(
         physics: const BouncingScrollPhysics(),
-        separatorBuilder:
-            (_, _) => widget.overlayActionsSepartor ?? const SizedBox(),
+        separatorBuilder: (_, _) =>
+            widget.overlayActionsSepartor ?? const SizedBox(),
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemCount: widget.overlayActions.length,
         itemBuilder: (context, index) => widget.overlayActions[index],
@@ -297,7 +296,10 @@ class _ButtonMobileDialog extends StatelessWidget {
       padding: padding,
       decoration: decoration,
       child: Column(
-        children: [top, Expanded(child: newChild ?? const SizedBox())],
+        children: [
+          top,
+          Expanded(child: newChild ?? const SizedBox()),
+        ],
       ),
     );
   }
@@ -366,7 +368,12 @@ class LaamsTableAction extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
-      children: [iconWidget, space, Expanded(child: title), space],
+      children: [
+        iconWidget,
+        space,
+        Expanded(child: title),
+        space,
+      ],
     );
 
     final decoration = BoxDecoration(

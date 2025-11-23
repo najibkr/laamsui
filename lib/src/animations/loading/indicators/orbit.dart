@@ -32,30 +32,32 @@ class _OrbitState extends State<Orbit> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 1900),
     );
 
-    _ring1ScaleAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.3), weight: 0.01),
-      TweenSequenceItem(tween: Tween(begin: 1.3, end: 2.0), weight: 100),
-    ]).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.45, 1.0, curve: Curves.linear),
-      ),
-    );
+    _ring1ScaleAnimation =
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.3), weight: 0.01),
+          TweenSequenceItem(tween: Tween(begin: 1.3, end: 2.0), weight: 100),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: const Interval(0.45, 1.0, curve: Curves.linear),
+          ),
+        );
     _ring1OpacityAnimation = Tween(begin: 0.8, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: const Interval(0.45, 1.0, curve: Curves.linear),
       ),
     );
-    _ring2ScaleAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.3), weight: 0.01),
-      TweenSequenceItem(tween: Tween(begin: 1.3, end: 2.1), weight: 100),
-    ]).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.55, 1.0, curve: Curves.linear),
-      ),
-    );
+    _ring2ScaleAnimation =
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.3), weight: 0.01),
+          TweenSequenceItem(tween: Tween(begin: 1.3, end: 2.1), weight: 100),
+        ]).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: const Interval(0.55, 1.0, curve: Curves.linear),
+          ),
+        );
     _ring2OpacityAnimation = Tween(begin: 0.70, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -69,7 +71,10 @@ class _OrbitState extends State<Orbit> with SingleTickerProviderStateMixin {
     ]).animate(_animationController);
     _satelliteAnimation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.0, end: pi), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: pi, end: 2 * pi), weight: 1),
+      TweenSequenceItem(
+        tween: Tween(begin: pi, end: 2 * pi),
+        weight: 1,
+      ),
     ]).animate(_animationController);
 
     _animationController.repeat();

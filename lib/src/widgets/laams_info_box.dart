@@ -119,7 +119,12 @@ class LaamsInfoBox extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: boxDecoration,
-      child: Row(children: [leading, Expanded(child: newMessage)]),
+      child: Row(
+        children: [
+          leading,
+          Expanded(child: newMessage),
+        ],
+      ),
     );
 
     if (alignment != null) {

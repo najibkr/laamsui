@@ -56,7 +56,9 @@ class LaamsTableMore extends StatelessWidget {
         child: content,
       );
 
-      return Center(child: Padding(padding: margin, child: content));
+      return Center(
+        child: Padding(padding: margin, child: content),
+      );
     }
     return const SizedBox();
   }

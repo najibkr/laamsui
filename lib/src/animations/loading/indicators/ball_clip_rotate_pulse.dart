@@ -35,7 +35,10 @@ class _BallClipRotatePulseState extends State<BallClipRotatePulse>
     ]).animate(CurvedAnimation(parent: _animationController, curve: cubic));
     _outCircleRotate = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.0, end: pi), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: pi, end: 2 * pi), weight: 1),
+      TweenSequenceItem(
+        tween: Tween(begin: pi, end: 2 * pi),
+        weight: 1,
+      ),
     ]).animate(CurvedAnimation(parent: _animationController, curve: cubic));
     _innerCircle = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.3), weight: 30),
@@ -54,32 +57,28 @@ class _BallClipRotatePulseState extends State<BallClipRotatePulse>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animationController,
-      builder:
-          (_, child) => Stack(
+      builder: (_, child) => Stack(
+        alignment: Alignment.center,
+        fit: StackFit.expand,
+        children: <Widget>[
+          Transform(
             alignment: Alignment.center,
-            fit: StackFit.expand,
-            children: <Widget>[
-              Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.diagonal3Values(
-                  _outCircleScale.value, // scaleX
-                  _outCircleScale.value, // scaleY
-                  1.0, // scaleZ (keep 1.0 for 2D transforms)
-                )..rotateZ(_outCircleRotate.value),
-                child: const IndicatorShapeWidget(
-                  shape: Shape.ringTwoHalfVertical,
-                  index: 0,
-                ),
-              ),
-              Transform.scale(
-                scale: _innerCircle.value * 0.3,
-                child: const IndicatorShapeWidget(
-                  shape: Shape.circle,
-                  index: 1,
-                ),
-              ),
-            ],
+            transform: Matrix4.diagonal3Values(
+              _outCircleScale.value, // scaleX
+              _outCircleScale.value, // scaleY
+              1.0, // scaleZ (keep 1.0 for 2D transforms)
+            )..rotateZ(_outCircleRotate.value),
+            child: const IndicatorShapeWidget(
+              shape: Shape.ringTwoHalfVertical,
+              index: 0,
+            ),
           ),
+          Transform.scale(
+            scale: _innerCircle.value * 0.3,
+            child: const IndicatorShapeWidget(shape: Shape.circle, index: 1),
+          ),
+        ],
+      ),
     );
   }
 }

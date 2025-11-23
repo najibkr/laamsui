@@ -38,7 +38,10 @@ class LaamsProgressCell extends StatelessWidget {
 
     final stack = Stack(
       alignment: Alignment.center,
-      children: [progress, Positioned(child: title)],
+      children: [
+        progress,
+        Positioned(child: title),
+      ],
     );
 
     return Padding(padding: margin ?? EdgeInsets.zero, child: stack);

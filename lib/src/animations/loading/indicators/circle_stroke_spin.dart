@@ -12,8 +12,9 @@ class CircleStrokeSpin extends StatelessWidget {
     return CircularProgressIndicator(
       strokeWidth: 2,
       color: color,
-      backgroundColor:
-          DecorateContext.of(context)!.decorateData.pathBackgroundColor,
+      backgroundColor: DecorateContext.of(
+        context,
+      )!.decorateData.pathBackgroundColor,
     );
   }
 }

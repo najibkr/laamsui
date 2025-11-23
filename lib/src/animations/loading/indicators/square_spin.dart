@@ -79,12 +79,11 @@ class _SquareSpinState extends State<SquareSpin>
         }
         return Transform(
           alignment: Alignment.center,
-          transform:
-              Matrix4.identity()
-                /// Whooops, must add this line to 3D effect.
-                ..setEntry(3, 2, 0.006)
-                ..rotateX(x)
-                ..rotateY(y),
+          transform: Matrix4.identity()
+            /// Whooops, must add this line to 3D effect.
+            ..setEntry(3, 2, 0.006)
+            ..rotateX(x)
+            ..rotateY(y),
           child: child,
         );
       },

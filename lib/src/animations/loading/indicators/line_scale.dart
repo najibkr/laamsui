@@ -62,27 +62,26 @@ class _LineScaleState extends State<LineScale> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets =
-        _animations
-            .asMap()
-            .entries
-            .map(
-              (entry) => Expanded(
-                child: AnimatedBuilder(
-                  animation: entry.value,
-                  builder: (BuildContext context, Widget? child) {
-                    return FractionallySizedBox(
-                      heightFactor: entry.value.value,
-                      child: IndicatorShapeWidget(
-                        shape: Shape.line,
-                        index: entry.key,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            )
-            .toList();
+    List<Widget> widgets = _animations
+        .asMap()
+        .entries
+        .map(
+          (entry) => Expanded(
+            child: AnimatedBuilder(
+              animation: entry.value,
+              builder: (BuildContext context, Widget? child) {
+                return FractionallySizedBox(
+                  heightFactor: entry.value.value,
+                  child: IndicatorShapeWidget(
+                    shape: Shape.line,
+                    index: entry.key,
+                  ),
+                );
+              },
+            ),
+          ),
+        )
+        .toList();
 
     for (int i = 0; i < widgets.length - 1; i++) {
       if (i % 2 == 0) {

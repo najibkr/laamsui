@@ -25,22 +25,23 @@ class _BallZigZagDeflectState extends State<BallZigZagDeflect>
       duration: const Duration(milliseconds: 700),
     );
 
-    _animation = TweenSequence([
-      TweenSequenceItem(
-        tween: Tween(begin: const Offset(0, 0), end: const Offset(-1, -1)),
-        weight: 1,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: const Offset(-1, -1), end: const Offset(1, -1)),
-        weight: 1,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: const Offset(1, -1), end: const Offset(0, 0)),
-        weight: 1,
-      ),
-    ]).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.linear),
-    );
+    _animation =
+        TweenSequence([
+          TweenSequenceItem(
+            tween: Tween(begin: const Offset(0, 0), end: const Offset(-1, -1)),
+            weight: 1,
+          ),
+          TweenSequenceItem(
+            tween: Tween(begin: const Offset(-1, -1), end: const Offset(1, -1)),
+            weight: 1,
+          ),
+          TweenSequenceItem(
+            tween: Tween(begin: const Offset(1, -1), end: const Offset(0, 0)),
+            weight: 1,
+          ),
+        ]).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.linear),
+        );
 
     _animationController.repeat(reverse: true);
   }
@@ -61,39 +62,38 @@ class _BallZigZagDeflectState extends State<BallZigZagDeflect>
 
         return AnimatedBuilder(
           animation: _animationController,
-          builder:
-              (_, child) => Stack(
-                children: <Widget>[
-                  Positioned.fromRect(
-                    rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
-                    child: Transform(
-                      transform: Matrix4.translationValues(
-                        deltaX * _animation.value.dx,
-                        deltaY * _animation.value.dy,
-                        0.0, // z-axis translation
-                      ),
-                      child: const IndicatorShapeWidget(
-                        shape: Shape.circle,
-                        index: 0,
-                      ),
-                    ),
+          builder: (_, child) => Stack(
+            children: <Widget>[
+              Positioned.fromRect(
+                rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
+                child: Transform(
+                  transform: Matrix4.translationValues(
+                    deltaX * _animation.value.dx,
+                    deltaY * _animation.value.dy,
+                    0.0, // z-axis translation
                   ),
-                  Positioned.fromRect(
-                    rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
-                    child: Transform(
-                      transform: Matrix4.translationValues(
-                        deltaX * _animation.value.dx,
-                        deltaY * _animation.value.dy,
-                        0.0, // z-axis translation
-                      ),
-                      child: const IndicatorShapeWidget(
-                        shape: Shape.circle,
-                        index: 1,
-                      ),
-                    ),
+                  child: const IndicatorShapeWidget(
+                    shape: Shape.circle,
+                    index: 0,
                   ),
-                ],
+                ),
               ),
+              Positioned.fromRect(
+                rect: Rect.fromLTWH(deltaX, deltaY, circleSize, circleSize),
+                child: Transform(
+                  transform: Matrix4.translationValues(
+                    deltaX * _animation.value.dx,
+                    deltaY * _animation.value.dy,
+                    0.0, // z-axis translation
+                  ),
+                  child: const IndicatorShapeWidget(
+                    shape: Shape.circle,
+                    index: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

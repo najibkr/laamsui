@@ -100,7 +100,12 @@ class _LaamsTableColumnState extends State<LaamsTableColumn> {
         child: Icon(widget.sortIcon, size: 20, color: color),
       );
 
-      items = Row(children: [Expanded(child: items), btn]);
+      items = Row(
+        children: [
+          Expanded(child: items),
+          btn,
+        ],
+      );
     }
 
     if (widget.onSort != null && widget.sortIcon == null) {

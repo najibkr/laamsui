@@ -182,10 +182,9 @@ class LaamsLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<Color> safeColors =
-        indicatorColors == null || indicatorColors!.isEmpty
-            ? [theme.primaryColor]
-            : indicatorColors!;
+    List<Color> safeColors = indicatorColors == null || indicatorColors!.isEmpty
+        ? [theme.primaryColor]
+        : indicatorColors!;
 
     final loading = switch (indicatorType) {
       IndicatorType.ballPulse => const BallPulse(),

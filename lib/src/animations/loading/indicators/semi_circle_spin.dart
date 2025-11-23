@@ -23,12 +23,13 @@ class _SemiCircleSpinState extends State<SemiCircleSpin>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _animation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 0.5), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: 0.5, end: 1.0), weight: 1),
-    ]).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.linear),
-    );
+    _animation =
+        TweenSequence([
+          TweenSequenceItem(tween: Tween(begin: 0.0, end: 0.5), weight: 1),
+          TweenSequenceItem(tween: Tween(begin: 0.5, end: 1.0), weight: 1),
+        ]).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.linear),
+        );
     _animationController.repeat();
   }
 

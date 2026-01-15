@@ -25,6 +25,7 @@ class LaamsTextButton extends StatelessWidget {
   final double? trailingIconSize;
   final bool isExpanded;
   final bool enabled;
+  final double spacing;
 
   const LaamsTextButton({
     super.key,
@@ -52,6 +53,7 @@ class LaamsTextButton extends StatelessWidget {
     this.trailingIconSize = 20.0,
     this.isExpanded = false,
     this.enabled = true,
+    this.spacing = 0.0,
   });
 
   @override
@@ -115,6 +117,7 @@ class LaamsTextButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
+        spacing: spacing,
         children: [
           if (iconWidget != null) iconWidget,
           content,

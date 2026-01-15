@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemChannels;
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'laams_floating_button.dart';
 
@@ -137,10 +136,7 @@ class LaamsFormDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardVisibilityBuilder(builder: _build);
-  }
-
-  Widget _build(BuildContext context, bool isVisible) {
+    final isVisible = MediaQuery.viewInsetsOf(context).bottom >= 50;
     final theme = Theme.of(context);
     final hasAction = (actionText ?? '').trim().isNotEmpty;
     final actionStyle = switch (isFullScreen) {

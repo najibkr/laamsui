@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:laamsui/src/extensions/viewport_extension.dart';
 
 class LaamsOverlay extends StatefulWidget {
@@ -135,12 +134,12 @@ class _LaamsOverlayState extends State<LaamsOverlay> {
 
   void _showOverlay(BuildContext context) {
     if (!_controller.isShowing) return _controller.show();
-    if (context.canPop()) context.pop();
+    if (Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
 
   void _hideOverlay(BuildContext context) {
     if (_controller.isShowing) return _controller.hide();
-    if (context.canPop()) context.pop();
+    if (Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
 
   @override

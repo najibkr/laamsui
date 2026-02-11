@@ -1,4 +1,4 @@
-## 1.1.9
+## 1.1.10
 - Updated dependencies and fixed some bugs
 
 ## 1.1.8

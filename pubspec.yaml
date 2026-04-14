@@ -1,13 +1,13 @@
 name: laamsui
 description: "A design system with a collection of Futter UI Widgets and dart extensions."
-version: 1.1.11
+version: 1.1.12
 homepage: https://laams.io
 repository: https://github.com/najibkr/laamsui
 issue_tracker: https://github.com/najibkr/laamsui/issues
 
 environment:
-  sdk: ">=3.9.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:
@@ -16,7 +16,7 @@ dependencies:
   intl: ^0.20.2
   flutter_svg: ^2.2.4
   flutter_animate: ^4.5.2
-  two_dimensional_scrollables: ^0.4.1
+  two_dimensional_scrollables: ^0.4.2
   calendar_date_picker2: ^2.0.1
   cached_network_image: ^3.4.1
 

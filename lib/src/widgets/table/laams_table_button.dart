@@ -149,7 +149,7 @@ class _LaamsTableButtonState extends State<LaamsTableButton> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [if (child != null) child, spacing, label, spacing],
+        children: [?child, spacing, label, spacing],
       );
     }
 

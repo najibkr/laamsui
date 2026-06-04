@@ -596,11 +596,11 @@ class LaamsCellOption<V> extends StatelessWidget {
         crossAxisAlignment: contentCrossAxisAlignment,
         mainAxisSize: contentMainAxisSize,
         children: [
-          if (newLeading != null) newLeading,
+          ?newLeading,
           if (newLeading != null) space,
           Expanded(child: content),
           if (newTrailing != null) space,
-          if (newTrailing != null) newTrailing,
+          ?newTrailing,
         ],
       );
     }

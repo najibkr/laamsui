@@ -346,12 +346,7 @@ class LaamsTable<Entity> extends StatelessWidget {
       _ => table,
     };
 
-    final items = [
-      if (titleBar != null) titleBar!,
-      if (newToolbar != null) newToolbar,
-      table,
-      if (footer != null) footer!,
-    ];
+    final items = [?titleBar, ?newToolbar, table, ?footer];
 
     if (!_hasTableBoxFields) return Column(children: items);
 

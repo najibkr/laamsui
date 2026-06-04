@@ -118,11 +118,7 @@ class LaamsTextButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         spacing: spacing,
-        children: [
-          if (iconWidget != null) iconWidget,
-          content,
-          if (trailing != null) trailing,
-        ],
+        children: [?iconWidget, content, ?trailing],
       );
     }
 

@@ -108,7 +108,7 @@ class LaamsTextCell extends StatelessWidget {
     if (actions.isNotEmpty || leading != null) {
       textWidget = Row(
         children: [
-          if (leading != null) leading!,
+          ?leading,
           Expanded(child: textWidget),
           ...actions,
         ],
@@ -121,11 +121,7 @@ class LaamsTextCell extends StatelessWidget {
       }
 
       final textsWidgets = texts.asMap().map(textBuilder ?? mapTexts);
-      final children = [
-        if (textsTop != null) textsTop!,
-        ...textsWidgets.values,
-        if (textsBottom != null) textsBottom!,
-      ];
+      final children = [?textsTop, ...textsWidgets.values, ?textsBottom];
       textWidget = Column(
         mainAxisAlignment: textsMainAxisAlignment,
         crossAxisAlignment: textsCrossAxisAlignment,

@@ -319,7 +319,7 @@ class LaamsLoading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      children: [indicator, space, text, space, if (btn != null) btn],
+      children: [indicator, space, text, space, ?btn],
     );
 
     final boxDecoration = BoxDecoration(

@@ -242,7 +242,7 @@ class _LaamsTabbedScaffoldState extends State<LaamsTabbedScaffold>
       }
 
       final children = [
-        if (leading != null) leading,
+        ?leading,
         if (leading != null) SizedBox(width: widget.titleSpacing),
         if (title != null) Expanded(child: widget.title ?? title),
         if (widget.actions.isNotEmpty) SizedBox(width: widget.titleSpacing),

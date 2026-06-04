@@ -181,7 +181,7 @@ class _LaamsTableToolbarState extends State<LaamsTableToolbar> {
         ...widget.selectedItemsActions,
       if (!_showSearchBar) const Spacer(),
       if (searchBar != null) Expanded(child: searchBar),
-      if (searchBtn != null) searchBtn,
+      ?searchBtn,
       if (!_showSearchBar) ...widget.actions,
     ];
 

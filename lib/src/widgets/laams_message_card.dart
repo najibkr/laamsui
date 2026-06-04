@@ -246,10 +246,7 @@ class LaamsMessageCard extends StatelessWidget {
       buttons = Wrap(
         spacing: spacing,
         runSpacing: spacing,
-        children: [
-          if (acceptBtn != null) acceptBtn,
-          if (rejectBtn != null) rejectBtn,
-        ],
+        children: [?acceptBtn, ?rejectBtn],
       );
     }
 
@@ -258,14 +255,14 @@ class LaamsMessageCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (header != null) header,
+        ?header,
         if (header != null && title != null) space,
-        if (title != null) title,
+        ?title,
         if (title != null && message != null) space,
-        if (message != null) message,
+        ?message,
         if (message != null || buttons != null) space,
         if (message != null || buttons != null) space,
-        if (buttons != null) buttons,
+        ?buttons,
       ],
     );
 

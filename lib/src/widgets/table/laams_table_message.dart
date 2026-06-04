@@ -91,7 +91,7 @@ class LaamsTableMessage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      children: [svg, sp, titleWidget, sp, desc, sp, if (btn != null) btn],
+      children: [svg, sp, titleWidget, sp, desc, sp, ?btn],
     );
 
     final container = Container(

@@ -283,11 +283,11 @@ class LaamsListTile extends StatelessWidget {
         crossAxisAlignment: topCrossAxisAlignment,
         mainAxisSize: topMainAxisSize,
         children: [
-          if (newPrefix != null) newPrefix,
+          ?newPrefix,
           if (prefix != null || prefixIcon != null) horizontalSpace,
           newTitle,
           if (suffix != null || suffixText != null) horizontalSpace,
-          if (newSuffix != null) newSuffix,
+          ?newSuffix,
         ],
       );
     }
@@ -318,7 +318,7 @@ class LaamsListTile extends StatelessWidget {
         children: [
           content,
           if (newSubtitle != null) verticalSpace,
-          if (newSubtitle != null) newSubtitle,
+          ?newSubtitle,
           if (bottom.isNotEmpty) verticalSpace,
           ...bottom,
         ],
@@ -341,11 +341,11 @@ class LaamsListTile extends StatelessWidget {
         crossAxisAlignment: innerCrossAxisAlignment,
         mainAxisSize: innerMainAxisSize,
         children: [
-          if (newLeading != null) newLeading,
+          ?newLeading,
           if (newLeading != null) horizontalSpace,
           Expanded(child: content),
           if (trailing != null) horizontalSpace,
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       );
     }
@@ -356,11 +356,11 @@ class LaamsListTile extends StatelessWidget {
         crossAxisAlignment: contentCrossAxisAlignment,
         mainAxisSize: contentMainAxisSize,
         children: [
-          if (header != null) header!,
+          ?header,
           if (header != null) verticalSpace,
           content,
           if (footer != null) verticalSpace,
-          if (footer != null) footer!,
+          ?footer,
         ],
       );
     }

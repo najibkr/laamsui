@@ -1,6 +1,8 @@
-## 1.1.17
+## 1.1.18
 - Updated dependencies
 
+## 1.1.17
+- Updated dependencies
 
 ## 1.1.16
 - Updated dependencies

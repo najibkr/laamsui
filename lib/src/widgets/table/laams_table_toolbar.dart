@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:laamsui/src/laams_icons.dart';
 
 import 'laams_table_button.dart';

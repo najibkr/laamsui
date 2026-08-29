@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Animates the y axis scale of a transformed widget.
 class ScaleYTransition extends AnimatedWidget {

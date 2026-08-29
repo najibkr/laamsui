@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'loading/decorate/decorate.dart';
 import 'loading/indicator_type.dart';

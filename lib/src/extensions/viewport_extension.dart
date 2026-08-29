@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart'
+import 'package:material_ui/material_ui.dart'
     show Directionality, TextDirection, TextTheme, Theme, ThemeData;
 import 'package:flutter/widgets.dart'
     show BuildContext, Locale, Localizations, MediaQuery, Orientation, Size;

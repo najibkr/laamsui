@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:laamsui/laamsui.dart' show LaamsLoading, IndicatorType;
 import 'package:laamsui/src/extensions/viewport_extension.dart';

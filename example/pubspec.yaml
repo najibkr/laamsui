@@ -1,7 +1,6 @@
 name: laamsui_example
 description: "A new Flutter project."
 publish_to: "none"
-
 version: 1.0.0+1
 
 environment:
@@ -13,6 +12,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   laamsui:
     path: ../
+  material_ui: ^1.1.0
+  cupertino_ui: ^1.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+export 'widgets/calendar.dart';
 export 'widgets/laams_floating_button.dart';
 export 'widgets/laams_form_dialog.dart';
 export 'widgets/laams_image.dart';

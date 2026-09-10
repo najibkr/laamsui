@@ -16,13 +16,13 @@ part of '../calendar_date_picker2.dart';
 class YearPicker extends StatefulWidget {
   /// Creates a year picker.
   const YearPicker({
+    super.key,
     required this.config,
     required this.selectedDates,
     required this.onChanged,
     required this.initialMonth,
     this.dragStartBehavior = DragStartBehavior.start,
-    Key? key,
-  }) : super(key: key);
+  });
 
   /// The calendar configurations
   final CalendarDatePicker2Config config;

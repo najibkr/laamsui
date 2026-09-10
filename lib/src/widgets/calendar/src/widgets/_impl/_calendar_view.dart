@@ -373,9 +373,6 @@ class _CalendarViewState extends State<_CalendarView> {
                               : Icons.chevron_left,
                         ),
                     color: controlColor,
-                    tooltip: _isDisplayingFirstMonth
-                        ? null
-                        : _localizations.previousMonthTooltip,
                     onPressed: _isDisplayingFirstMonth
                         ? null
                         : _handlePreviousMonth,
@@ -394,9 +391,6 @@ class _CalendarViewState extends State<_CalendarView> {
                               : Icons.chevron_right,
                         ),
                     color: controlColor,
-                    tooltip: _isDisplayingLastMonth
-                        ? null
-                        : _localizations.nextMonthTooltip,
                     onPressed: _isDisplayingLastMonth ? null : _handleNextMonth,
                   ),
               ],

@@ -17,8 +17,8 @@ class _MonthPicker extends StatefulWidget {
     required this.selectedDates,
     required this.onChanged,
     required this.initialMonth,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The calendar configurations
   final CalendarDatePicker2Config config;

@@ -6,11 +6,12 @@ part of '../calendar_date_picker2.dart';
 /// what the currently focused date (if any) should be.
 class _FocusedDate extends InheritedWidget {
   const _FocusedDate({
-    Key? key,
-    required Widget child,
+    // ignore: unused_element_parameter
+    super.key,
+    required super.child,
     this.date,
     this.scrollDirection,
-  }) : super(key: key, child: child);
+  });
 
   final DateTime? date;
   final TraversalDirection? scrollDirection;

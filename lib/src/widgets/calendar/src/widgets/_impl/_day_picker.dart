@@ -12,8 +12,8 @@ class _DayPicker extends StatefulWidget {
     required this.selectedDates,
     required this.onChanged,
     required this.dayRowsCount,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The calendar configurations
   final CalendarDatePicker2Config config;

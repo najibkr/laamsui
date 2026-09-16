@@ -215,9 +215,8 @@ class _DatePickerModeToggleButtonState
                             .config
                             .semanticsDictionary?[CalendarDatePicker2SemanticsLabel
                             .selectMonth] ??
-                        MaterialLocalizations.of(
-                          context,
-                        ).selectYearSemanticsLabel,
+                        MaterialLocalizations.of(context)
+                            .selectYearSemanticsLabel,
                     excludeSemantics: true,
                     button: true,
                     child: SizedBox(
@@ -280,9 +279,8 @@ class _DatePickerModeToggleButtonState
                             .config
                             .semanticsDictionary?[CalendarDatePicker2SemanticsLabel
                             .selectYear] ??
-                        MaterialLocalizations.of(
-                          context,
-                        ).selectYearSemanticsLabel,
+                        MaterialLocalizations.of(context)
+                            .selectYearSemanticsLabel,
                     excludeSemantics: true,
                     button: true,
                     child: SizedBox(

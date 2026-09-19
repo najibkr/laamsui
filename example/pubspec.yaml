@@ -12,8 +12,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   laamsui:
     path: ../
-  material_ui: ^1.1.0
-  cupertino_ui: ^1.0.1
+  material_ui: ^1.3.0
+  cupertino_ui: ^1.1.0
 
 dev_dependencies:
   flutter_test:

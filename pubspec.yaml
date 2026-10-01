@@ -19,7 +19,7 @@ dependencies:
   flutter_svg: ^2.3.0
   flutter_animate: ^4.5.2
   two_dimensional_scrollables: ^0.5.5
-  cached_network_image: ^4.0.3
+  cached_network_image: ^4.0.4
 
 dev_dependencies:
   flutter_test:

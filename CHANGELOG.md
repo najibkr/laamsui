@@ -1,3 +1,6 @@
+## 1.1.31
+- Updated dependencies
+
 ## 1.1.30
 - Updated dependencies
 
